@@ -17,6 +17,7 @@
 #import "MDMScheduler.h"
 
 #import "MDMPerformerGroup.h"
+#import "MDMPerformerGroupDelegate.h"
 #import "MDMTransaction+Private.h"
 
 @interface MDMScheduler () <MDMPerformerGroupDelegate>

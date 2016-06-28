@@ -35,10 +35,3 @@
 - (void)executeLog:(MDMTransactionLog *)log;
 
 @end
-
-@protocol MDMPerformerGroupDelegate <NSObject>
-@required
-
-- (void)performerGroup:(MDMPerformerGroup *)performerGroup activeStateDidChange:(BOOL)isActive;
-
-@end

@@ -14,17 +14,11 @@
  limitations under the License.
  */
 
-#import "MDMTransaction.h"
+#import <Foundation/Foundation.h>
 
-@protocol MDMPlan;
+@protocol MDMPerformerGroupDelegate <NSObject>
+@required
 
-@interface MDMTransactionLog : NSObject
-@property(nonatomic) NSArray<id<MDMPlan>> *plans;
-@property(nonatomic) id target;
-@end
-
-@interface MDMTransaction ()
-
-- (NSArray<MDMTransactionLog *> *)logs;
+- (void)performerGroup:(MDMPerformerGroup *)performerGroup activeStateDidChange:(BOOL)isActive;
 
 @end

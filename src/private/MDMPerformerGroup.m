@@ -17,11 +17,12 @@
 #import "MDMPerformerGroup.h"
 
 #import "MDMScheduler.h"
+#import "MDMPerforming.h"
 #import "MDMTransaction+Private.h"
 
 @interface MDMPerformerInfo : NSObject
 @property(nonnull, strong) id<MDMPerforming> performer;
-@property(nonnull, strong) NSMutableSet<NSString *> *remoteExecutionNames;
+@property(nonnull, strong) NSMutableSet<NSString *> *delegatedExecutionNames;
 @end
 
 @interface MDMPerformerGroup ()
@@ -81,15 +82,15 @@
 - (void)setUpFeaturesForPerformerInfo:(MDMPerformerInfo *)performerInfo {
   id<MDMPerforming> performer = performerInfo.performer;
 
-  // Remote execution
+  // Delegated execution
 
-  BOOL canStartRemote = [performer respondsToSelector:@selector(setRemoteExecutionWillStartNamed:)];
-  BOOL canEndRemote = [performer respondsToSelector:@selector(setRemoteExecutionDidEndNamed:)];
-  if (canStartRemote && canEndRemote) {
+  BOOL canStartDelegated = [performer respondsToSelector:@selector(setDelegatedExecutionWillStartNamed:)];
+  BOOL canEndDelegated = [performer respondsToSelector:@selector(setDelegatedExecutionDidEndNamed:)];
+  if (canStartDelegated && canEndDelegated) {
     __weak MDMPerformerInfo *weakInfo = performerInfo;
     __weak MDMPerformerGroup *weakSelf = self;
 
-    [(id<MDMDelegatedPerforming>)performer setRemoteExecutionWillStartNamed:^(NSString *name) {
+    [(id<MDMDelegatedPerforming>)performer setDelegatedExecutionWillStartNamed:^(NSString *name) {
       MDMPerformerInfo *strongInfo = weakInfo;
       MDMPerformerGroup *strongSelf = weakSelf;
       if (!strongInfo || !strongSelf) {
@@ -98,7 +99,7 @@
 
       // Register the work
 
-      [strongInfo.remoteExecutionNames addObject:name];
+      [strongInfo.delegatedExecutionNames addObject:name];
 
       // Check our group's activity state
 
@@ -114,16 +115,16 @@
       }
     }];
 
-    [(id<MDMDelegatedPerforming>)performer setRemoteExecutionDidEndNamed:^(NSString *name) {
+    [(id<MDMDelegatedPerforming>)performer setDelegatedExecutionDidEndNamed:^(NSString *name) {
       MDMPerformerInfo *strongInfo = weakInfo;
       MDMPerformerGroup *strongSelf = weakSelf;
       if (!strongInfo) {
         return;
       }
 
-      [strongInfo.remoteExecutionNames removeObject:name];
+      [strongInfo.delegatedExecutionNames removeObject:name];
 
-      if (strongInfo.remoteExecutionNames.count == 0) {
+      if (strongInfo.delegatedExecutionNames.count == 0) {
         [strongSelf.activePerformers removeObject:strongInfo.performer];
 
         if (strongSelf.activePerformers.count == 0) {
@@ -141,7 +142,7 @@
 - (instancetype)init {
   self = [super init];
   if (self) {
-    _remoteExecutionNames = [NSMutableSet set];
+    _delegatedExecutionNames = [NSMutableSet set];
   }
   return self;
 }

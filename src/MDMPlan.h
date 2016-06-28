@@ -14,17 +14,21 @@
  limitations under the License.
  */
 
-#import "MDMTransaction.h"
+#import <Foundation/Foundation.h>
 
-@protocol MDMPlan;
+/**
+ A class conforming to MDMPlan is expected to describe a plan of motion for a target.
 
-@interface MDMTransactionLog : NSObject
-@property(nonatomic) NSArray<id<MDMPlan>> *plans;
-@property(nonatomic) id target;
-@end
+ Plans are translated into performers by an instance of MDMScheduler.
+ */
+@protocol MDMPlan <NSObject>
 
-@interface MDMTransaction ()
+/**
+ Asks the receiver to return a class conforming to MDMPerformer.
 
-- (NSArray<MDMTransactionLog *> *)logs;
+ The returned class will be instantiated by an MDMScheduler. The instantiated performer is expected to
+ execute the plan.
+ */
+- (nonnull Class)performerClass;
 
 @end

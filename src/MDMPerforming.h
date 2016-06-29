@@ -50,13 +50,13 @@
 
  This is not recursive.
  */
-@property(nonnull, copy) void (^delegatedExecutionWillStartNamed)(NSString *_Nonnull);
+@property(nonnull, copy) void (^delegatedPerformanceWillStartNamed)(NSString *_Nonnull);
 
 /**
  The performer must call this method after delegated execution ends.
 
  This is not recursive.
  */
-@property(nonnull, copy) void (^delegatedExecutionDidEndNamed)(NSString *_Nonnull);
+@property(nonnull, copy) void (^delegatedPerformanceDidEndNamed)(NSString *_Nonnull);
 
 @end

@@ -41,7 +41,7 @@ typedef enum : NSUInteger {
 
  A scheduler is Active if any Performer is active. Otherwise, the scheduler is Idle.
 
- An Performer conforming to MDMDelegatedPerforming is active if it has ongoing delegated execution.
+ An Performer conforming to MDMDelegatedPerforming is active if it has ongoing delegated performance.
  */
 @property(nonatomic, assign, readonly) MDMSchedulerActivityState activityState;
 

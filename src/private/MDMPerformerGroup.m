@@ -22,7 +22,7 @@
 
 @interface MDMPerformerInfo : NSObject
 @property(nonnull, strong) id<MDMPerforming> performer;
-@property(nonnull, strong) NSMutableSet<NSString *> *delegatedExecutionNames;
+@property(nonnull, strong) NSMutableSet<NSString *> *delegatedPerformanceNames;
 @end
 
 @interface MDMPerformerGroup ()
@@ -82,15 +82,15 @@
 - (void)setUpFeaturesForPerformerInfo:(MDMPerformerInfo *)performerInfo {
   id<MDMPerforming> performer = performerInfo.performer;
 
-  // Delegated execution
+  // Delegated performance
 
-  BOOL canStartDelegated = [performer respondsToSelector:@selector(setDelegatedExecutionWillStartNamed:)];
-  BOOL canEndDelegated = [performer respondsToSelector:@selector(setDelegatedExecutionDidEndNamed:)];
+  BOOL canStartDelegated = [performer respondsToSelector:@selector(setDelegatedPerformanceWillStartNamed:)];
+  BOOL canEndDelegated = [performer respondsToSelector:@selector(setDelegatedPerformanceDidEndNamed:)];
   if (canStartDelegated && canEndDelegated) {
     __weak MDMPerformerInfo *weakInfo = performerInfo;
     __weak MDMPerformerGroup *weakSelf = self;
 
-    [(id<MDMDelegatedPerforming>)performer setDelegatedExecutionWillStartNamed:^(NSString *name) {
+    [(id<MDMDelegatedPerforming>)performer setDelegatedPerformanceWillStartNamed:^(NSString *name) {
       MDMPerformerInfo *strongInfo = weakInfo;
       MDMPerformerGroup *strongSelf = weakSelf;
       if (!strongInfo || !strongSelf) {
@@ -99,7 +99,7 @@
 
       // Register the work
 
-      [strongInfo.delegatedExecutionNames addObject:name];
+      [strongInfo.delegatedPerformanceNames addObject:name];
 
       // Check our group's activity state
 
@@ -115,16 +115,16 @@
       }
     }];
 
-    [(id<MDMDelegatedPerforming>)performer setDelegatedExecutionDidEndNamed:^(NSString *name) {
+    [(id<MDMDelegatedPerforming>)performer setDelegatedPerformanceDidEndNamed:^(NSString *name) {
       MDMPerformerInfo *strongInfo = weakInfo;
       MDMPerformerGroup *strongSelf = weakSelf;
       if (!strongInfo) {
         return;
       }
 
-      [strongInfo.delegatedExecutionNames removeObject:name];
+      [strongInfo.delegatedPerformanceNames removeObject:name];
 
-      if (strongInfo.delegatedExecutionNames.count == 0) {
+      if (strongInfo.delegatedPerformanceNames.count == 0) {
         [strongSelf.activePerformers removeObject:strongInfo.performer];
 
         if (strongSelf.activePerformers.count == 0) {
@@ -142,7 +142,7 @@
 - (instancetype)init {
   self = [super init];
   if (self) {
-    _delegatedExecutionNames = [NSMutableSet set];
+    _delegatedPerformanceNames = [NSMutableSet set];
   }
   return self;
 }

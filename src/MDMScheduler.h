@@ -16,7 +16,10 @@
 
 #import <Foundation/Foundation.h>
 
+@class MDMScheduler;
+
 @protocol MDMSchedulerDelegate <NSObject>
+
 @required
 
 - (void)schedulerActivityStateDidChange:(nonnull MDMScheduler *)scheduler;
@@ -48,6 +51,6 @@ typedef enum : NSUInteger {
 /** Commits the provided transaction to the receiver. */
 - (void)commitTransaction:(nonnull MDMTransaction *)transaction;
 
-@property(nonatomic, weak, nullable) id<MDMScheduleDelegate> delegate;
+@property(nonatomic, weak, nullable) id<MDMSchedulerDelegate> delegate;
 
 @end

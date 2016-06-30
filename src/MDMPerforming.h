@@ -27,7 +27,10 @@
 
 @end
 
+@protocol MDMPlan;
+
 /** A class conforming to this protocol will be provided with plan instances. */
+
 @protocol MDMPlanPerforming <MDMPerforming>
 
 /**

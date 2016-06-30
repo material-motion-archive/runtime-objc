@@ -16,8 +16,10 @@
 
 #import "MDMPerformerGroup.h"
 
-#import "MDMScheduler.h"
+#import "MDMPerformerGroupDelegate.h"
 #import "MDMPerforming.h"
+#import "MDMPlan.h"
+#import "MDMScheduler.h"
 #import "MDMTransaction+Private.h"
 
 @interface MDMPerformerInfo : NSObject

@@ -1,0 +1,337 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		36D5B3D71D255EA2004CD6CE /* MDMRuntimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36D5B3D11D249123004CD6CE /* MDMRuntimeTests.m */; };
+		3E16FD716E7CF82FE0042736 /* Pods_MotionApps_RuntimeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2EFD4177287514290CF04A7 /* Pods_MotionApps_RuntimeTests.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		10F741A872B59B1CB0AC2EDA /* Pods-MotionApps-MDM Objc Unit Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MotionApps-MDM Objc Unit Tests.release.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MotionApps-MDM Objc Unit Tests/Pods-MotionApps-MDM Objc Unit Tests.release.xcconfig"; sourceTree = "<group>"; };
+		36D5B3CE1D249123004CD6CE /* RuntimeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RuntimeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		36D5B3D11D249123004CD6CE /* MDMRuntimeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MDMRuntimeTests.m; path = ../../../../Users/larche/Documents/iOS/MDM_objc/tests/unit/MDMRuntimeTests.m; sourceTree = DEVELOPER_DIR; };
+		36D5B3D31D249123004CD6CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		7F130D144EED6E647565D707 /* Pods-MotionApps-RuntimeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MotionApps-RuntimeTests.release.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MotionApps-RuntimeTests/Pods-MotionApps-RuntimeTests.release.xcconfig"; sourceTree = "<group>"; };
+		9C4A3DBB08F773788F6B3746 /* Pods_MotionApps_MDM_Objc_Unit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MotionApps_MDM_Objc_Unit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2EFD4177287514290CF04A7 /* Pods_MotionApps_RuntimeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MotionApps_RuntimeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1F61E7CFC54ABF2BEB5FE0A /* Pods-MotionApps-MDM Objc Unit Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MotionApps-MDM Objc Unit Tests.debug.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MotionApps-MDM Objc Unit Tests/Pods-MotionApps-MDM Objc Unit Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		EDF8686C635E818F259D4D98 /* Pods-MotionApps-RuntimeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MotionApps-RuntimeTests.debug.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MotionApps-RuntimeTests/Pods-MotionApps-RuntimeTests.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		36D5B3CB1D249123004CD6CE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3E16FD716E7CF82FE0042736 /* Pods_MotionApps_RuntimeTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		36D5B3C31D24911A004CD6CE = {
+			isa = PBXGroup;
+			children = (
+				36D5B3D01D249123004CD6CE /* MDMRuntimeTests */,
+				36D5B3CF1D249123004CD6CE /* Products */,
+				914D1DF4576E939FAD7658CE /* Pods */,
+				942D54106649C454ABFBA0E0 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		36D5B3CF1D249123004CD6CE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				36D5B3CE1D249123004CD6CE /* RuntimeTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		36D5B3D01D249123004CD6CE /* MDMRuntimeTests */ = {
+			isa = PBXGroup;
+			children = (
+				36D5B3D11D249123004CD6CE /* MDMRuntimeTests.m */,
+				36D5B3D31D249123004CD6CE /* Info.plist */,
+			);
+			name = MDMRuntimeTests;
+			path = "MDM Objc Tests";
+			sourceTree = "<group>";
+		};
+		914D1DF4576E939FAD7658CE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B1F61E7CFC54ABF2BEB5FE0A /* Pods-MotionApps-MDM Objc Unit Tests.debug.xcconfig */,
+				10F741A872B59B1CB0AC2EDA /* Pods-MotionApps-MDM Objc Unit Tests.release.xcconfig */,
+				EDF8686C635E818F259D4D98 /* Pods-MotionApps-RuntimeTests.debug.xcconfig */,
+				7F130D144EED6E647565D707 /* Pods-MotionApps-RuntimeTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		942D54106649C454ABFBA0E0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9C4A3DBB08F773788F6B3746 /* Pods_MotionApps_MDM_Objc_Unit_Tests.framework */,
+				A2EFD4177287514290CF04A7 /* Pods_MotionApps_RuntimeTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		36D5B3CD1D249123004CD6CE /* RuntimeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 36D5B3D41D249123004CD6CE /* Build configuration list for PBXNativeTarget "RuntimeTests" */;
+			buildPhases = (
+				88B2111C975C500EA97AC77B /* [CP] Check Pods Manifest.lock */,
+				36D5B3CA1D249123004CD6CE /* Sources */,
+				36D5B3CB1D249123004CD6CE /* Frameworks */,
+				36D5B3CC1D249123004CD6CE /* Resources */,
+				0A922678EA65C78463B18062 /* [CP] Embed Pods Frameworks */,
+				A3BE61675E19B71384234DC3 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RuntimeTests;
+			productName = "MDM Objc Tests";
+			productReference = 36D5B3CE1D249123004CD6CE /* RuntimeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		36D5B3C41D24911A004CD6CE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				TargetAttributes = {
+					36D5B3CD1D249123004CD6CE = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 36D5B3C71D24911A004CD6CE /* Build configuration list for PBXProject "RuntimeTests" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 36D5B3C31D24911A004CD6CE;
+			productRefGroup = 36D5B3CF1D249123004CD6CE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				36D5B3CD1D249123004CD6CE /* RuntimeTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		36D5B3CC1D249123004CD6CE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0A922678EA65C78463B18062 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../../../Pods/Target Support Files/Pods-MotionApps-RuntimeTests/Pods-MotionApps-RuntimeTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		88B2111C975C500EA97AC77B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A3BE61675E19B71384234DC3 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../../../Pods/Target Support Files/Pods-MotionApps-RuntimeTests/Pods-MotionApps-RuntimeTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		36D5B3CA1D249123004CD6CE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36D5B3D71D255EA2004CD6CE /* MDMRuntimeTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		36D5B3C81D24911A004CD6CE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		36D5B3C91D24911A004CD6CE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		36D5B3D51D249123004CD6CE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EDF8686C635E818F259D4D98 /* Pods-MotionApps-RuntimeTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "google.MDM-Objc-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		36D5B3D61D249123004CD6CE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7F130D144EED6E647565D707 /* Pods-MotionApps-RuntimeTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "google.MDM-Objc-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		36D5B3C71D24911A004CD6CE /* Build configuration list for PBXProject "RuntimeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				36D5B3C81D24911A004CD6CE /* Debug */,
+				36D5B3C91D24911A004CD6CE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		36D5B3D41D249123004CD6CE /* Build configuration list for PBXNativeTarget "RuntimeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				36D5B3D51D249123004CD6CE /* Debug */,
+				36D5B3D61D249123004CD6CE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 36D5B3C41D24911A004CD6CE /* Project object */;
+}

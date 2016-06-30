@@ -21,9 +21,11 @@
 #import "MDMTransaction+Private.h"
 
 @interface MDMScheduler () <MDMPerformerGroupDelegate>
+
 @property(nonatomic, strong) NSMapTable *targetToPerformerGroup;
 
 @property(nonatomic, strong) NSMutableSet *activePerformerGroups;
+
 @end
 
 @implementation MDMScheduler

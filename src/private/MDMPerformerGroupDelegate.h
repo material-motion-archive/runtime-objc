@@ -17,6 +17,7 @@
 #import <Foundation/Foundation.h>
 
 @protocol MDMPerformerGroupDelegate <NSObject>
+
 @required
 
 - (void)performerGroup:(MDMPerformerGroup *)performerGroup activeStateDidChange:(BOOL)isActive;

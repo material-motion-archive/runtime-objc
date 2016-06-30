@@ -6,7 +6,7 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   MaterialMotionRuntime:
-    :path: "./"
+    :path: ./
 
 SPEC CHECKSUMS:
   MaterialMotionRuntime: 291b90a7a43529b9cbd4b7ad4bcf41f1b973e58f

@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		36D5B3D71D255EA2004CD6CE /* MDMRuntimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36D5B3D11D249123004CD6CE /* MDMRuntimeTests.m */; };
 		3E16FD716E7CF82FE0042736 /* Pods_MotionApps_RuntimeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2EFD4177287514290CF04A7 /* Pods_MotionApps_RuntimeTests.framework */; };
+		660C42171D25C3D4007F6165 /* MDMRuntimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 660C42161D25C3D4007F6165 /* MDMRuntimeTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		10F741A872B59B1CB0AC2EDA /* Pods-MotionApps-MDM Objc Unit Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MotionApps-MDM Objc Unit Tests.release.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MotionApps-MDM Objc Unit Tests/Pods-MotionApps-MDM Objc Unit Tests.release.xcconfig"; sourceTree = "<group>"; };
 		36D5B3CE1D249123004CD6CE /* RuntimeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RuntimeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		36D5B3D11D249123004CD6CE /* MDMRuntimeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MDMRuntimeTests.m; path = ../../../../Users/larche/Documents/iOS/MDM_objc/tests/unit/MDMRuntimeTests.m; sourceTree = DEVELOPER_DIR; };
-		36D5B3D31D249123004CD6CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		660C42161D25C3D4007F6165 /* MDMRuntimeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDMRuntimeTests.m; sourceTree = "<group>"; };
+		660C42181D25C661007F6165 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7F130D144EED6E647565D707 /* Pods-MotionApps-RuntimeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MotionApps-RuntimeTests.release.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MotionApps-RuntimeTests/Pods-MotionApps-RuntimeTests.release.xcconfig"; sourceTree = "<group>"; };
 		9C4A3DBB08F773788F6B3746 /* Pods_MotionApps_MDM_Objc_Unit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MotionApps_MDM_Objc_Unit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2EFD4177287514290CF04A7 /* Pods_MotionApps_RuntimeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MotionApps_RuntimeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -38,7 +38,8 @@
 		36D5B3C31D24911A004CD6CE = {
 			isa = PBXGroup;
 			children = (
-				36D5B3D01D249123004CD6CE /* MDMRuntimeTests */,
+				36D5B3D01D249123004CD6CE /* tests */,
+				660C421A1D25C664007F6165 /* Resources */,
 				36D5B3CF1D249123004CD6CE /* Products */,
 				914D1DF4576E939FAD7658CE /* Pods */,
 				942D54106649C454ABFBA0E0 /* Frameworks */,
@@ -53,14 +54,29 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		36D5B3D01D249123004CD6CE /* MDMRuntimeTests */ = {
+		36D5B3D01D249123004CD6CE /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				36D5B3D11D249123004CD6CE /* MDMRuntimeTests.m */,
-				36D5B3D31D249123004CD6CE /* Info.plist */,
+				660C421B1D25C674007F6165 /* unit */,
 			);
-			name = MDMRuntimeTests;
-			path = "MDM Objc Tests";
+			name = tests;
+			path = ../../unit;
+			sourceTree = "<group>";
+		};
+		660C421A1D25C664007F6165 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				660C42181D25C661007F6165 /* Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		660C421B1D25C674007F6165 /* unit */ = {
+			isa = PBXGroup;
+			children = (
+				660C42161D25C3D4007F6165 /* MDMRuntimeTests.m */,
+			);
+			name = unit;
 			sourceTree = "<group>";
 		};
 		914D1DF4576E939FAD7658CE /* Pods */ = {
@@ -90,12 +106,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 36D5B3D41D249123004CD6CE /* Build configuration list for PBXNativeTarget "RuntimeTests" */;
 			buildPhases = (
-				88B2111C975C500EA97AC77B /* [CP] Check Pods Manifest.lock */,
+				EE94C7718466F3C575256E74 /* [CP] Check Pods Manifest.lock */,
 				36D5B3CA1D249123004CD6CE /* Sources */,
 				36D5B3CB1D249123004CD6CE /* Frameworks */,
 				36D5B3CC1D249123004CD6CE /* Resources */,
-				0A922678EA65C78463B18062 /* [CP] Embed Pods Frameworks */,
-				A3BE61675E19B71384234DC3 /* [CP] Copy Pods Resources */,
+				0BD52BFAC2887F4A60E5C7D7 /* [CP] Embed Pods Frameworks */,
+				EA85D43A98196451EE4C00AA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -147,7 +163,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0A922678EA65C78463B18062 /* [CP] Embed Pods Frameworks */ = {
+		0BD52BFAC2887F4A60E5C7D7 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -162,22 +178,7 @@
 			shellScript = "\"${SRCROOT}/../../../Pods/Target Support Files/Pods-MotionApps-RuntimeTests/Pods-MotionApps-RuntimeTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		88B2111C975C500EA97AC77B /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		A3BE61675E19B71384234DC3 /* [CP] Copy Pods Resources */ = {
+		EA85D43A98196451EE4C00AA /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -192,6 +193,21 @@
 			shellScript = "\"${SRCROOT}/../../../Pods/Target Support Files/Pods-MotionApps-RuntimeTests/Pods-MotionApps-RuntimeTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		EE94C7718466F3C575256E74 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -199,7 +215,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36D5B3D71D255EA2004CD6CE /* MDMRuntimeTests.m in Sources */,
+				660C42171D25C3D4007F6165 /* MDMRuntimeTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

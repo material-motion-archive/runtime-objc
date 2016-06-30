@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3E16FD716E7CF82FE0042736 /* Pods_MotionApps_RuntimeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2EFD4177287514290CF04A7 /* Pods_MotionApps_RuntimeTests.framework */; };
 		660C42171D25C3D4007F6165 /* MDMRuntimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 660C42161D25C3D4007F6165 /* MDMRuntimeTests.m */; };
+		E543FEBAE9CB690945B6045A /* Pods_MotionApps_RuntimeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B38C7DBB254FF057B2B2043A /* Pods_MotionApps_RuntimeTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,8 +18,8 @@
 		660C42181D25C661007F6165 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7F130D144EED6E647565D707 /* Pods-MotionApps-RuntimeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MotionApps-RuntimeTests.release.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MotionApps-RuntimeTests/Pods-MotionApps-RuntimeTests.release.xcconfig"; sourceTree = "<group>"; };
 		9C4A3DBB08F773788F6B3746 /* Pods_MotionApps_MDM_Objc_Unit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MotionApps_MDM_Objc_Unit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A2EFD4177287514290CF04A7 /* Pods_MotionApps_RuntimeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MotionApps_RuntimeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1F61E7CFC54ABF2BEB5FE0A /* Pods-MotionApps-MDM Objc Unit Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MotionApps-MDM Objc Unit Tests.debug.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MotionApps-MDM Objc Unit Tests/Pods-MotionApps-MDM Objc Unit Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		B38C7DBB254FF057B2B2043A /* Pods_MotionApps_RuntimeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MotionApps_RuntimeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EDF8686C635E818F259D4D98 /* Pods-MotionApps-RuntimeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MotionApps-RuntimeTests.debug.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MotionApps-RuntimeTests/Pods-MotionApps-RuntimeTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -28,7 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E16FD716E7CF82FE0042736 /* Pods_MotionApps_RuntimeTests.framework in Frameworks */,
+				E543FEBAE9CB690945B6045A /* Pods_MotionApps_RuntimeTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,7 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				9C4A3DBB08F773788F6B3746 /* Pods_MotionApps_MDM_Objc_Unit_Tests.framework */,
-				A2EFD4177287514290CF04A7 /* Pods_MotionApps_RuntimeTests.framework */,
+				B38C7DBB254FF057B2B2043A /* Pods_MotionApps_RuntimeTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

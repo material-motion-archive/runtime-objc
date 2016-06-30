@@ -6,11 +6,11 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   MaterialMotionRuntime:
-    :path: ./
+    :path: "./"
 
 SPEC CHECKSUMS:
-  MaterialMotionRuntime: 291b90a7a43529b9cbd4b7ad4bcf41f1b973e58f
+  MaterialMotionRuntime: 75fefd025d476306fadd0267d6e1b5d19ad21bad
 
-PODFILE CHECKSUM: 54ff52f828ee733fbf5ee9e84953de1f60e2e321
+PODFILE CHECKSUM: 34aed6d11d07e90631d3d3aa41fc17f180bd810f
 
 COCOAPODS: 1.0.1

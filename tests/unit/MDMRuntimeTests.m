@@ -15,6 +15,7 @@
  */
 
 #import <XCTest/XCTest.h>
+@import MaterialMotionRuntime;
 
 @interface MDMRuntimeTests : XCTestCase
 

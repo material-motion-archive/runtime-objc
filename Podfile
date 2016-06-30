@@ -1,6 +1,6 @@
 abstract_target 'MotionApps' do
 	pod 'MaterialMotionRuntime', :path => './'
-	use_frameworks!
+	use_frameworks! 
 	
 	target "RuntimeTests" do
 		project 'tests/apps/MDMRuntimeTests/RuntimeTests.xcodeproj'

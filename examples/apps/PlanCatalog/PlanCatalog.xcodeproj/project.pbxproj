@@ -12,9 +12,11 @@
 		66876C661D25ED610054CED4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66876C651D25ED610054CED4 /* ViewController.m */; };
 		66876C6B1D25ED610054CED4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66876C6A1D25ED610054CED4 /* Assets.xcassets */; };
 		66876C6E1D25ED610054CED4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66876C6C1D25ED610054CED4 /* LaunchScreen.storyboard */; };
+		CA8C88715352899275724E52 /* Pods_MaterialMotionRuntime_PlanCatalog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E9F0FB5FB808715EC1FC0B7 /* Pods_MaterialMotionRuntime_PlanCatalog.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4E9F0FB5FB808715EC1FC0B7 /* Pods_MaterialMotionRuntime_PlanCatalog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MaterialMotionRuntime_PlanCatalog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66876C5B1D25ED610054CED4 /* PlanCatalog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlanCatalog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66876C5F1D25ED610054CED4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		66876C611D25ED610054CED4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -24,6 +26,8 @@
 		66876C6A1D25ED610054CED4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		66876C6D1D25ED610054CED4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		66876C6F1D25ED610054CED4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		75F2F4A20A51B559BDF137E9 /* Pods-MaterialMotionRuntime-PlanCatalog.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaterialMotionRuntime-PlanCatalog.debug.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MaterialMotionRuntime-PlanCatalog/Pods-MaterialMotionRuntime-PlanCatalog.debug.xcconfig"; sourceTree = "<group>"; };
+		C0EA85F5845AC624D40CFF3B /* Pods-MaterialMotionRuntime-PlanCatalog.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaterialMotionRuntime-PlanCatalog.release.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MaterialMotionRuntime-PlanCatalog/Pods-MaterialMotionRuntime-PlanCatalog.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA8C88715352899275724E52 /* Pods_MaterialMotionRuntime_PlanCatalog.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +47,8 @@
 			children = (
 				66876C5D1D25ED610054CED4 /* PlanCatalog */,
 				66876C5C1D25ED610054CED4 /* Products */,
+				8C0B878FA36FECEAB1371636 /* Pods */,
+				8FBA7A9DA1C8D0F7E3A8CDC6 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -76,6 +83,23 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		8C0B878FA36FECEAB1371636 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				75F2F4A20A51B559BDF137E9 /* Pods-MaterialMotionRuntime-PlanCatalog.debug.xcconfig */,
+				C0EA85F5845AC624D40CFF3B /* Pods-MaterialMotionRuntime-PlanCatalog.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		8FBA7A9DA1C8D0F7E3A8CDC6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4E9F0FB5FB808715EC1FC0B7 /* Pods_MaterialMotionRuntime_PlanCatalog.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -83,9 +107,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 66876C721D25ED610054CED4 /* Build configuration list for PBXNativeTarget "PlanCatalog" */;
 			buildPhases = (
+				FDBF362A2FF511E40BB66A8B /* [CP] Check Pods Manifest.lock */,
 				66876C571D25ED610054CED4 /* Sources */,
 				66876C581D25ED610054CED4 /* Frameworks */,
 				66876C591D25ED610054CED4 /* Resources */,
+				8DDC8971D5A6EE088489A3B6 /* [CP] Embed Pods Frameworks */,
+				3A87D63A476E452B434A8DDD /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -139,6 +166,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3A87D63A476E452B434A8DDD /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../../../Pods/Target Support Files/Pods-MaterialMotionRuntime-PlanCatalog/Pods-MaterialMotionRuntime-PlanCatalog-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8DDC8971D5A6EE088489A3B6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../../../Pods/Target Support Files/Pods-MaterialMotionRuntime-PlanCatalog/Pods-MaterialMotionRuntime-PlanCatalog-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FDBF362A2FF511E40BB66A8B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		66876C571D25ED610054CED4 /* Sources */ = {
@@ -251,6 +326,7 @@
 		};
 		66876C731D25ED610054CED4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75F2F4A20A51B559BDF137E9 /* Pods-MaterialMotionRuntime-PlanCatalog.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = PlanCatalog/Info.plist;
@@ -262,6 +338,7 @@
 		};
 		66876C741D25ED610054CED4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C0EA85F5845AC624D40CFF3B /* Pods-MaterialMotionRuntime-PlanCatalog.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = PlanCatalog/Info.plist;
@@ -290,6 +367,7 @@
 				66876C741D25ED610054CED4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

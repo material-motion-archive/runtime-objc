@@ -17,32 +17,65 @@
 #import <XCTest/XCTest.h>
 @import MaterialMotionRuntime;
 
-@interface MDMRuntimeTests : XCTestCase
+@interface TestState : NSObject
+@property(nonatomic) bool boolean;
+@end
 
+@interface TestPlan : NSObject <MDMPlan>
+@property(nonatomic) bool desiredBoolean;
+@end
+
+@interface TestPerformer : NSObject <MDMPlanPerforming>
+@end
+
+@interface MDMRuntimeTests : XCTestCase
 @end
 
 @implementation MDMRuntimeTests
 
-- (void)setUp {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+- (void)testLifeOfAPlan {
+  TestState *state = [TestState new];
+  state.boolean = false;
+
+  TestPlan *plan = [TestPlan new];
+  plan.desiredBoolean = true;
+
+  MDMTransaction *transaction = [MDMTransaction new];
+  [transaction addPlan:plan toTarget:state];
+
+  MDMScheduler *scheduler = [MDMScheduler new];
+  [scheduler commitTransaction:transaction];
+
+  XCTAssertEqual(state.boolean, plan.desiredBoolean);
 }
 
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
+@end
+
+@implementation TestPlan
+
+- (Class)performerClass {
+  return [TestPerformer class];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
+@end
+
+@implementation TestPerformer {
+  TestState *_targetState;
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+- (instancetype)initWithTarget:(id)target {
+  self = [super init];
+  if (self) {
+    _targetState = target;
+  }
+  return self;
 }
 
+- (void)addPlan:(TestPlan *)plan {
+  _targetState.boolean = plan.desiredBoolean;
+}
+
+@end
+
+@implementation TestState
 @end

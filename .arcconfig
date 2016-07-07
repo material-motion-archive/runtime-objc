@@ -1,5 +1,6 @@
 {
   "load": [
+    "third_party/clang-format-linter",
     "third_party/arc-proselint",
     "third_party/arc-hook-conphig",
     "third_party/arc-jazzy-linter",

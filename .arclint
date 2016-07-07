@@ -1,5 +1,10 @@
 {
   "linters": {
+    "clang-format": {
+      "type": "clang-format",
+      "include": "(\\.(m|h|mm)$)",
+      "exclude": "(/Pods/)"
+    },
     "chmod": {
       "type": "chmod"
     },

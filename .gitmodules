@@ -10,3 +10,6 @@
 [submodule "third_party/arc-jazzy-linter"]
 	path = third_party/arc-jazzy-linter
 	url = https://github.com/google/arc-jazzy-linter.git
+[submodule "third_party/clang-format-linter"]
+	path = third_party/clang-format-linter
+	url = https://github.com/vhbit/clang-format-linter.git

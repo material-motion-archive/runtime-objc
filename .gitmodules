@@ -7,3 +7,6 @@
 [submodule ".arc-hooks/post-diff/arc-hook-github-issues"]
 	path = .arc-hooks/post-diff/arc-hook-github-issues
 	url = https://github.com/material-foundation/arc-hook-github-issues.git
+[submodule "third_party/arc-jazzy-linter"]
+	path = third_party/arc-jazzy-linter
+	url = https://github.com/google/arc-jazzy-linter.git

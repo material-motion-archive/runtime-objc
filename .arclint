@@ -3,6 +3,10 @@
     "chmod": {
       "type": "chmod"
     },
+    "jazzy": {
+      "type": "jazzy",
+      "include": "(src/[^\/]+?\\.(h|swift)$)"
+    },
     "prose": {
       "type": "prose",
       "include": "(\\.(md)$)",

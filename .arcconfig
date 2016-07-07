@@ -2,6 +2,7 @@
   "load": [
     "third_party/arc-proselint",
     "third_party/arc-hook-conphig",
+    "third_party/arc-jazzy-linter",
     ".arc-hooks/post-diff/arc-hook-github-issues"
   ],
   "arcanist_configuration" : "HookConphig",

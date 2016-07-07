@@ -7,22 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		36A920011D2D56900001C0B0 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A920001D2D56900001C0B0 /* MainViewController.m */; };
 		66876C601D25ED610054CED4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66876C5F1D25ED610054CED4 /* main.m */; };
 		66876C631D25ED610054CED4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66876C621D25ED610054CED4 /* AppDelegate.m */; };
-		66876C661D25ED610054CED4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66876C651D25ED610054CED4 /* ViewController.m */; };
+		66876C661D25ED610054CED4 /* PlanFadeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66876C651D25ED610054CED4 /* PlanFadeViewController.m */; };
 		66876C6B1D25ED610054CED4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66876C6A1D25ED610054CED4 /* Assets.xcassets */; };
 		66876C6E1D25ED610054CED4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66876C6C1D25ED610054CED4 /* LaunchScreen.storyboard */; };
 		CA8C88715352899275724E52 /* Pods_MaterialMotionRuntime_PlanCatalog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E9F0FB5FB808715EC1FC0B7 /* Pods_MaterialMotionRuntime_PlanCatalog.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		36A91FFF1D2D56900001C0B0 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		36A920001D2D56900001C0B0 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		4E9F0FB5FB808715EC1FC0B7 /* Pods_MaterialMotionRuntime_PlanCatalog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MaterialMotionRuntime_PlanCatalog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66876C5B1D25ED610054CED4 /* PlanCatalog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlanCatalog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66876C5F1D25ED610054CED4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		66876C611D25ED610054CED4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		66876C621D25ED610054CED4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		66876C641D25ED610054CED4 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		66876C651D25ED610054CED4 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		66876C641D25ED610054CED4 /* PlanFadeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlanFadeViewController.h; path = Plan/PlanFadeViewController.h; sourceTree = "<group>"; };
+		66876C651D25ED610054CED4 /* PlanFadeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlanFadeViewController.m; path = Plan/PlanFadeViewController.m; sourceTree = "<group>"; };
 		66876C6A1D25ED610054CED4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		66876C6D1D25ED610054CED4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		66876C6F1D25ED610054CED4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -42,6 +45,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		36A920021D2D56990001C0B0 /* Plan */ = {
+			isa = PBXGroup;
+			children = (
+				66876C641D25ED610054CED4 /* PlanFadeViewController.h */,
+				66876C651D25ED610054CED4 /* PlanFadeViewController.m */,
+			);
+			name = Plan;
+			sourceTree = "<group>";
+		};
 		66876C521D25ED610054CED4 = {
 			isa = PBXGroup;
 			children = (
@@ -65,8 +77,9 @@
 			children = (
 				66876C611D25ED610054CED4 /* AppDelegate.h */,
 				66876C621D25ED610054CED4 /* AppDelegate.m */,
-				66876C641D25ED610054CED4 /* ViewController.h */,
-				66876C651D25ED610054CED4 /* ViewController.m */,
+				36A91FFF1D2D56900001C0B0 /* MainViewController.h */,
+				36A920001D2D56900001C0B0 /* MainViewController.m */,
+				36A920021D2D56990001C0B0 /* Plan */,
 				66876C6A1D25ED610054CED4 /* Assets.xcassets */,
 				66876C6C1D25ED610054CED4 /* LaunchScreen.storyboard */,
 				66876C6F1D25ED610054CED4 /* Info.plist */,
@@ -220,9 +233,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				66876C661D25ED610054CED4 /* ViewController.m in Sources */,
+				66876C661D25ED610054CED4 /* PlanFadeViewController.m in Sources */,
 				66876C631D25ED610054CED4 /* AppDelegate.m in Sources */,
 				66876C601D25ED610054CED4 /* main.m in Sources */,
+				36A920011D2D56900001C0B0 /* MainViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

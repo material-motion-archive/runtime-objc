@@ -16,5 +16,5 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface PlanFadeViewController : UIViewController
 @end

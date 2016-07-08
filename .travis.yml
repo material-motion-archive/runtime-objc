@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode7.3
+osx_image: xcode7.1
 sudo: false
 notifications:
   email: false
@@ -7,15 +7,24 @@ env:
   global:
   - LC_CTYPE=en_US.UTF-8
   - LANG=en_US.UTF-8
-  matrix:
-    - DESTINATION="OS=9.3,name=iPhone 6s Plus"
-    - DESTINATION="OS=9.2,name=iPhone 6 Plus"
-    - DESTINATION="OS=9.1,name=iPhone 6s"
-    - DESTINATION="OS=9.0,name=iPhone 6 Plus"
-    - DESTINATION="OS=8.4,name=iPhone 6"
-    - DESTINATION="OS=8.3,name=iPhone 5S"
-    - DESTINATION="OS=8.2,name=iPhone 5"
-    - DESTINATION="OS=8.1,name=iPhone 4s"
+matrix:
+  include:
+    - osx_image: xcode7.3
+      env: DESTINATION="OS=9.3,name=iPhone 6s Plus"
+    - osx_image: xcode7.2
+      env: DESTINATION="OS=9.2,name=iPhone 6 Plus"
+    - osx_image: xcode7.1
+      env: DESTINATION="OS=9.1,name=iPhone 6s"
+    - osx_image: xcode7.1
+      env: DESTINATION="OS=9.0,name=iPhone 6 Plus"
+    - osx_image: xcode7.1
+      env: DESTINATION="OS=8.4,name=iPhone 6"
+    - osx_image: xcode7.1
+      env: DESTINATION="OS=8.3,name=iPhone 5S"
+    - osx_image: xcode7.1
+      env: DESTINATION="OS=8.2,name=iPhone 5"
+    - osx_image: xcode7.1
+      env: DESTINATION="OS=8.1,name=iPhone 4s"
 before_install:
   - gem install cocoapods --no-rdoc --no-ri --no-document --quiet
   - gem install xcpretty --no-rdoc --no-ri --no-document --quiet

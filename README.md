@@ -1,5 +1,7 @@
 # Material Motion Objective-C Runtime
 
+[![Build Status](https://travis-ci.org/material-motion/material-motion-runtime-objc.svg?branch=develop)](https://travis-ci.org/material-motion/material-motion-runtime-objc)
+
 The Material Motion Runtime is a tool for describing motion declaratively.
 
 ## Declarative motion, aka motion as data

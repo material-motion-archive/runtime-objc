@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		36A920011D2D56900001C0B0 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A920001D2D56900001C0B0 /* MainViewController.m */; };
+		36A9202C1D2FEB4D0001C0B0 /* Tween.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A9202B1D2FEB4D0001C0B0 /* Tween.m */; };
 		66876C601D25ED610054CED4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66876C5F1D25ED610054CED4 /* main.m */; };
 		66876C631D25ED610054CED4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66876C621D25ED610054CED4 /* AppDelegate.m */; };
 		66876C661D25ED610054CED4 /* PlanFadeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66876C651D25ED610054CED4 /* PlanFadeViewController.m */; };
@@ -19,6 +20,8 @@
 /* Begin PBXFileReference section */
 		36A91FFF1D2D56900001C0B0 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		36A920001D2D56900001C0B0 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		36A9202A1D2FEB4D0001C0B0 /* Tween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tween.h; path = Plan/Tween.h; sourceTree = "<group>"; };
+		36A9202B1D2FEB4D0001C0B0 /* Tween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tween.m; path = Plan/Tween.m; sourceTree = "<group>"; };
 		4E9F0FB5FB808715EC1FC0B7 /* Pods_MaterialMotionRuntime_PlanCatalog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MaterialMotionRuntime_PlanCatalog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66876C5B1D25ED610054CED4 /* PlanCatalog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlanCatalog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66876C5F1D25ED610054CED4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -48,6 +51,8 @@
 		36A920021D2D56990001C0B0 /* Plan */ = {
 			isa = PBXGroup;
 			children = (
+				36A9202A1D2FEB4D0001C0B0 /* Tween.h */,
+				36A9202B1D2FEB4D0001C0B0 /* Tween.m */,
 				66876C641D25ED610054CED4 /* PlanFadeViewController.h */,
 				66876C651D25ED610054CED4 /* PlanFadeViewController.m */,
 			);
@@ -235,6 +240,7 @@
 			files = (
 				66876C661D25ED610054CED4 /* PlanFadeViewController.m in Sources */,
 				66876C631D25ED610054CED4 /* AppDelegate.m in Sources */,
+				36A9202C1D2FEB4D0001C0B0 /* Tween.m in Sources */,
 				66876C601D25ED610054CED4 /* main.m in Sources */,
 				36A920011D2D56900001C0B0 /* MainViewController.m in Sources */,
 			);

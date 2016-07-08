@@ -15,8 +15,14 @@
  */
 
 #import "PlanFadeViewController.h"
+#import "Tween.h"
+
+@import MaterialMotionRuntime;
 
 @interface PlanFadeViewController ()
+
+@property(nonatomic) UIView *redView;
+
 @end
 
 @implementation PlanFadeViewController
@@ -34,21 +40,36 @@
 
   self.view.backgroundColor = [UIColor grayColor];
 
-  UIView *redView = [[UIView alloc] initWithFrame:CGRectZero];
-  redView.backgroundColor = [UIColor redColor];
-  redView.translatesAutoresizingMaskIntoConstraints = false;
-  [self.view addSubview:redView];
+  self.redView = [[UIView alloc] initWithFrame:CGRectZero];
+  self.redView.backgroundColor = [UIColor redColor];
+  self.redView.translatesAutoresizingMaskIntoConstraints = false;
+  [self.view addSubview:self.redView];
 
-  [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[subView]-20-|"
+  [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-100-[subView]-100-|"
                                                                     options:0
                                                                     metrics:nil
-                                                                      views:@{ @"subView" : redView }]];
-  [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[subView]-20-|"
+                                                                      views:@{ @"subView" : self.redView }]];
+  [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-100-[subView]-100-|"
                                                                     options:0
                                                                     metrics:nil
-                                                                      views:@{ @"subView" : redView }]];
+                                                                      views:@{ @"subView" : self.redView }]];
 
-  redView.alpha = 0;
+  self.redView.alpha = 0;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+  [super viewDidAppear:animated];
+
+  Tween *fade = [[Tween alloc] init];
+  fade.property = @"opacity";
+  fade.from = 0;
+  fade.to = 1;
+
+  MDMTransaction *transaction = [MDMTransaction new];
+  [transaction addPlan:fade toTarget:self.redView];
+
+  MDMScheduler *scheduler = [MDMScheduler new];
+  [scheduler commitTransaction:transaction];
 }
 
 @end

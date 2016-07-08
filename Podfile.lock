@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
-  MaterialMotionRuntime: 75fefd025d476306fadd0267d6e1b5d19ad21bad
+  MaterialMotionRuntime: 97dd05916b9b445dbf5766fa202c08cf8d83f21f
 
 PODFILE CHECKSUM: 42629d89e36af0dc865cee4af81b3c347278035a
 

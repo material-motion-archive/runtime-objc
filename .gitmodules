@@ -13,3 +13,6 @@
 [submodule "third_party/clang-format-linter"]
 	path = third_party/clang-format-linter
 	url = https://github.com/vhbit/clang-format-linter.git
+[submodule "third_party/arc-xcode-test-engine"]
+	path = third_party/arc-xcode-test-engine
+	url = https://github.com/google/arc-xcode-test-engine.git

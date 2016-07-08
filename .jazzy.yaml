@@ -1,0 +1,4 @@
+module: MaterialMotionRuntime
+umbrella_header: src/MaterialMotionRuntime.h
+objc: true
+sdk: iphonesimulator

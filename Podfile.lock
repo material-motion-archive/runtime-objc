@@ -1,0 +1,16 @@
+PODS:
+  - MaterialMotionRuntime (1.0.0)
+
+DEPENDENCIES:
+  - MaterialMotionRuntime (from `./`)
+
+EXTERNAL SOURCES:
+  MaterialMotionRuntime:
+    :path: "./"
+
+SPEC CHECKSUMS:
+  MaterialMotionRuntime: 97dd05916b9b445dbf5766fa202c08cf8d83f21f
+
+PODFILE CHECKSUM: 42629d89e36af0dc865cee4af81b3c347278035a
+
+COCOAPODS: 1.0.1

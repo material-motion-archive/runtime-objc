@@ -1,0 +1,26 @@
+{
+  "load": [
+    "third_party/clang-format-linter",
+    "third_party/arc-proselint",
+    "third_party/arc-hook-conphig",
+    "third_party/arc-jazzy-linter",
+    "third_party/arc-xcode-test-engine",
+    ".arc-hooks/post-diff/arc-hook-github-issues"
+  ],
+  "arcanist_configuration" : "HookConphig",
+  "phabricator.uri" : "http://codereview.cc/",
+  "arc.land.onto.default" : "develop",
+  "arc.feature.start.default": "origin/develop",
+  "git.default-relative-commit" : "origin/develop",
+  "unit.xcode": {
+    "build": {
+      "workspace": "MaterialMotionRuntime.xcworkspace",
+      "scheme": "RuntimeTests",
+      "configuration": "Debug",
+      "destination": "platform=iOS Simulator,name=iPhone 6S"
+    },
+    "coverage": {
+      "product": "MaterialMotionRuntime.framework/MaterialMotionRuntime"
+    }
+  }
+}

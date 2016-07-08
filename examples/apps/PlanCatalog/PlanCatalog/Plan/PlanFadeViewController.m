@@ -21,8 +21,7 @@
 
 @implementation PlanFadeViewController
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
   if (self) {
     self.title = NSStringFromClass(self.class);
@@ -43,11 +42,11 @@
   [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[subView]-20-|"
                                                                     options:0
                                                                     metrics:nil
-                                                                      views:@{@"subView" : redView}]];
+                                                                      views:@{ @"subView" : redView }]];
   [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[subView]-20-|"
                                                                     options:0
                                                                     metrics:nil
-                                                                      views:@{@"subView" : redView}]];
+                                                                      views:@{ @"subView" : redView }]];
 
   redView.alpha = 0;
 }

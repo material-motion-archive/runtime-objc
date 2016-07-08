@@ -21,14 +21,13 @@ NSString *const title = @"Material Motion";
 
 @interface MainViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic) UITableView *tableView;
+@property(nonatomic) UITableView *tableView;
 
 @end
 
 @implementation MainViewController
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
   if (self) {
     self.title = title;
@@ -43,12 +42,13 @@ NSString *const title = @"Material Motion";
   self.tableView.translatesAutoresizingMaskIntoConstraints = false;
   [self.view addSubview:self.tableView];
   [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|"
-                                                                    options:0 metrics:nil
-                                                                      views:@{@"tableView" : self.tableView}]];
+                                                                    options:0
+                                                                    metrics:nil
+                                                                      views:@{ @"tableView" : self.tableView }]];
   [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView]|"
                                                                     options:0
                                                                     metrics:nil
-                                                                      views:@{@"tableView" : self.tableView}]];
+                                                                      views:@{ @"tableView" : self.tableView }]];
 
   self.tableView.delegate = self;
   self.tableView.dataSource = self;
@@ -56,30 +56,27 @@ NSString *const title = @"Material Motion";
          forCellReuseIdentifier:NSStringFromClass([UITableViewCell class])];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
   [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:true];
 }
 
-- (NSArray <Class>*)controllers {
-  NSArray <Class>*controllers = @[PlanFadeViewController.class];
+- (NSArray<Class> *)controllers {
+  NSArray<Class> *controllers = @[ PlanFadeViewController.class ];
 
   return controllers;
 }
 
 #pragma mark - TableView DataSource
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
   return 1;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   UITableViewCell *cell =
-    [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([UITableViewCell class])
-                                    forIndexPath:indexPath];
+      [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([UITableViewCell class])
+                                      forIndexPath:indexPath];
   Class controllerClass = [self controllers][indexPath.row];
   if (controllerClass) {
     cell.textLabel.text = NSStringFromClass(controllerClass);
@@ -90,8 +87,7 @@ NSString *const title = @"Material Motion";
 
 #pragma mark - TableView Delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   id controller = [[[self controllers][indexPath.row] alloc] init];
   if ([controller isKindOfClass:[UIViewController class]]) {
     [self.navigationController pushViewController:controller animated:true];

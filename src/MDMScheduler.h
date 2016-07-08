@@ -17,27 +17,54 @@
 #import <Foundation/Foundation.h>
 
 @class MDMScheduler;
+@protocol MDMSchedulerDelegate;
 
-@protocol MDMSchedulerDelegate <NSObject>
+/**
+ The possible activity states a scheduler can be in.
 
-@required
-
-- (void)schedulerActivityStateDidChange:(nonnull MDMScheduler *)scheduler;
-
-@end
-
-typedef enum : NSUInteger {
+ A scheduler can be either idle or active. If any performer in the scheduler is active, then the
+ scheduler is active.
+ */
+typedef NS_ENUM(NSUInteger, MDMSchedulerActivityState) {
+  /** An idle scheduler has no active performers. */
   MDMSchedulerActivityStateIdle,
+
+  /** An active scheduler has at least one active performer. */
   MDMSchedulerActivityStateActive,
-} MDMSchedulerActivityState;
+};
 
 @class MDMTransaction;
 
 /**
- The MDMScheduler class coordinates the registration and execution of motion intent, as expressed by
- the MDMPlan type.
+ An instance of MDMScheduler acts as the mediating agent between plans and performers.
+ 
+ Plans are objects that conform to the MDMPlan protocol.
+ Performers are objects that conform to the MDMPerforming protocol.
+ 
+ ## Usage
+ 
+ Many MDMScheduler instances may be instantiated throughout the lifetime of an app.
+ Generally-speaking, one scheduler is created per interaction. An interaction might be a transition,
+ a one-off animation, or a complex multi-state interaction.
+ 
+ To add plans to a scheduler you must create an instance of MDMTransaction. MDMTransaction captures
+ a series of operations association plans with targets.
+ 
+ Once a transaction is committed to a scheduler, the scheduler creates performer instances.
+ Performers are expected to fulfill the described plans.
+ 
+ ## Lifecycle
+ 
+ When an instance of MDMScheduler is deallocated its performers will also be deallocated.
  */
 @interface MDMScheduler : NSObject
+
+#pragma mark Committing transactions
+
+/** Commits the provided transaction to the receiver. */
+- (void)commitTransaction:(nonnull MDMTransaction *)transaction;
+
+#pragma mark State
 
 /**
  The current activity state of the scheduler.
@@ -48,9 +75,20 @@ typedef enum : NSUInteger {
  */
 @property(nonatomic, assign, readonly) MDMSchedulerActivityState activityState;
 
-/** Commits the provided transaction to the receiver. */
-- (void)commitTransaction:(nonnull MDMTransaction *)transaction;
+#pragma mark Delegated events
 
+/** A scheduler delegate can listen to specific state change events. */
 @property(nonatomic, weak, nullable) id<MDMSchedulerDelegate> delegate;
+
+@end
+
+/**
+ The MDMSchedulerDelegate protocol defines state change events that may be sent from an instance of
+ MDMScheduler.
+ */
+@protocol MDMSchedulerDelegate <NSObject>
+
+/** Informs the receiver that the scheduler's current activity state has changed. */
+- (void)schedulerActivityStateDidChange:(nonnull MDMScheduler *)scheduler;
 
 @end

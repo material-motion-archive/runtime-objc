@@ -22,6 +22,8 @@
  */
 @protocol MDMPerforming <NSObject>
 
+#pragma mark Designated initializer
+
 /** The receiver is expected to execute its plan to the provided target. */
 - (nonnull instancetype)initWithTarget:(nonnull id)target;
 
@@ -33,11 +35,15 @@
 
 @protocol MDMPlanPerforming <MDMPerforming>
 
+#pragma mark Adding plans to a performer
+
 /**
- * Provides the performer with an plan.
- *
- * The performer may choose to store this plan or to simply extract necessary information and cache
- * it separately.
+ Provides the performer with an plan.
+ 
+ The performer may choose to store this plan or to simply extract necessary information and cache
+ it separately.
+
+ @param plan The plan that required this type of performer.
  */
 - (void)addPlan:(nullable id<MDMPlan>)plan;
 
@@ -47,6 +53,8 @@
  A class conforming to MDMDelegatedPerforming is expected to delegate execution to an external system.
  */
 @protocol MDMDelegatedPerforming <MDMPerforming>
+
+#pragma mark Delegating performing
 
 /**
  The performer must call this method before delegated execution begins.

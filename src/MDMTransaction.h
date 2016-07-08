@@ -24,6 +24,8 @@
  */
 @interface MDMTransaction : NSObject
 
+#pragma mark Adding plans to a transaction
+
 /** Associate an plan with a given target. */
 - (void)addPlan:(nonnull id<MDMPlan>)plan toTarget:(nonnull id)target;
 

@@ -23,6 +23,8 @@
  */
 @protocol MDMPlan <NSObject>
 
+#pragma mark Defining the performer class
+
 /**
  Asks the receiver to return a class conforming to MDMPerformer.
 

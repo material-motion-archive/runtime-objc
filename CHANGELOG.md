@@ -1,3 +1,4 @@
-# release-candidate
+# 1.0.0
 
- TODO: Enumerate changes.
+- Initial release.
+- Includes a Tween in CoreAnimation, runtime, catalog and the first unit test.

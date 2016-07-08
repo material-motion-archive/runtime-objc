@@ -8,17 +8,19 @@ env:
   - LC_CTYPE=en_US.UTF-8
   - LANG=en_US.UTF-8
   matrix:
-    - DESTINATION="OS=9.2,name=iPhone 6 Plus" SDK=iphonesimulator9.3
-    - DESTINATION="OS=9.1,name=iPhone 6s" SDK=iphonesimulator9.3
-    - DESTINATION="OS=9.0,name=iPhone 6 Plus" SDK=iphonesimulator9.3
-    - DESTINATION="OS=8.4,name=iPhone 6" SDK=iphonesimulator9.3
-    - DESTINATION="OS=8.3,name=iPhone 5S" SDK=iphonesimulator9.3
-    - DESTINATION="OS=8.2,name=iPhone 5" SDK=iphonesimulator9.3
-    - DESTINATION="OS=8.1,name=iPhone 4s" SDK=iphonesimulator9.3
+    - DESTINATION="OS=9.3,name=iPhone 6s Plus"
+    - DESTINATION="OS=9.2,name=iPhone 6 Plus"
+    - DESTINATION="OS=9.1,name=iPhone 6s"
+    - DESTINATION="OS=9.0,name=iPhone 6 Plus"
+    - DESTINATION="OS=8.4,name=iPhone 6"
+    - DESTINATION="OS=8.3,name=iPhone 5S"
+    - DESTINATION="OS=8.2,name=iPhone 5"
+    - DESTINATION="OS=8.1,name=iPhone 4s"
 before_install:
   - gem install cocoapods --no-rdoc --no-ri --no-document --quiet
   - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
   - pod install
 script:
   - set -o pipefail
-  - xcodebuild -workspace MaterialMotionRuntime.xcworkspace -scheme RuntimeTests -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build test | xcpretty -c;
+  - xcodebuild -workspace MaterialMotionRuntime.xcworkspace -scheme PlanCatalog -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c;
+  - xcodebuild -workspace MaterialMotionRuntime.xcworkspace -scheme RuntimeTests -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c;

@@ -15,7 +15,7 @@
  */
 
 #import "MainViewController.h"
-#import "Plan/PlanFadeViewController.h"
+#import "PlanFadeViewController.h"
 
 NSString *const title = @"Material Motion";
 

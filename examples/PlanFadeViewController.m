@@ -60,8 +60,7 @@
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
 
-  Tween *fade = [[Tween alloc] init];
-  fade.property = @"opacity";
+  Tween *fade = [[Tween alloc] initWithProperty:@"opacity" name:@"opacity"];
   fade.from = 0;
   fade.to = 1;
 

@@ -26,6 +26,8 @@
 
 @property(nonatomic, copy, nonnull) NSString* name;
 
-- (nonnull instancetype)initWithProperty:(nonnull NSString*)property name:(nonnull NSString*)name;
+- (nonnull instancetype)initWithProperty:(nonnull NSString*)property name:(nonnull NSString*)name NS_DESIGNATED_INITIALIZER;
+
+- (nonnull instancetype)init NS_UNAVAILABLE;
 
 @end

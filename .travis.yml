@@ -22,5 +22,5 @@ before_install:
   - pod install
 script:
   - set -o pipefail
-  - xcodebuild -workspace MaterialMotionRuntime.xcworkspace -scheme PlanCatalog -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c;
-  - xcodebuild -workspace MaterialMotionRuntime.xcworkspace -scheme RuntimeTests -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c;
+  - xcodebuild -workspace MaterialMotionRuntime.xcworkspace -scheme Catalog -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c;
+  - xcodebuild -workspace MaterialMotionRuntime.xcworkspace -scheme UnitTests -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c;

@@ -1,16 +1,7 @@
 {
   "linters": {
-    "clang-format": {
-      "type": "clang-format",
-      "include": "(\\.(m|h|mm)$)",
-      "exclude": "(/Pods/)"
-    },
     "chmod": {
       "type": "chmod"
-    },
-    "jazzy": {
-      "type": "jazzy",
-      "include": "(src/[^\/]+?\\.(h|swift)$)"
     },
     "prose": {
       "type": "prose",
@@ -28,6 +19,15 @@
     "spelling": {
       "type": "spelling",
       "include": "(\\.(md)$)"
+    },
+    "clang-format": {
+      "type": "clang-format",
+      "include": "(\\.(m|h|mm)$)",
+      "exclude": "(/Pods/)"
+    },
+    "jazzy": {
+      "type": "jazzy",
+      "include": "(src/[^/]+?\\.(h|swift)$)"
     }
   }
 }

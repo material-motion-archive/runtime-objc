@@ -3,11 +3,11 @@ abstract_target 'MaterialMotionRuntime' do
   workspace 'MaterialMotionRuntime.xcworkspace'
 	use_frameworks! 
 	
-	target "RuntimeTests" do
-		project 'tests/apps/MDMRuntimeTests/RuntimeTests.xcodeproj'
+	target "UnitTests" do
+		project 'examples/apps/Catalog/Catalog.xcodeproj'
 	end
-	
-	target "PlanCatalog" do
-		project 'examples/apps/PlanCatalog/PlanCatalog.xcodeproj'
+
+	target "Catalog" do
+		project 'examples/apps/Catalog/Catalog.xcodeproj'
 	end
 end

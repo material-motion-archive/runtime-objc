@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "MaterialMotionRuntime"
-  s.summary      = "Material Motion Objective-C Runtime"
+  s.summary      = "Material Motion Runtime for Apple Devices"
   s.version      = "1.0.0"
   s.authors      = "The Material Motion Authors."
   s.license      = "Apache 2.0"

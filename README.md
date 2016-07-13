@@ -1,4 +1,4 @@
-# Material Motion Objective-C Runtime
+# Material Motion Runtime for Apple Devices
 
 [![Build Status](https://travis-ci.org/material-motion/material-motion-runtime-objc.svg?branch=develop)](https://travis-ci.org/material-motion/material-motion-runtime-objc)
 

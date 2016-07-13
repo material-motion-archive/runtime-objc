@@ -72,3 +72,11 @@
 }
 
 @end
+
+@implementation PlanFadeViewController (CatalogByConvention)
+
++ (NSArray<NSString *> *)catalogBreadcrumbs {
+  return @[ @"Runtime", @"Fade in plan" ];
+}
+
+@end

@@ -27,7 +27,7 @@
     },
     "jazzy": {
       "type": "jazzy",
-      "include": "(src/[^/]+?\\.(h|swift)$)"
+      "include": "(src/[^\/]+?\\.(h|swift)$)"
     }
   }
 }

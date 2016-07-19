@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3630F1AF1D3E9BC1001E1C83 /* RuntimeTestTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 3630F1AB1D3E99CF001E1C83 /* RuntimeTestTypes.m */; };
 		36A920011D2D56900001C0B0 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A920001D2D56900001C0B0 /* MainViewController.m */; };
 		3C3D2B52435BC7B4312983A3 /* Pods_MaterialMotionRuntime_Catalog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E9F0FB5FB808715EC1FC0B7 /* Pods_MaterialMotionRuntime_Catalog.framework */; };
 		4489E3B5A134470DCF97D0CD /* Pods_MaterialMotionRuntime_UnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2B624803B0AE3BEB727C4F2 /* Pods_MaterialMotionRuntime_UnitTests.framework */; };
@@ -31,6 +32,8 @@
 
 /* Begin PBXFileReference section */
 		03F5D02B2B631F68A32B4870 /* Pods-MaterialMotionRuntime-Catalog.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaterialMotionRuntime-Catalog.release.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MaterialMotionRuntime-Catalog/Pods-MaterialMotionRuntime-Catalog.release.xcconfig"; sourceTree = "<group>"; };
+		3630F1AB1D3E99CF001E1C83 /* RuntimeTestTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RuntimeTestTypes.m; sourceTree = "<group>"; };
+		3630F1AE1D3E9B82001E1C83 /* RuntimeTestTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RuntimeTestTypes.h; sourceTree = "<group>"; };
 		36A91FFF1D2D56900001C0B0 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		36A920001D2D56900001C0B0 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		3BAE67A62BB80977FDFFDEDC /* Pods-MaterialMotionRuntime-Catalog.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaterialMotionRuntime-Catalog.debug.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MaterialMotionRuntime-Catalog/Pods-MaterialMotionRuntime-Catalog.debug.xcconfig"; sourceTree = "<group>"; };
@@ -89,6 +92,8 @@
 			isa = PBXGroup;
 			children = (
 				66251F1C1D360C87006EBC89 /* MDMRuntimeTests.m */,
+				3630F1AE1D3E9B82001E1C83 /* RuntimeTestTypes.h */,
+				3630F1AB1D3E99CF001E1C83 /* RuntimeTestTypes.m */,
 			);
 			path = unit;
 			sourceTree = "<group>";
@@ -371,6 +376,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3630F1AF1D3E9BC1001E1C83 /* RuntimeTestTypes.m in Sources */,
 				66251F1E1D360C8E006EBC89 /* MDMRuntimeTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

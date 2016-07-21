@@ -45,7 +45,7 @@
 
  @param plan The plan that required this type of performer.
  */
-- (void)addPlan:(nullable id<MDMPlan>)plan;
+- (void)addPlan:(nonnull id<MDMPlan>)plan;
 
 @end
 

@@ -39,7 +39,7 @@
 
 /**
  Provides the performer with an plan.
- 
+
  The performer may choose to store this plan or to simply extract necessary information and cache
  it separately.
 

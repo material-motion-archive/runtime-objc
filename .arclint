@@ -3,6 +3,17 @@
     "chmod": {
       "type": "chmod"
     },
+    "text": {
+      "type": "text",
+      "include": "(\\.(m|h|mm|md|swift)$)",
+      "exclude": [
+        "(/Pods/)"
+      ],
+      "severity": {
+        "3": "disabled",
+        "5": "disabled"
+      }
+    },
     "prose": {
       "type": "prose",
       "include": "(\\.(md)$)",

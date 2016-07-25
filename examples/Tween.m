@@ -52,6 +52,11 @@
 
 @end
 
+@interface TweenPerformer ()
+@property(nonatomic, copy) void (^willStartNamed)(NSString *_Nonnull);
+@property(nonatomic, copy) void (^didEndNamed)(NSString *_Nonnull);
+@end
+
 @implementation TweenPerformer
 
 @synthesize delegatedPerformanceWillStartNamed;
@@ -77,7 +82,7 @@
 
     [CATransaction commit];
 
-    self.delegatedPerformanceDidEndNamed(tweenPlan.name);
+    self.didEndNamed(tweenPlan.name);
   }];
 
   CABasicAnimation *animation = [CABasicAnimation animation];
@@ -90,7 +95,29 @@
 
   [CATransaction commit];
 
-  self.delegatedPerformanceWillStartNamed(tweenPlan.name);
+  self.willStartNamed(tweenPlan.name);
+}
+
+- (void)setDelegatedPerformanceWillStartNamed:(void (^)(NSString *_Nonnull))willStartNamed
+                                  didEndNamed:(void (^)(NSString *_Nonnull))didEndNamed {
+  self.willStartNamed = willStartNamed;
+  self.didEndNamed = didEndNamed;
+}
+
+- (void)setDelegatedPerformanceWillStartNamed:(void (^)(NSString *_Nonnull))willStartNamed {
+  self.willStartNamed = willStartNamed;
+}
+
+- (void (^)(NSString *_Nonnull))delegatedPerformanceWillStartNamed {
+  return self.willStartNamed;
+}
+
+- (void)setDelegatedPerformanceDidEndNamed:(void (^)(NSString *_Nonnull))didEndNamed {
+  self.didEndNamed = didEndNamed;
+}
+
+- (void (^)(NSString *_Nonnull))delegatedPerformanceDidEndNamed {
+  return self.didEndNamed;
 }
 
 @end

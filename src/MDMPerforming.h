@@ -56,18 +56,33 @@
 
 #pragma mark Delegating performing
 
+@optional
+
+/**
+ The performer will be provided with two methods for indicating the current activity state of the
+ performer.
+
+ These methods are not recursive.
+ */
+- (void)setDelegatedPerformanceWillStartNamed:(nonnull void (^)(NSString *_Nonnull))willStartNamed
+                                  didEndNamed:(nonnull void (^)(NSString *_Nonnull))didEndNamed;
+
+@required
+
 /**
  The performer must call this method before delegated execution begins.
 
  This is not recursive.
  */
-@property(nonnull, copy) void (^delegatedPerformanceWillStartNamed)(NSString *_Nonnull);
+@property(nonatomic, nonnull, copy) void (^delegatedPerformanceWillStartNamed)(NSString *_Nonnull)
+    __deprecated_msg("Implement setDelegatedPerformanceWillStartNamed:didEndNamed: instead.");
 
 /**
  The performer must call this method after delegated execution ends.
 
  This is not recursive.
  */
-@property(nonnull, copy) void (^delegatedPerformanceDidEndNamed)(NSString *_Nonnull);
+@property(nonatomic, nonnull, copy) void (^delegatedPerformanceDidEndNamed)(NSString *_Nonnull)
+    __deprecated_msg("Implement setDelegatedPerformanceWillStartNamed:didEndNamed: instead.");
 
 @end

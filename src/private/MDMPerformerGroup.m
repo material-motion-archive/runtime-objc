@@ -86,54 +86,63 @@
 
   // Delegated performance
 
+  __weak MDMPerformerInfo *weakInfo = performerInfo;
+  __weak MDMPerformerGroup *weakSelf = self;
+  void (^willStartNamed)(NSString *_Nonnull) = ^(NSString *name) {
+    MDMPerformerInfo *strongInfo = weakInfo;
+    MDMPerformerGroup *strongSelf = weakSelf;
+    if (!strongInfo || !strongSelf) {
+      return;
+    }
+
+    // Register the work
+
+    [strongInfo.delegatedPerformanceNames addObject:name];
+
+    // Check our group's activity state
+
+    // TODO(featherless): If/when we explore multi-threaded schedulers we need to more cleanly
+    // propagate activity state up to the Scheduler. As it stands, this code is not thread-safe.
+
+    BOOL wasInactive = strongSelf.activePerformers.count == 0;
+
+    [strongSelf.activePerformers addObject:strongInfo.performer];
+
+    if (wasInactive) {
+      [strongSelf.delegate performerGroup:strongSelf activeStateDidChange:YES];
+    }
+  };
+
+  void (^didEndNamed)(NSString *_Nonnull) = ^(NSString *name) {
+    MDMPerformerInfo *strongInfo = weakInfo;
+    MDMPerformerGroup *strongSelf = weakSelf;
+    if (!strongInfo) {
+      return;
+    }
+
+    [strongInfo.delegatedPerformanceNames removeObject:name];
+
+    if (strongInfo.delegatedPerformanceNames.count == 0) {
+      [strongSelf.activePerformers removeObject:strongInfo.performer];
+
+      if (strongSelf.activePerformers.count == 0) {
+        [strongSelf.delegate performerGroup:strongSelf activeStateDidChange:NO];
+      }
+    }
+  };
+
   BOOL canStartDelegated = [performer respondsToSelector:@selector(setDelegatedPerformanceWillStartNamed:)];
   BOOL canEndDelegated = [performer respondsToSelector:@selector(setDelegatedPerformanceDidEndNamed:)];
   if (canStartDelegated && canEndDelegated) {
-    __weak MDMPerformerInfo *weakInfo = performerInfo;
-    __weak MDMPerformerGroup *weakSelf = self;
+    id<MDMDelegatedPerforming> delegatedPerformer = (id<MDMDelegatedPerforming>)performer;
+    [delegatedPerformer setDelegatedPerformanceWillStartNamed:willStartNamed];
+    [delegatedPerformer setDelegatedPerformanceDidEndNamed:didEndNamed];
+  }
 
-    [(id<MDMDelegatedPerforming>)performer setDelegatedPerformanceWillStartNamed:^(NSString *name) {
-      MDMPerformerInfo *strongInfo = weakInfo;
-      MDMPerformerGroup *strongSelf = weakSelf;
-      if (!strongInfo || !strongSelf) {
-        return;
-      }
-
-      // Register the work
-
-      [strongInfo.delegatedPerformanceNames addObject:name];
-
-      // Check our group's activity state
-
-      // TODO(featherless): If/when we explore multi-threaded schedulers we need to more cleanly
-      // propagate activity state up to the Scheduler. As it stands, this code is not thread-safe.
-
-      BOOL wasInactive = strongSelf.activePerformers.count == 0;
-
-      [strongSelf.activePerformers addObject:strongInfo.performer];
-
-      if (wasInactive) {
-        [strongSelf.delegate performerGroup:strongSelf activeStateDidChange:YES];
-      }
-    }];
-
-    [(id<MDMDelegatedPerforming>)performer setDelegatedPerformanceDidEndNamed:^(NSString *name) {
-      MDMPerformerInfo *strongInfo = weakInfo;
-      MDMPerformerGroup *strongSelf = weakSelf;
-      if (!strongInfo) {
-        return;
-      }
-
-      [strongInfo.delegatedPerformanceNames removeObject:name];
-
-      if (strongInfo.delegatedPerformanceNames.count == 0) {
-        [strongSelf.activePerformers removeObject:strongInfo.performer];
-
-        if (strongSelf.activePerformers.count == 0) {
-          [strongSelf.delegate performerGroup:strongSelf activeStateDidChange:NO];
-        }
-      }
-    }];
+  if ([performer respondsToSelector:@selector(setDelegatedPerformanceWillStartNamed:didEndNamed:)]) {
+    id<MDMDelegatedPerforming> delegatedPerformer = (id<MDMDelegatedPerforming>)performer;
+    [delegatedPerformer setDelegatedPerformanceWillStartNamed:willStartNamed
+                                                  didEndNamed:didEndNamed];
   }
 }
 

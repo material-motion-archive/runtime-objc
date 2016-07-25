@@ -49,25 +49,36 @@
 
 @end
 
+#pragma mark - Delegated performing
+
+/**
+ An object conforming to MDMDelegatedPerformingToken represents a single unit of delegated
+ performance.
+ */
+@protocol MDMDelegatedPerformingToken <NSObject>
+@end
+
+/** A block that returns a delegated performance token. */
+typedef _Nullable id<MDMDelegatedPerformingToken> (^MDMDelegatedPerformanceTokenReturnBlock)(void);
+
+/** A block that accepts a delegated performance token. */
+typedef void (^MDMDelegatedPerformanceTokenArgBlock)(_Nonnull id<MDMDelegatedPerformingToken>);
+
 /**
  A class conforming to MDMDelegatedPerforming is expected to delegate execution to an external system.
  */
 @protocol MDMDelegatedPerforming <MDMPerforming>
 
-#pragma mark Delegating performing
-
 @optional
+
+#pragma mark Delegating performing
 
 /**
  The performer will be provided with two methods for indicating the current activity state of the
  performer.
-
- These methods are not recursive.
  */
-- (void)setDelegatedPerformanceWillStartNamed:(nonnull void (^)(NSString *_Nonnull))willStartNamed
-                                  didEndNamed:(nonnull void (^)(NSString *_Nonnull))didEndNamed;
-
-@required
+- (void)setDelegatedPerformanceWillStart:(nonnull MDMDelegatedPerformanceTokenReturnBlock)willStart
+                                  didEnd:(nonnull MDMDelegatedPerformanceTokenArgBlock)didEnd;
 
 /**
  The performer must call this method before delegated execution begins.

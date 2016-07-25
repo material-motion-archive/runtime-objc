@@ -53,14 +53,11 @@
 @end
 
 @interface TweenPerformer ()
-@property(nonatomic, copy) void (^willStartNamed)(NSString *_Nonnull);
-@property(nonatomic, copy) void (^didEndNamed)(NSString *_Nonnull);
+@property(nonatomic, copy) MDMDelegatedPerformanceTokenReturnBlock willStart;
+@property(nonatomic, copy) MDMDelegatedPerformanceTokenArgBlock didEnd;
 @end
 
 @implementation TweenPerformer
-
-@synthesize delegatedPerformanceWillStartNamed;
-@synthesize delegatedPerformanceDidEndNamed;
 
 - (instancetype)initWithTarget:(UIView *)target {
   self = [super init];
@@ -71,6 +68,8 @@
 }
 
 - (void)addPlan:(Tween *)tweenPlan {
+  id<MDMDelegatedPerformingToken> token = self.willStart();
+
   [CATransaction begin];
 
   [CATransaction setCompletionBlock:^{
@@ -82,7 +81,7 @@
 
     [CATransaction commit];
 
-    self.didEndNamed(tweenPlan.name);
+    self.didEnd(token);
   }];
 
   CABasicAnimation *animation = [CABasicAnimation animation];
@@ -94,30 +93,12 @@
   [self.target.layer addAnimation:animation forKey:tweenPlan.name];
 
   [CATransaction commit];
-
-  self.willStartNamed(tweenPlan.name);
 }
 
-- (void)setDelegatedPerformanceWillStartNamed:(void (^)(NSString *_Nonnull))willStartNamed
-                                  didEndNamed:(void (^)(NSString *_Nonnull))didEndNamed {
-  self.willStartNamed = willStartNamed;
-  self.didEndNamed = didEndNamed;
-}
-
-- (void)setDelegatedPerformanceWillStartNamed:(void (^)(NSString *_Nonnull))willStartNamed {
-  self.willStartNamed = willStartNamed;
-}
-
-- (void (^)(NSString *_Nonnull))delegatedPerformanceWillStartNamed {
-  return self.willStartNamed;
-}
-
-- (void)setDelegatedPerformanceDidEndNamed:(void (^)(NSString *_Nonnull))didEndNamed {
-  self.didEndNamed = didEndNamed;
-}
-
-- (void (^)(NSString *_Nonnull))delegatedPerformanceDidEndNamed {
-  return self.didEndNamed;
+- (void)setDelegatedPerformanceWillStart:(MDMDelegatedPerformanceTokenReturnBlock)willStart
+                                  didEnd:(MDMDelegatedPerformanceTokenArgBlock)didEnd {
+  self.willStart = willStart;
+  self.didEnd = didEnd;
 }
 
 @end

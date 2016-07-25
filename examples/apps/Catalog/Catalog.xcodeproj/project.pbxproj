@@ -11,7 +11,9 @@
 		36A920011D2D56900001C0B0 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A920001D2D56900001C0B0 /* MainViewController.m */; };
 		3C3D2B52435BC7B4312983A3 /* Pods_MaterialMotionRuntime_Catalog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E9F0FB5FB808715EC1FC0B7 /* Pods_MaterialMotionRuntime_Catalog.framework */; };
 		4489E3B5A134470DCF97D0CD /* Pods_MaterialMotionRuntime_UnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2B624803B0AE3BEB727C4F2 /* Pods_MaterialMotionRuntime_UnitTests.framework */; };
+		6624C6431D466D7C00DF3108 /* DelegatedPerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6624C6421D466D7C00DF3108 /* DelegatedPerformanceTests.swift */; };
 		66251F1E1D360C8E006EBC89 /* MDMRuntimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 66251F1C1D360C87006EBC89 /* MDMRuntimeTests.m */; };
+		6625A5531D467EBD00FD10F7 /* TestSchedulerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6625A5521D467EBD00FD10F7 /* TestSchedulerDelegate.swift */; };
 		66876C601D25ED610054CED4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66876C5F1D25ED610054CED4 /* main.m */; };
 		66876C631D25ED610054CED4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66876C621D25ED610054CED4 /* AppDelegate.m */; };
 		66876C6B1D25ED610054CED4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66876C6A1D25ED610054CED4 /* Assets.xcassets */; };
@@ -41,8 +43,11 @@
 		4E9F0FB5FB808715EC1FC0B7 /* Pods_MaterialMotionRuntime_Catalog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MaterialMotionRuntime_Catalog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		586FE8540230E626300786A1 /* Pods-MaterialMotionRuntime-UnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaterialMotionRuntime-UnitTests.release.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MaterialMotionRuntime-UnitTests/Pods-MaterialMotionRuntime-UnitTests.release.xcconfig"; sourceTree = "<group>"; };
 		65D8BB400B3DC634E8675679 /* Pods_MaterialMotionRuntime_Catalog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MaterialMotionRuntime_Catalog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6624C6421D466D7C00DF3108 /* DelegatedPerformanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelegatedPerformanceTests.swift; sourceTree = "<group>"; };
 		66251F111D360C65006EBC89 /* UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		66251F1C1D360C87006EBC89 /* MDMRuntimeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDMRuntimeTests.m; sourceTree = "<group>"; };
+		6625A5511D467D1C00FD10F7 /* UnitTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UnitTests-Bridging-Header.h"; path = "UnitTests/UnitTests-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		6625A5521D467EBD00FD10F7 /* TestSchedulerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSchedulerDelegate.swift; sourceTree = "<group>"; };
 		66876C5B1D25ED610054CED4 /* Catalog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Catalog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66876C5F1D25ED610054CED4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		66876C611D25ED610054CED4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -94,6 +99,8 @@
 				66251F1C1D360C87006EBC89 /* MDMRuntimeTests.m */,
 				3630F1AE1D3E9B82001E1C83 /* RuntimeTestTypes.h */,
 				3630F1AB1D3E99CF001E1C83 /* RuntimeTestTypes.m */,
+				6624C6421D466D7C00DF3108 /* DelegatedPerformanceTests.swift */,
+				6625A5521D467EBD00FD10F7 /* TestSchedulerDelegate.swift */,
 			);
 			path = unit;
 			sourceTree = "<group>";
@@ -129,6 +136,7 @@
 				66876C6A1D25ED610054CED4 /* Assets.xcassets */,
 				66876C6C1D25ED610054CED4 /* LaunchScreen.storyboard */,
 				66876C6F1D25ED610054CED4 /* Info.plist */,
+				6625A5511D467D1C00FD10F7 /* UnitTests-Bridging-Header.h */,
 				66876C5E1D25ED610054CED4 /* Supporting Files */,
 			);
 			path = src;
@@ -233,6 +241,7 @@
 				TargetAttributes = {
 					66251F101D360C65006EBC89 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = 66876C5A1D25ED610054CED4;
 					};
 					66876C5A1D25ED610054CED4 = {
@@ -376,6 +385,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6625A5531D467EBD00FD10F7 /* TestSchedulerDelegate.swift in Sources */,
+				6624C6431D466D7C00DF3108 /* DelegatedPerformanceTests.swift in Sources */,
 				3630F1AF1D3E9BC1001E1C83 /* RuntimeTestTypes.m in Sources */,
 				66251F1E1D360C8E006EBC89 /* MDMRuntimeTests.m in Sources */,
 			);
@@ -420,12 +431,15 @@
 			baseConfigurationReference = 410EA1DE9CF79CEBF25C7B38 /* Pods-MaterialMotionRuntime-UnitTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = UnitTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.google.UnitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "UnitTests/UnitTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Catalog.app/Catalog";
 			};
 			name = Debug;
@@ -435,11 +449,14 @@
 			baseConfigurationReference = 586FE8540230E626300786A1 /* Pods-MaterialMotionRuntime-UnitTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = UnitTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.google.UnitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "UnitTests/UnitTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Catalog.app/Catalog";
 			};
 			name = Release;

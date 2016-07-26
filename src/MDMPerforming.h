@@ -20,6 +20,7 @@
  A class conforming to MDMPerforming is expected to implement the plan of motion described by objects
  that conform to MDMPlan.
  */
+NS_SWIFT_NAME(Performing)
 @protocol MDMPerforming <NSObject>
 
 #pragma mark Designated initializer
@@ -33,6 +34,7 @@
 
 /** A class conforming to this protocol will be provided with plan instances. */
 
+NS_SWIFT_NAME(PlanPerforming)
 @protocol MDMPlanPerforming <MDMPerforming>
 
 #pragma mark Adding plans to a performer
@@ -45,7 +47,8 @@
 
  @param plan The plan that required this type of performer.
  */
-- (void)addPlan:(nonnull id<MDMPlan>)plan;
+- (void)addPlan:(nonnull id<MDMPlan>)plan
+NS_SWIFT_NAME(add(plan:));
 
 @end
 
@@ -67,6 +70,7 @@ typedef void (^MDMDelegatedPerformanceTokenArgBlock)(_Nonnull id<MDMDelegatedPer
 /**
  A class conforming to MDMDelegatedPerforming is expected to delegate execution to an external system.
  */
+NS_SWIFT_NAME(DelegatedPerforming)
 @protocol MDMDelegatedPerforming <MDMPerforming>
 
 @optional

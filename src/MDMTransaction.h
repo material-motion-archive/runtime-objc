@@ -22,11 +22,14 @@
  The MDMTransaction class acts as a register of operations that may be committed to an instance of
  MDMScheduler.
  */
+NS_SWIFT_NAME(Transaction)
 @interface MDMTransaction : NSObject
 
 #pragma mark Adding plans to a transaction
 
 /** Associate an plan with a given target. */
-- (void)addPlan:(nonnull id<MDMPlan>)plan toTarget:(nonnull id)target;
+- (void)addPlan:(nonnull id<MDMPlan>)plan
+       toTarget:(nonnull id)target
+NS_SWIFT_NAME(add(plan:to:));
 
 @end

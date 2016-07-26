@@ -57,6 +57,7 @@ typedef NS_ENUM(NSUInteger, MDMSchedulerActivityState) {
 
  When an instance of MDMScheduler is deallocated its performers will also be deallocated.
  */
+NS_SWIFT_NAME(Scheduler)
 @interface MDMScheduler : NSObject
 
 #pragma mark Committing transactions
@@ -86,6 +87,7 @@ typedef NS_ENUM(NSUInteger, MDMSchedulerActivityState) {
  The MDMSchedulerDelegate protocol defines state change events that may be sent from an instance of
  MDMScheduler.
  */
+NS_SWIFT_NAME(SchedulerDelegate)
 @protocol MDMSchedulerDelegate <NSObject>
 
 /** Informs the receiver that the scheduler's current activity state has changed. */

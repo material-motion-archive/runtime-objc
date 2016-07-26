@@ -20,10 +20,10 @@ import MaterialMotionRuntime
 class DelegatedPerformanceTests: XCTestCase {
 
   func testDelegatedPerformanceCausesActivityStateChange() {
-    let transaction = MDMTransaction()
-    transaction.add(DelegatedPlan(), toTarget: NSObject())
+    let transaction = Transaction()
+    transaction.add(plan: DelegatedPlan(), to: NSObject())
 
-    let scheduler = MDMScheduler()
+    let scheduler = Scheduler()
     let delegate = TestSchedulerDelegate()
     scheduler.delegate = delegate
 
@@ -34,27 +34,27 @@ class DelegatedPerformanceTests: XCTestCase {
   }
 }
 
-@objc class DelegatedPlan: NSObject, MDMPlan {
+@objc class DelegatedPlan: NSObject, Plan {
   func performerClass() -> AnyClass {
     return DelegatedPerformer.self
   }
 }
 
-@objc class DelegatedPerformer: NSObject, MDMPlanPerforming, MDMDelegatedPerforming {
+@objc class DelegatedPerformer: NSObject, PlanPerforming, DelegatedPerforming {
   let target: AnyObject
-  var willStart: MDMDelegatedPerformanceTokenReturnBlock!
-  var didEnd: MDMDelegatedPerformanceTokenArgBlock!
+  var willStart: DelegatedPerformanceTokenReturnBlock!
+  var didEnd: DelegatedPerformanceTokenArgBlock!
 
   required init(target: AnyObject) {
     self.target = target
   }
 
-  func add(_ plan: MDMPlan) {
+  func add(plan: Plan) {
     let token = self.willStart()!
     self.didEnd(token)
   }
 
-  func setDelegatedPerformanceWillStart(_ willStart: MDMDelegatedPerformanceTokenReturnBlock, didEnd: MDMDelegatedPerformanceTokenArgBlock) {
+  func setDelegatedPerformanceWillStart(_ willStart: DelegatedPerformanceTokenReturnBlock, didEnd: DelegatedPerformanceTokenArgBlock) {
     self.willStart = willStart
     self.didEnd = didEnd
   }

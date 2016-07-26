@@ -58,13 +58,16 @@ NS_SWIFT_NAME(add(plan:));
  An object conforming to MDMDelegatedPerformingToken represents a single unit of delegated
  performance.
  */
+NS_SWIFT_NAME(DelegatedPerformingToken)
 @protocol MDMDelegatedPerformingToken <NSObject>
 @end
 
 /** A block that returns a delegated performance token. */
+NS_SWIFT_NAME(DelegatedPerformanceTokenReturnBlock)
 typedef _Nullable id<MDMDelegatedPerformingToken> (^MDMDelegatedPerformanceTokenReturnBlock)(void);
 
 /** A block that accepts a delegated performance token. */
+NS_SWIFT_NAME(DelegatedPerformanceTokenArgBlock)
 typedef void (^MDMDelegatedPerformanceTokenArgBlock)(_Nonnull id<MDMDelegatedPerformingToken>);
 
 /**

@@ -5,9 +5,9 @@ notifications:
   email: false
 before_install:
   - gem install cocoapods --no-rdoc --no-ri --no-document --quiet
-#  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
   - pod install
 script:
   - set -o pipefail
-  - xcodebuild build-for-testing test-without-building -workspace MaterialMotionRuntime.xcworkspace -scheme UnitTests -sdk "iphonesimulator10.0" -destination "name=iPhone 6s,OS=10.0" ONLY_ACTIVE_ARCH=YES; # | xcpretty -c;
-  - xcodebuild build -workspace MaterialMotionRuntime.xcworkspace -scheme Catalog -sdk "iphonesimulator10.0" -destination "name=iPhone 6s,OS=10.0" ONLY_ACTIVE_ARCH=YES; # | xcpretty -c;
+  - xcodebuild build-for-testing test-without-building -workspace MaterialMotionRuntime.xcworkspace -scheme UnitTests -sdk "iphonesimulator10.0" -destination "name=iPhone 6s,OS=10.0" ONLY_ACTIVE_ARCH=YES | xcpretty -c;
+  - xcodebuild build -workspace MaterialMotionRuntime.xcworkspace -scheme Catalog -sdk "iphonesimulator10.0" -destination "name=iPhone 6s,OS=10.0" ONLY_ACTIVE_ARCH=YES | xcpretty -c;

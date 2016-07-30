@@ -10,5 +10,5 @@ before_install:
   - pod install
 script:
   - set -o pipefail
-  - arcanist/bin/arc unit --everything
+  - arcanist/bin/arc unit --everything --trace
   - xcodebuild build -workspace MaterialMotionRuntime.xcworkspace -scheme Catalog -sdk "iphonesimulator10.0" -destination "name=iPhone 6s,OS=10.0" ONLY_ACTIVE_ARCH=YES | xcpretty -c;

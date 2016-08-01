@@ -11,6 +11,6 @@ before_install:
 script:
   - set -o pipefail
   - arcanist/bin/arc unit --everything --trace
-  - xcodebuild build -workspace MaterialMotionRuntime.xcworkspace -scheme Catalog -sdk "iphonesimulator10.0" -destination "name=iPhone 6s,OS=10.0" ONLY_ACTIVE_ARCH=YES -enableCodeCoverage "YES" | xcpretty -c;
+  - xcodebuild build -workspace MaterialMotionRuntime.xcworkspace -scheme Catalog -sdk "iphonesimulator10.0" -destination "name=iPhone 6s,OS=10.0" ONLY_ACTIVE_ARCH=YES | xcpretty -c;
 after_success:
   - bash <(curl -s https://codecov.io/bash)

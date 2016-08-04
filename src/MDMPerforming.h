@@ -48,7 +48,7 @@ NS_SWIFT_NAME(PlanPerforming)
  @param plan The plan that required this type of performer.
  */
 - (void)addPlan:(nonnull id<MDMPlan>)plan
-NS_SWIFT_NAME(add(plan:));
+    NS_SWIFT_NAME(add(plan:));
 
 @end
 

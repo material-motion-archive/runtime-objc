@@ -52,10 +52,12 @@
 
 @end
 
-@implementation TweenPerformer
+@interface TweenPerformer ()
+@property(nonatomic, copy) MDMDelegatedPerformanceTokenReturnBlock willStart;
+@property(nonatomic, copy) MDMDelegatedPerformanceTokenArgBlock didEnd;
+@end
 
-@synthesize delegatedPerformanceWillStartNamed;
-@synthesize delegatedPerformanceDidEndNamed;
+@implementation TweenPerformer
 
 - (instancetype)initWithTarget:(UIView *)target {
   self = [super init];
@@ -66,6 +68,8 @@
 }
 
 - (void)addPlan:(Tween *)tweenPlan {
+  id<MDMDelegatedPerformingToken> token = self.willStart();
+
   [CATransaction begin];
 
   [CATransaction setCompletionBlock:^{
@@ -77,7 +81,7 @@
 
     [CATransaction commit];
 
-    self.delegatedPerformanceDidEndNamed(tweenPlan.name);
+    self.didEnd(token);
   }];
 
   CABasicAnimation *animation = [CABasicAnimation animation];
@@ -89,8 +93,12 @@
   [self.target.layer addAnimation:animation forKey:tweenPlan.name];
 
   [CATransaction commit];
+}
 
-  self.delegatedPerformanceWillStartNamed(tweenPlan.name);
+- (void)setDelegatedPerformanceWillStart:(MDMDelegatedPerformanceTokenReturnBlock)willStart
+                                  didEnd:(MDMDelegatedPerformanceTokenArgBlock)didEnd {
+  self.willStart = willStart;
+  self.didEnd = didEnd;
 }
 
 @end

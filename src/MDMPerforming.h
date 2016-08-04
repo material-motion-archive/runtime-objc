@@ -20,6 +20,7 @@
  A class conforming to MDMPerforming is expected to implement the plan of motion described by objects
  that conform to MDMPlan.
  */
+NS_SWIFT_NAME(Performing)
 @protocol MDMPerforming <NSObject>
 
 #pragma mark Designated initializer
@@ -33,41 +34,74 @@
 
 /** A class conforming to this protocol will be provided with plan instances. */
 
+NS_SWIFT_NAME(PlanPerforming)
 @protocol MDMPlanPerforming <MDMPerforming>
 
 #pragma mark Adding plans to a performer
 
 /**
  Provides the performer with an plan.
- 
+
  The performer may choose to store this plan or to simply extract necessary information and cache
  it separately.
 
  @param plan The plan that required this type of performer.
  */
-- (void)addPlan:(nullable id<MDMPlan>)plan;
+- (void)addPlan:(nonnull id<MDMPlan>)plan
+    NS_SWIFT_NAME(add(plan:));
 
 @end
+
+#pragma mark - Delegated performing
+
+/**
+ An object conforming to MDMDelegatedPerformingToken represents a single unit of delegated
+ performance.
+ */
+NS_SWIFT_NAME(DelegatedPerformingToken)
+@protocol MDMDelegatedPerformingToken <NSObject>
+@end
+
+/** A block that returns a delegated performance token. */
+NS_SWIFT_NAME(DelegatedPerformanceTokenReturnBlock)
+typedef _Nullable id<MDMDelegatedPerformingToken> (^MDMDelegatedPerformanceTokenReturnBlock)(void);
+
+/** A block that accepts a delegated performance token. */
+NS_SWIFT_NAME(DelegatedPerformanceTokenArgBlock)
+typedef void (^MDMDelegatedPerformanceTokenArgBlock)(_Nonnull id<MDMDelegatedPerformingToken>);
 
 /**
  A class conforming to MDMDelegatedPerforming is expected to delegate execution to an external system.
  */
+NS_SWIFT_NAME(DelegatedPerforming)
 @protocol MDMDelegatedPerforming <MDMPerforming>
 
+@optional
+
 #pragma mark Delegating performing
+
+/**
+ The performer will be provided with two methods for indicating the current activity state of the
+ performer.
+ */
+- (void)setDelegatedPerformanceWillStart:(nonnull MDMDelegatedPerformanceTokenReturnBlock)willStart
+                                  didEnd:(nonnull MDMDelegatedPerformanceTokenArgBlock)didEnd
+    NS_SWIFT_NAME(setDelegatedPerformance(willStart:didEnd:));
 
 /**
  The performer must call this method before delegated execution begins.
 
  This is not recursive.
  */
-@property(nonnull, copy) void (^delegatedPerformanceWillStartNamed)(NSString *_Nonnull);
+@property(nonatomic, nonnull, copy) void (^delegatedPerformanceWillStartNamed)(NSString *_Nonnull)
+    __deprecated_msg("Implement setDelegatedPerformanceWillStartNamed:didEndNamed: instead.");
 
 /**
  The performer must call this method after delegated execution ends.
 
  This is not recursive.
  */
-@property(nonnull, copy) void (^delegatedPerformanceDidEndNamed)(NSString *_Nonnull);
+@property(nonatomic, nonnull, copy) void (^delegatedPerformanceDidEndNamed)(NSString *_Nonnull)
+    __deprecated_msg("Implement setDelegatedPerformanceWillStartNamed:didEndNamed: instead.");
 
 @end

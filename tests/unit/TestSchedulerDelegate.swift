@@ -14,18 +14,13 @@
  limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+import XCTest
+import MaterialMotionRuntime
 
-@import MaterialMotionRuntime;
+@objc class TestSchedulerDelegate: NSObject, SchedulerDelegate {
+  var activityStateDidChange = false
 
-@interface Tween : NSObject <MDMPlan, NSCopying>
-
-@property(nonatomic, copy, nonnull) NSString* property;
-@property(nonatomic) float from;
-@property(nonatomic) float to;
-
-@property(nonatomic, copy, nonnull) NSString* name;
-
-- (nonnull instancetype)initWithProperty:(nonnull NSString*)property name:(nonnull NSString*)name;
-
-@end
+  func schedulerActivityStateDidChange(_ scheduler: Scheduler) {
+    self.activityStateDidChange = true
+  }
+}

@@ -15,18 +15,8 @@
  */
 
 #import <XCTest/XCTest.h>
+#import "RuntimeTestTypes.h"
 @import MaterialMotionRuntime;
-
-@interface TestState : NSObject
-@property(nonatomic) bool boolean;
-@end
-
-@interface TestPlan : NSObject <MDMPlan>
-@property(nonatomic) bool desiredBoolean;
-@end
-
-@interface TestPerformer : NSObject <MDMPlanPerforming>
-@end
 
 @interface MDMRuntimeTests : XCTestCase
 @end
@@ -49,33 +39,4 @@
   XCTAssertEqual(state.boolean, plan.desiredBoolean);
 }
 
-@end
-
-@implementation TestPlan
-
-- (Class)performerClass {
-  return [TestPerformer class];
-}
-
-@end
-
-@implementation TestPerformer {
-  TestState *_targetState;
-}
-
-- (instancetype)initWithTarget:(id)target {
-  self = [super init];
-  if (self) {
-    _targetState = target;
-  }
-  return self;
-}
-
-- (void)addPlan:(TestPlan *)plan {
-  _targetState.boolean = plan.desiredBoolean;
-}
-
-@end
-
-@implementation TestState
 @end

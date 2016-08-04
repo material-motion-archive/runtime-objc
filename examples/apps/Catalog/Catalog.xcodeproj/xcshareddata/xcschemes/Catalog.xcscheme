@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "66876C5A1D25ED610054CED4"
-               BuildableName = "PlanCatalog.app"
-               BlueprintName = "PlanCatalog"
-               ReferencedContainer = "container:PlanCatalog.xcodeproj">
+               BuildableName = "Catalog.app"
+               BlueprintName = "Catalog"
+               ReferencedContainer = "container:Catalog.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -28,14 +28,24 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "66251F101D360C65006EBC89"
+               BuildableName = "UnitTests.xctest"
+               BlueprintName = "UnitTests"
+               ReferencedContainer = "container:Catalog.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "66876C5A1D25ED610054CED4"
-            BuildableName = "PlanCatalog.app"
-            BlueprintName = "PlanCatalog"
-            ReferencedContainer = "container:PlanCatalog.xcodeproj">
+            BuildableName = "Catalog.app"
+            BlueprintName = "Catalog"
+            ReferencedContainer = "container:Catalog.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +66,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "66876C5A1D25ED610054CED4"
-            BuildableName = "PlanCatalog.app"
-            BlueprintName = "PlanCatalog"
-            ReferencedContainer = "container:PlanCatalog.xcodeproj">
+            BuildableName = "Catalog.app"
+            BlueprintName = "Catalog"
+            ReferencedContainer = "container:Catalog.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -75,9 +85,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "66876C5A1D25ED610054CED4"
-            BuildableName = "PlanCatalog.app"
-            BlueprintName = "PlanCatalog"
-            ReferencedContainer = "container:PlanCatalog.xcodeproj">
+            BuildableName = "Catalog.app"
+            BlueprintName = "Catalog"
+            ReferencedContainer = "container:Catalog.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

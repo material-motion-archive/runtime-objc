@@ -22,9 +22,13 @@
 #import "MDMScheduler.h"
 #import "MDMTransaction+Private.h"
 
+@interface MDMDelegatedPerformanceToken : NSObject <MDMDelegatedPerformingToken>
+@end
+
 @interface MDMPerformerInfo : NSObject
 @property(nonnull, strong) id<MDMPerforming> performer;
 @property(nonnull, strong) NSMutableSet<NSString *> *delegatedPerformanceNames;
+@property(nonnull, strong) NSMutableSet<MDMDelegatedPerformanceToken *> *delegatedPerformanceTokens;
 @end
 
 @interface MDMPerformerGroup ()
@@ -32,6 +36,9 @@
 
 @property(nonatomic, strong) NSMutableDictionary *performerClassNameToPerformerInfo;
 @property(nonatomic, strong) NSMutableSet *activePerformers;
+@end
+
+@implementation MDMDelegatedPerformanceToken
 @end
 
 @implementation MDMPerformerGroup
@@ -89,10 +96,11 @@
   BOOL canStartDelegated = [performer respondsToSelector:@selector(setDelegatedPerformanceWillStartNamed:)];
   BOOL canEndDelegated = [performer respondsToSelector:@selector(setDelegatedPerformanceDidEndNamed:)];
   if (canStartDelegated && canEndDelegated) {
+    id<MDMDelegatedPerforming> delegatedPerformer = (id<MDMDelegatedPerforming>)performer;
+
     __weak MDMPerformerInfo *weakInfo = performerInfo;
     __weak MDMPerformerGroup *weakSelf = self;
-
-    [(id<MDMDelegatedPerforming>)performer setDelegatedPerformanceWillStartNamed:^(NSString *name) {
+    void (^willStartNamed)(NSString *_Nonnull) = ^(NSString *name) {
       MDMPerformerInfo *strongInfo = weakInfo;
       MDMPerformerGroup *strongSelf = weakSelf;
       if (!strongInfo || !strongSelf) {
@@ -115,9 +123,9 @@
       if (wasInactive) {
         [strongSelf.delegate performerGroup:strongSelf activeStateDidChange:YES];
       }
-    }];
+    };
 
-    [(id<MDMDelegatedPerforming>)performer setDelegatedPerformanceDidEndNamed:^(NSString *name) {
+    void (^didEndNamed)(NSString *_Nonnull) = ^(NSString *name) {
       MDMPerformerInfo *strongInfo = weakInfo;
       MDMPerformerGroup *strongSelf = weakSelf;
       if (!strongInfo) {
@@ -133,7 +141,66 @@
           [strongSelf.delegate performerGroup:strongSelf activeStateDidChange:NO];
         }
       }
-    }];
+    };
+
+    [delegatedPerformer setDelegatedPerformanceWillStartNamed:willStartNamed];
+    [delegatedPerformer setDelegatedPerformanceDidEndNamed:didEndNamed];
+  }
+
+  if ([performer respondsToSelector:@selector(setDelegatedPerformanceWillStart:didEnd:)]) {
+    id<MDMDelegatedPerforming> delegatedPerformer = (id<MDMDelegatedPerforming>)performer;
+
+    __weak MDMPerformerInfo *weakInfo = performerInfo;
+    __weak MDMPerformerGroup *weakSelf = self;
+    MDMDelegatedPerformanceTokenReturnBlock willStartNamed = ^(void) {
+      MDMPerformerInfo *strongInfo = weakInfo;
+      MDMPerformerGroup *strongSelf = weakSelf;
+      if (!strongInfo || !strongSelf) {
+        return (id<MDMDelegatedPerformingToken>)nil;
+      }
+
+      // Register the work
+
+      MDMDelegatedPerformanceToken *token = [MDMDelegatedPerformanceToken new];
+      [strongInfo.delegatedPerformanceTokens addObject:token];
+
+      // Check our group's activity state
+
+      // TODO(featherless): If/when we explore multi-threaded schedulers we need to more cleanly
+      // propagate activity state up to the Scheduler. As it stands, this code is not thread-safe.
+
+      BOOL wasInactive = strongSelf.activePerformers.count == 0;
+
+      [strongSelf.activePerformers addObject:strongInfo.performer];
+
+      if (wasInactive) {
+        [strongSelf.delegate performerGroup:strongSelf activeStateDidChange:YES];
+      }
+
+      return (id<MDMDelegatedPerformingToken>)token;
+    };
+
+    MDMDelegatedPerformanceTokenArgBlock didEndNamed = ^(id<MDMDelegatedPerformingToken> token) {
+      MDMPerformerInfo *strongInfo = weakInfo;
+      MDMPerformerGroup *strongSelf = weakSelf;
+      if (!strongInfo) {
+        return;
+      }
+
+      NSAssert([strongInfo.delegatedPerformanceTokens containsObject:token],
+               @"Token is not active. May have already been terminated by a previous invocation.");
+      [strongInfo.delegatedPerformanceTokens removeObject:token];
+
+      if (strongInfo.delegatedPerformanceTokens.count == 0) {
+        [strongSelf.activePerformers removeObject:strongInfo.performer];
+
+        if (strongSelf.activePerformers.count == 0) {
+          [strongSelf.delegate performerGroup:strongSelf activeStateDidChange:NO];
+        }
+      }
+    };
+
+    [delegatedPerformer setDelegatedPerformanceWillStart:willStartNamed didEnd:didEndNamed];
   }
 }
 
@@ -145,6 +212,7 @@
   self = [super init];
   if (self) {
     _delegatedPerformanceNames = [NSMutableSet set];
+    _delegatedPerformanceTokens = [NSMutableSet set];
   }
   return self;
 }

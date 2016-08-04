@@ -1,26 +1,26 @@
 {
   "load": [
-    "third_party/clang-format-linter",
-    "third_party/arc-proselint",
+    ".arc-hooks/post-diff/arc-hook-github-issues",
     "third_party/arc-hook-conphig",
     "third_party/arc-jazzy-linter",
+    "third_party/arc-proselint",
     "third_party/arc-xcode-test-engine",
-    ".arc-hooks/post-diff/arc-hook-github-issues"
+    "third_party/clang-format-linter"
   ],
-  "arcanist_configuration" : "HookConphig",
-  "phabricator.uri" : "http://codereview.cc/",
-  "arc.land.onto.default" : "develop",
+  "arcanist_configuration": "HookConphig",
+  "phabricator.uri": "http://codereview.cc/",
+  "arc.land.onto.default": "develop",
   "arc.feature.start.default": "origin/develop",
-  "git.default-relative-commit" : "origin/develop",
   "unit.xcode": {
     "build": {
       "workspace": "MaterialMotionRuntime.xcworkspace",
-      "scheme": "RuntimeTests",
+      "scheme": "UnitTests",
       "configuration": "Debug",
-      "destination": "platform=iOS Simulator,name=iPhone 6S"
+      "destination": "platform=iOS Simulator,name=iPhone 6s"
     },
     "coverage": {
       "product": "MaterialMotionRuntime.framework/MaterialMotionRuntime"
-    }
+    },
+    "pre-build": "pod install"
   }
 }

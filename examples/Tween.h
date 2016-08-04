@@ -16,20 +16,18 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol MDMPlan;
+@import MaterialMotionRuntime;
 
-/**
- The MDMTransaction class acts as a register of operations that may be committed to an instance of
- MDMScheduler.
- */
-NS_SWIFT_NAME(Transaction)
-@interface MDMTransaction : NSObject
+@interface Tween : NSObject <MDMPlan, NSCopying>
 
-#pragma mark Adding plans to a transaction
+@property(nonatomic, copy, nonnull) NSString* property;
+@property(nonatomic) float from;
+@property(nonatomic) float to;
 
-/** Associate an plan with a given target. */
-- (void)addPlan:(nonnull id<MDMPlan>)plan
-       toTarget:(nonnull id)target
-    NS_SWIFT_NAME(add(plan:to:));
+@property(nonatomic, copy, nonnull) NSString* name;
+
+- (nonnull instancetype)initWithProperty:(nonnull NSString*)property name:(nonnull NSString*)name NS_DESIGNATED_INITIALIZER;
+
+- (nonnull instancetype)init NS_UNAVAILABLE;
 
 @end

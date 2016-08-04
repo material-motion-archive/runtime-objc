@@ -9,6 +9,10 @@ Delegated performance APIs are now tokenized.
 The new tokenized APIs are similar to the old named APIs, but each `willStart` invocation generates
 a new unique token. The token must be released with a corresponding `didEnd` invocation.
 
+## Breaking changes
+
+Swift API names have changed and must be updated in your local code. Xcode will generally provide fix-its.
+
 ## Source changes
 
 * [Audit all public APIs for swift 3 compatibility.](https://github.com/material-motion/material-motion-runtime-objc/commit/e1fdcae0ab809abf9dba0801a6aaed015504d12b) (Jeff Verkoeyen)

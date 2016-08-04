@@ -27,7 +27,7 @@ class DelegatedPerformanceTests: XCTestCase {
     let delegate = TestSchedulerDelegate()
     scheduler.delegate = delegate
 
-    scheduler.commit(transaction)
+    scheduler.commit(transaction: transaction)
 
     XCTAssertTrue(delegate.activityStateDidChange)
     XCTAssertTrue(scheduler.activityState == .idle)
@@ -54,7 +54,8 @@ class DelegatedPerformanceTests: XCTestCase {
     self.didEnd(token)
   }
 
-  func setDelegatedPerformanceWillStart(_ willStart: DelegatedPerformanceTokenReturnBlock, didEnd: DelegatedPerformanceTokenArgBlock) {
+  func setDelegatedPerformance(willStart: DelegatedPerformanceTokenReturnBlock,
+                               didEnd: DelegatedPerformanceTokenArgBlock) {
     self.willStart = willStart
     self.didEnd = didEnd
   }

@@ -85,7 +85,8 @@ NS_SWIFT_NAME(DelegatedPerforming)
  performer.
  */
 - (void)setDelegatedPerformanceWillStart:(nonnull MDMDelegatedPerformanceTokenReturnBlock)willStart
-                                  didEnd:(nonnull MDMDelegatedPerformanceTokenArgBlock)didEnd;
+                                  didEnd:(nonnull MDMDelegatedPerformanceTokenArgBlock)didEnd
+    NS_SWIFT_NAME(setDelegatedPerformance(willStart:didEnd:));
 
 /**
  The performer must call this method before delegated execution begins.

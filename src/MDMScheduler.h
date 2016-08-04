@@ -63,7 +63,8 @@ NS_SWIFT_NAME(Scheduler)
 #pragma mark Committing transactions
 
 /** Commits the provided transaction to the receiver. */
-- (void)commitTransaction:(nonnull MDMTransaction *)transaction;
+- (void)commitTransaction:(nonnull MDMTransaction *)transaction
+    NS_SWIFT_NAME(commit(transaction:));
 
 #pragma mark State
 

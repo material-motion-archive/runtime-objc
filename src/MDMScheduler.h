@@ -47,8 +47,8 @@ typedef NS_ENUM(NSUInteger, MDMSchedulerActivityState) {
  Generally-speaking, one scheduler is created per interaction. An interaction might be a transition,
  a one-off animation, or a complex multi-state interaction.
 
- To add plans to a scheduler you must create an instance of MDMTransaction. MDMTransaction captures
- a series of operations association plans with targets.
+ To add plans to a scheduler you must create an instance of MDMTransaction. A transaction captures
+ a series of operations that associate plans with targets.
 
  Once a transaction is committed to a scheduler, the scheduler creates performer instances.
  Performers are expected to fulfill the described plans.

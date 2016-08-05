@@ -1,3 +1,7 @@
+# 2.0.1
+
+Bump the podspec and jazzy version numbers that we missed in 2.0.0.
+
 # 2.0.0
 
 Swift 3 compatibility release.

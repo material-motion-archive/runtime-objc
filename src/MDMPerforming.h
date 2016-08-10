@@ -88,20 +88,4 @@ NS_SWIFT_NAME(DelegatedPerforming)
                                   didEnd:(nonnull MDMDelegatedPerformanceTokenArgBlock)didEnd
     NS_SWIFT_NAME(setDelegatedPerformance(willStart:didEnd:));
 
-/**
- The performer must call this method before delegated execution begins.
-
- This is not recursive.
- */
-@property(nonatomic, nonnull, copy) void (^delegatedPerformanceWillStartNamed)(NSString *_Nonnull)
-    __deprecated_msg("Implement setDelegatedPerformanceWillStartNamed:didEndNamed: instead.");
-
-/**
- The performer must call this method after delegated execution ends.
-
- This is not recursive.
- */
-@property(nonatomic, nonnull, copy) void (^delegatedPerformanceDidEndNamed)(NSString *_Nonnull)
-    __deprecated_msg("Implement setDelegatedPerformanceWillStartNamed:didEndNamed: instead.");
-
 @end

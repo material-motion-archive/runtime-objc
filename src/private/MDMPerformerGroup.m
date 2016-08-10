@@ -25,21 +25,31 @@
 @interface MDMDelegatedPerformanceToken : NSObject <MDMDelegatedPerformingToken>
 @end
 
+@implementation MDMDelegatedPerformanceToken
+@end
+
 @interface MDMPerformerInfo : NSObject
 @property(nonnull, strong) id<MDMPerforming> performer;
-@property(nonnull, strong) NSMutableSet<NSString *> *delegatedPerformanceNames;
 @property(nonnull, strong) NSMutableSet<MDMDelegatedPerformanceToken *> *delegatedPerformanceTokens;
+@end
+
+@implementation MDMPerformerInfo
+
+- (instancetype)init {
+  self = [super init];
+  if (self) {
+    _delegatedPerformanceTokens = [NSMutableSet set];
+  }
+  return self;
+}
+
 @end
 
 @interface MDMPerformerGroup ()
 @property(nonatomic, weak) MDMScheduler *scheduler;
 @property(nonatomic, strong) NSMutableArray<MDMPerformerInfo *> *performerInfos;
-
 @property(nonatomic, strong) NSMutableDictionary *performerClassNameToPerformerInfo;
 @property(nonatomic, strong) NSMutableSet *activePerformers;
-@end
-
-@implementation MDMDelegatedPerformanceToken
 @end
 
 @implementation MDMPerformerGroup
@@ -117,7 +127,7 @@
 
     __weak MDMPerformerInfo *weakInfo = performerInfo;
     __weak MDMPerformerGroup *weakSelf = self;
-    MDMDelegatedPerformanceTokenReturnBlock willStartNamed = ^(void) {
+    MDMDelegatedPerformanceTokenReturnBlock willStartBlock = ^(void) {
       MDMPerformerInfo *strongInfo = weakInfo;
       MDMPerformerGroup *strongSelf = weakSelf;
       if (!strongInfo || !strongSelf) {
@@ -145,7 +155,7 @@
       return (id<MDMDelegatedPerformingToken>)token;
     };
 
-    MDMDelegatedPerformanceTokenArgBlock didEndNamed = ^(id<MDMDelegatedPerformingToken> token) {
+    MDMDelegatedPerformanceTokenArgBlock didEndBlock = ^(id<MDMDelegatedPerformingToken> token) {
       MDMPerformerInfo *strongInfo = weakInfo;
       MDMPerformerGroup *strongSelf = weakSelf;
       if (!strongInfo) {
@@ -165,21 +175,8 @@
       }
     };
 
-    [delegatedPerformer setDelegatedPerformanceWillStart:willStartNamed didEnd:didEndNamed];
+    [delegatedPerformer setDelegatedPerformanceWillStart:willStartBlock didEnd:didEndBlock];
   }
-}
-
-@end
-
-@implementation MDMPerformerInfo
-
-- (instancetype)init {
-  self = [super init];
-  if (self) {
-    _delegatedPerformanceNames = [NSMutableSet set];
-    _delegatedPerformanceTokens = [NSMutableSet set];
-  }
-  return self;
 }
 
 @end

@@ -32,6 +32,7 @@
 @end
 
 @interface MDMPerformerGroup ()
+@property(nonatomic, weak) MDMScheduler *scheduler;
 @property(nonatomic, strong) NSMutableArray<MDMPerformerInfo *> *performerInfos;
 
 @property(nonatomic, strong) NSMutableDictionary *performerClassNameToPerformerInfo;
@@ -43,10 +44,11 @@
 
 @implementation MDMPerformerGroup
 
-- (instancetype)initWithTarget:(id)target {
+- (instancetype)initWithTarget:(id)target scheduler:(MDMScheduler *)scheduler {
   self = [super init];
   if (self) {
     _target = target;
+    _scheduler = scheduler;
 
     _performerInfos = [NSMutableArray array];
     _performerClassNameToPerformerInfo = [NSMutableDictionary dictionary];
@@ -90,6 +92,23 @@
 
 - (void)setUpFeaturesForPerformerInfo:(MDMPerformerInfo *)performerInfo {
   id<MDMPerforming> performer = performerInfo.performer;
+
+  // Composable performance
+
+  if ([performer respondsToSelector:@selector(setTransactBlock:)]) {
+    id<MDMComposablePerforming> composablePerformer = (id<MDMComposablePerforming>)performer;
+
+    __weak MDMPerformerGroup *weakSelf = self;
+    [composablePerformer setTransactBlock:^(MDMTransactionBlock transactionBlock) {
+      MDMPerformerGroup *strongSelf = weakSelf;
+      if (!strongSelf.scheduler || !transactionBlock) {
+        return;
+      }
+      MDMTransaction *transaction = [MDMTransaction new];
+      transactionBlock(transaction);
+      [strongSelf.scheduler commitTransaction:transaction];
+    }];
+  }
 
   // Delegated performance
 

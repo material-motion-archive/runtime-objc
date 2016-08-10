@@ -47,7 +47,7 @@
 - (MDMPerformerGroup *)performerGroupForTarget:(id)target {
   MDMPerformerGroup *performerGroup = [_targetToPerformerGroup objectForKey:target];
   if (!performerGroup) {
-    performerGroup = [[MDMPerformerGroup alloc] initWithTarget:target];
+    performerGroup = [[MDMPerformerGroup alloc] initWithTarget:target scheduler:self];
     performerGroup.delegate = self;
     [self.targetToPerformerGroup setObject:performerGroup forKey:target];
 

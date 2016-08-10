@@ -16,13 +16,14 @@
 
 #import <Foundation/Foundation.h>
 
+@class MDMScheduler;
 @class MDMTransactionLog;
 @protocol MDMPerformerGroupDelegate;
 
 /** An entity responsible for managing the performers associated with a given target. */
 @interface MDMPerformerGroup : NSObject
 
-- (instancetype)initWithTarget:(id)target NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithTarget:(id)target scheduler:(MDMScheduler *)scheduler NS_DESIGNATED_INITIALIZER;
 - (instancetype)init NS_UNAVAILABLE;
 
 @property(nonatomic, readonly) id target;

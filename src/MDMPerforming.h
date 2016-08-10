@@ -30,6 +30,7 @@ NS_SWIFT_NAME(Performing)
 
 @end
 
+@class MDMTransaction;
 @protocol MDMPlan;
 
 /** A class conforming to this protocol will be provided with plan instances. */
@@ -70,6 +71,14 @@ typedef _Nullable id<MDMDelegatedPerformingToken> (^MDMDelegatedPerformanceToken
 NS_SWIFT_NAME(DelegatedPerformanceTokenArgBlock)
 typedef void (^MDMDelegatedPerformanceTokenArgBlock)(_Nonnull id<MDMDelegatedPerformingToken>);
 
+/** A block that provides a transaction that will be committed to a scheduler. */
+NS_SWIFT_NAME(TransactionBlock)
+typedef void (^MDMTransactionBlock)(MDMTransaction* _Nonnull);
+
+/** A block that initiates a new transaction. */
+NS_SWIFT_NAME(TransactBlock)
+typedef void (^MDMTransactBlock)(_Nonnull MDMTransactionBlock);
+
 /**
  A class conforming to MDMDelegatedPerforming is expected to delegate execution to an external system.
  */
@@ -87,5 +96,19 @@ NS_SWIFT_NAME(DelegatedPerforming)
 - (void)setDelegatedPerformanceWillStart:(nonnull MDMDelegatedPerformanceTokenReturnBlock)willStart
                                   didEnd:(nonnull MDMDelegatedPerformanceTokenArgBlock)didEnd
     NS_SWIFT_NAME(setDelegatedPerformance(willStart:didEnd:));
+
+@end
+
+/** A class conforming to MDMComposablePerforming is able to commit new plans. */
+NS_SWIFT_NAME(ComposablePerforming)
+@protocol MDMComposablePerforming <MDMPerforming>
+
+@optional
+
+#pragma mark Composable performing
+
+/** The performer will be provided with a method for initiating a new transaction. */
+- (void)setTransactBlock:(nonnull MDMTransactBlock)transactBlock
+    NS_SWIFT_NAME(set(transactBlock:));
 
 @end

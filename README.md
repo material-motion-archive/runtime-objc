@@ -1,6 +1,7 @@
 # Material Motion Runtime for Apple Devices
 
 [![Build Status](https://travis-ci.org/material-motion/material-motion-runtime-objc.svg?branch=develop)](https://travis-ci.org/material-motion/material-motion-runtime-objc)
+[![codecov](https://codecov.io/gh/material-motion/material-motion-runtime-objc/branch/develop/graph/badge.svg)](https://codecov.io/gh/material-motion/material-motion-runtime-objc)
 
 The Material Motion Runtime is a tool for describing motion declaratively.
 

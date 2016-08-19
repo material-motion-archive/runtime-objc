@@ -41,11 +41,11 @@ class DelegatedPerformanceTests: XCTestCase {
 }
 
 @objc class DelegatedPerformer: NSObject, PlanPerforming, DelegatedPerforming {
-  let target: AnyObject
+  let target: Any
   var willStart: DelegatedPerformanceTokenReturnBlock!
   var didEnd: DelegatedPerformanceTokenArgBlock!
 
-  required init(target: AnyObject) {
+  required init(target: Any) {
     self.target = target
   }
 

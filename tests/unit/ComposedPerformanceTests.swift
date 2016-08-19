@@ -47,10 +47,10 @@ class ComposedPerformanceTests: XCTestCase {
 }
 
 @objc class ComposingPerformer: NSObject, PlanPerforming, ComposablePerforming {
-  let target: AnyObject
+  let target: Any
   var transact: TransactBlock!
 
-  required init(target: AnyObject) {
+  required init(target: Any) {
     self.target = target
   }
 
@@ -66,11 +66,11 @@ class ComposedPerformanceTests: XCTestCase {
 }
 
 @objc class LeafPerformer: NSObject, PlanPerforming, DelegatedPerforming {
-  let target: AnyObject
+  let target: Any
   var willStart: DelegatedPerformanceTokenReturnBlock!
   var didEnd: DelegatedPerformanceTokenArgBlock!
 
-  required init(target: AnyObject) {
+  required init(target: Any) {
     self.target = target
   }
 

@@ -99,6 +99,16 @@ NS_SWIFT_NAME(DelegatedPerforming)
 
 @end
 
+/** A transaction emitter allows a performer to commit new plans to a scheduler. */
+NS_SWIFT_NAME(TransactionEmitting)
+@protocol MDMTransactionEmitting <NSObject>
+
+/** Emit a new transaction. The transaction will immediately be committed to the scheduler. */
+- (void)emitTransaction:(nonnull MDMTransaction*)transaction
+    NS_SWIFT_NAME(emit(transaction:));
+
+@end
+
 /** A class conforming to MDMComposablePerforming is able to commit new plans. */
 NS_SWIFT_NAME(ComposablePerforming)
 @protocol MDMComposablePerforming <MDMPerforming>
@@ -108,7 +118,7 @@ NS_SWIFT_NAME(ComposablePerforming)
 #pragma mark Composable performing
 
 /** The performer will be provided with a method for initiating a new transaction. */
-- (void)setTransactBlock:(nonnull MDMTransactBlock)transactBlock
-    NS_SWIFT_NAME(set(transactBlock:));
+- (void)setTransactionEmitter:(nonnull id<MDMTransactionEmitting>)transactionEmitter
+    NS_SWIFT_NAME(set(transactionEmitter:));
 
 @end

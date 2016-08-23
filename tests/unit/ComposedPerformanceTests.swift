@@ -48,20 +48,20 @@ class ComposedPerformanceTests: XCTestCase {
 
 @objc class ComposingPerformer: NSObject, PlanPerforming, ComposablePerforming {
   let target: Any
-  var transact: TransactBlock!
+  var emitter: TransactionEmitting!
 
   required init(target: Any) {
     self.target = target
   }
 
   func add(plan: Plan) {
-    self.transact({ transaction in
-      transaction.add(plan: LeafPlan(), to: self.target)
-    })
+    let transaction = Transaction()
+    transaction.add(plan: LeafPlan(), to: self.target)
+    self.emitter.emit(transaction: transaction)
   }
 
-  func set(transactBlock: TransactBlock) {
-    self.transact = transactBlock
+  func set(transactionEmitter: TransactionEmitting) {
+    self.emitter = transactionEmitter
   }
 }
 

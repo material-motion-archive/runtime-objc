@@ -21,6 +21,7 @@
 #import "MDMPlan.h"
 #import "MDMScheduler.h"
 #import "MDMTransaction+Private.h"
+#import "MDMTransactionEmitter.h"
 
 @interface MDMDelegatedPerformanceToken : NSObject <MDMDelegatedPerformingToken>
 @end
@@ -105,19 +106,11 @@
 
   // Composable performance
 
-  if ([performer respondsToSelector:@selector(setTransactBlock:)]) {
+  if ([performer respondsToSelector:@selector(setTransactionEmitter:)]) {
     id<MDMComposablePerforming> composablePerformer = (id<MDMComposablePerforming>)performer;
 
-    __weak MDMPerformerGroup *weakSelf = self;
-    [composablePerformer setTransactBlock:^(MDMTransactionBlock transactionBlock) {
-      MDMPerformerGroup *strongSelf = weakSelf;
-      if (!strongSelf.scheduler || !transactionBlock) {
-        return;
-      }
-      MDMTransaction *transaction = [MDMTransaction new];
-      transactionBlock(transaction);
-      [strongSelf.scheduler commitTransaction:transaction];
-    }];
+    MDMTransactionEmitter *emitter = [[MDMTransactionEmitter alloc] initWithScheduler:self.scheduler];
+    [composablePerformer setTransactionEmitter:emitter];
   }
 
   // Delegated performance

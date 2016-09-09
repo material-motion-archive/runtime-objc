@@ -34,19 +34,19 @@ class ComposedPerformanceTests: XCTestCase {
   }
 }
 
-@objc class RootPlan: NSObject, Plan {
+class RootPlan: NSObject, Plan {
   func performerClass() -> AnyClass {
     return ComposingPerformer.self
   }
 }
 
-@objc class LeafPlan: NSObject, Plan {
+class LeafPlan: NSObject, Plan {
   func performerClass() -> AnyClass {
     return LeafPerformer.self
   }
 }
 
-@objc class ComposingPerformer: NSObject, PlanPerforming, ComposablePerforming {
+class ComposingPerformer: NSObject, PlanPerforming, ComposablePerforming {
   let target: Any
   var emitter: TransactionEmitting!
 
@@ -65,7 +65,7 @@ class ComposedPerformanceTests: XCTestCase {
   }
 }
 
-@objc class LeafPerformer: NSObject, PlanPerforming, DelegatedPerforming {
+class LeafPerformer: NSObject, PlanPerforming, DelegatedPerforming {
   let target: Any
   var willStart: DelegatedPerformanceTokenReturnBlock!
   var didEnd: DelegatedPerformanceTokenArgBlock!
@@ -79,8 +79,8 @@ class ComposedPerformanceTests: XCTestCase {
     self.didEnd(token)
   }
 
-  func setDelegatedPerformance(willStart: DelegatedPerformanceTokenReturnBlock,
-                               didEnd: DelegatedPerformanceTokenArgBlock) {
+  func setDelegatedPerformance(willStart: @escaping DelegatedPerformanceTokenReturnBlock,
+                               didEnd: @escaping DelegatedPerformanceTokenArgBlock) {
     self.willStart = willStart
     self.didEnd = didEnd
   }

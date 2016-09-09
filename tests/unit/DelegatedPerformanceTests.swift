@@ -34,13 +34,13 @@ class DelegatedPerformanceTests: XCTestCase {
   }
 }
 
-@objc class DelegatedPlan: NSObject, Plan {
+class DelegatedPlan: NSObject, Plan {
   func performerClass() -> AnyClass {
     return DelegatedPerformer.self
   }
 }
 
-@objc class DelegatedPerformer: NSObject, PlanPerforming, DelegatedPerforming {
+class DelegatedPerformer: NSObject, PlanPerforming, DelegatedPerforming {
   let target: Any
   var willStart: DelegatedPerformanceTokenReturnBlock!
   var didEnd: DelegatedPerformanceTokenArgBlock!
@@ -54,8 +54,8 @@ class DelegatedPerformanceTests: XCTestCase {
     self.didEnd(token)
   }
 
-  func setDelegatedPerformance(willStart: DelegatedPerformanceTokenReturnBlock,
-                               didEnd: DelegatedPerformanceTokenArgBlock) {
+  func setDelegatedPerformance(willStart: @escaping DelegatedPerformanceTokenReturnBlock,
+                               didEnd: @escaping DelegatedPerformanceTokenArgBlock) {
     self.willStart = willStart
     self.didEnd = didEnd
   }

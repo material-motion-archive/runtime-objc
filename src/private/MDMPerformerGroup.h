@@ -25,17 +25,17 @@
 /** An entity responsible for managing the performers associated with a given target. */
 @interface MDMPerformerGroup : NSObject
 
-- (instancetype)initWithTarget:(id)target scheduler:(MDMScheduler *)scheduler NS_DESIGNATED_INITIALIZER;
-- (instancetype)init NS_UNAVAILABLE;
+- (nonnull instancetype)initWithTarget:(nonnull id)target scheduler:(nonnull MDMScheduler *)scheduler NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init NS_UNAVAILABLE;
 
-@property(nonatomic, readonly) id target;
+@property(nonatomic, nonnull, readonly) id target;
 
-@property(nonatomic, weak) id<MDMPerformerGroupDelegate> delegate;
+@property(nonatomic, nullable, weak) id<MDMPerformerGroupDelegate> delegate;
 
 // nil by default. Useful for view duplication.
-@property(nonatomic) id schedulerTarget;
+@property(nonatomic, nullable) id schedulerTarget;
 
-- (void)executeLog:(MDMTransactionLog *)log;
+- (void)executeLog:(nonnull MDMTransactionLog *)log;
 
 @end
 

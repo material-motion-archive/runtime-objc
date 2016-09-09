@@ -1,7 +1,9 @@
 PODS:
+  - CatalogByConvention (1.0.1)
   - MaterialMotionRuntime (2.0.1)
 
 DEPENDENCIES:
+  - CatalogByConvention
   - MaterialMotionRuntime (from `./`)
 
 EXTERNAL SOURCES:
@@ -9,8 +11,9 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
+  CatalogByConvention: 0e471a53b232b83be30141379b3ff0ad3365c3ec
   MaterialMotionRuntime: 142f75ce2cf2682458aa9631541b8644b653ef34
 
-PODFILE CHECKSUM: 1bcef5bd6b2e27a4f498c49559af24d5a2b7432d
+PODFILE CHECKSUM: 67ade2c3b79ebf6420cc17bcc5153f02727c6dbd
 
 COCOAPODS: 1.0.1

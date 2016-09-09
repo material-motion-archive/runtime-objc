@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3630F1AF1D3E9BC1001E1C83 /* RuntimeTestTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 3630F1AB1D3E99CF001E1C83 /* RuntimeTestTypes.m */; };
 		3696FD981D41363000535C4E /* TwoDifferentPlansTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3696FD961D4135D900535C4E /* TwoDifferentPlansTests.m */; };
-		36A920011D2D56900001C0B0 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A920001D2D56900001C0B0 /* MainViewController.m */; };
 		3C3D2B52435BC7B4312983A3 /* Pods_MaterialMotionRuntime_Catalog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E9F0FB5FB808715EC1FC0B7 /* Pods_MaterialMotionRuntime_Catalog.framework */; };
 		4489E3B5A134470DCF97D0CD /* Pods_MaterialMotionRuntime_UnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2B624803B0AE3BEB727C4F2 /* Pods_MaterialMotionRuntime_UnitTests.framework */; };
 		661369711D5BE7CB00F6830F /* ComposedPerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661369701D5BE7CB00F6830F /* ComposedPerformanceTests.swift */; };
@@ -39,8 +38,6 @@
 		3630F1AB1D3E99CF001E1C83 /* RuntimeTestTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RuntimeTestTypes.m; sourceTree = "<group>"; };
 		3630F1AE1D3E9B82001E1C83 /* RuntimeTestTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RuntimeTestTypes.h; sourceTree = "<group>"; };
 		3696FD961D4135D900535C4E /* TwoDifferentPlansTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwoDifferentPlansTests.m; sourceTree = "<group>"; };
-		36A91FFF1D2D56900001C0B0 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
-		36A920001D2D56900001C0B0 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		3BAE67A62BB80977FDFFDEDC /* Pods-MaterialMotionRuntime-Catalog.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaterialMotionRuntime-Catalog.debug.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MaterialMotionRuntime-Catalog/Pods-MaterialMotionRuntime-Catalog.debug.xcconfig"; sourceTree = "<group>"; };
 		410EA1DE9CF79CEBF25C7B38 /* Pods-MaterialMotionRuntime-UnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaterialMotionRuntime-UnitTests.debug.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MaterialMotionRuntime-UnitTests/Pods-MaterialMotionRuntime-UnitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4E9F0FB5FB808715EC1FC0B7 /* Pods_MaterialMotionRuntime_Catalog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MaterialMotionRuntime_Catalog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,8 +134,6 @@
 			children = (
 				66876C611D25ED610054CED4 /* AppDelegate.h */,
 				66876C621D25ED610054CED4 /* AppDelegate.m */,
-				36A91FFF1D2D56900001C0B0 /* MainViewController.h */,
-				36A920001D2D56900001C0B0 /* MainViewController.m */,
 				66876C6A1D25ED610054CED4 /* Assets.xcassets */,
 				66876C6C1D25ED610054CED4 /* LaunchScreen.storyboard */,
 				66876C6F1D25ED610054CED4 /* Info.plist */,
@@ -409,7 +404,6 @@
 				66DBB8D31D341BFB0048FC80 /* Tween.m in Sources */,
 				66DBB8D21D341BFB0048FC80 /* PlanFadeViewController.m in Sources */,
 				66876C601D25ED610054CED4 /* main.m in Sources */,
-				36A920011D2D56900001C0B0 /* MainViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

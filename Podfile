@@ -1,5 +1,7 @@
 abstract_target 'MaterialMotionRuntime' do
   pod 'MaterialMotionRuntime', :path => './'
+  pod 'CatalogByConvention'
+
   workspace 'MaterialMotionRuntime.xcworkspace'
   use_frameworks!
 

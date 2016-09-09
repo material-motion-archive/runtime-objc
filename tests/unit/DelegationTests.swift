@@ -17,46 +17,20 @@
 import XCTest
 import MaterialMotionRuntime
 
-class DelegatedPerformanceTests: XCTestCase {
+// Tests related to performer delegation.
+class DelegationTests: XCTestCase {
 
-  func testDelegatedPerformanceCausesActivityStateChange() {
-    let transaction = Transaction()
-    transaction.add(plan: DelegatedPlan(), to: NSObject())
-
+  func testDelegationPerformerCausesActivityStateChange() {
     let scheduler = Scheduler()
+
     let delegate = TestSchedulerDelegate()
     scheduler.delegate = delegate
 
+    let transaction = Transaction()
+    transaction.add(plan: NoopDelegation(), to: NSObject())
     scheduler.commit(transaction: transaction)
 
     XCTAssertTrue(delegate.activityStateDidChange)
     XCTAssertTrue(scheduler.activityState == .idle)
-  }
-}
-
-class DelegatedPlan: NSObject, Plan {
-  func performerClass() -> AnyClass {
-    return DelegatedPerformer.self
-  }
-}
-
-class DelegatedPerformer: NSObject, PlanPerforming, DelegatedPerforming {
-  let target: Any
-  var willStart: DelegatedPerformanceTokenReturnBlock!
-  var didEnd: DelegatedPerformanceTokenArgBlock!
-
-  required init(target: Any) {
-    self.target = target
-  }
-
-  func add(plan: Plan) {
-    let token = self.willStart()!
-    self.didEnd(token)
-  }
-
-  func setDelegatedPerformance(willStart: @escaping DelegatedPerformanceTokenReturnBlock,
-                               didEnd: @escaping DelegatedPerformanceTokenArgBlock) {
-    self.willStart = willStart
-    self.didEnd = didEnd
   }
 }

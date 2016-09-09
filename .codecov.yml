@@ -1,0 +1,3 @@
+coverage:
+  ignore:
+    - "^((?!src\/).)*$" # Ignore any non-src folders

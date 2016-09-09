@@ -16,11 +16,30 @@
 
 @import MaterialMotionRuntime;
 
-@interface TestPerformer : NSObject <MDMPlanPerforming>
+@interface TestPerformerA : NSObject <MDMPlanPerforming>
+@property(nonatomic) bool boolean;
 @end
 
-@interface TestPlan : NSObject <MDMPlan>
+@interface TestPerformerB : NSObject <MDMPlanPerforming>
+@property(nonatomic) bool boolean;
+@end
+
+@interface TestPerformerSubclass : TestPerformerA
+@end
+
+@interface TestPlanA : NSObject <MDMPlan>
 @property(nonatomic) bool desiredBoolean;
+@end
+
+@interface TestPlanB : NSObject <MDMPlan>
+@property(nonatomic) bool desiredBoolean;
+@end
+
+@interface TestPlanSubclassA : TestPlanA
+@end
+
+// - (Class)performerClass is overridden
+@interface TestPlanSubclassB : TestPlanA
 @end
 
 @interface TestState : NSObject

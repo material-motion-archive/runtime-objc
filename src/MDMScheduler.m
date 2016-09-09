@@ -54,6 +54,7 @@
     // TODO: Add event hook for plugins. This is where a plugin might provide a scheduler target. This
     // is how view duplicaion gets hooked in to the scheduler.
   }
+
   return performerGroup;
 }
 
@@ -85,5 +86,17 @@
     [[self performerGroupForTarget:log.target] executeLog:log];
   }
 }
+
+@end
+
+#pragma mark - Event Broadcasting
+
+MDMEventIdentifier const MDMEventIdentifierPerformerGroupCreated = @"MDMEventIdentifierPerformerGroupCreated";
+
+@implementation MDMSchedulerPerformerGroupCreatedEvent
+
+@end
+
+@implementation MDMSchedulerExecutionPerformersCreatedEvent
 
 @end

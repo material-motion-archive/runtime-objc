@@ -16,8 +16,11 @@
 
 #import <Foundation/Foundation.h>
 
+#import "MDMEvent.h"
+
 @class MDMScheduler;
 @protocol MDMSchedulerDelegate;
+@protocol MDMPerforming;
 
 /**
  The possible activity states a scheduler can be in.
@@ -93,5 +96,19 @@ NS_SWIFT_NAME(SchedulerDelegate)
 
 /** Informs the receiver that the scheduler's current activity state has changed. */
 - (void)schedulerActivityStateDidChange:(nonnull MDMScheduler *)scheduler;
+
+@end
+
+#pragma mark - Event Broadcasting
+
+/**
+ This event is created when the perfomerGroup / log is executed. Performers are created. They are copied here.
+ */
+@interface MDMSchedulerExecutionPerformersCreatedEvent : NSObject <MDMEvent>
+
+/**
+ This is the object included in the event when it's sent.
+ */
+@property(nonatomic, nonnull) NSArray<MDMPerforming> *performers;
 
 @end

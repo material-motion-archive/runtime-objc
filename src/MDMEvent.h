@@ -14,29 +14,23 @@
  limitations under the License.
  */
 
-#import <XCTest/XCTest.h>
-#import "RuntimeTestTypes.h"
-@import MaterialMotionRuntime;
+#import <Foundation/Foundation.h>
 
-@interface MDMRuntimeTests : XCTestCase
-@end
+/**
+ This will allow const identifiers to be easily used in Swift 3.
+ */
+typedef NSString *MDMEventIdentifier NS_EXTENSIBLE_STRING_ENUM NS_SWIFT_NAME(Identifier);
 
-@implementation MDMRuntimeTests
+/**
+ A key used in the userInfo dictionary of an NSNotification. The key's value should be an instance of a class that implements MDMEvent.
+ */
+static NSString *_Nonnull MDMEventNotificationKeyEvent = @"MDMEventNotificationKeyEvent";
 
-- (void)testLifeOfAPlan {
-  TestState *state = [TestState new];
-  state.boolean = false;
+/**
+ Classes implementing this protocol are official, testable events.
+ */
 
-  TestPlanA *plan = [TestPlanA new];
-  plan.desiredBoolean = true;
-
-  MDMTransaction *transaction = [MDMTransaction new];
-  [transaction addPlan:plan toTarget:state];
-
-  MDMScheduler *scheduler = [MDMScheduler new];
-  [scheduler commitTransaction:transaction];
-
-  XCTAssertEqual(state.boolean, plan.desiredBoolean);
-}
+NS_SWIFT_NAME(Event)
+@protocol MDMEvent <NSObject>
 
 @end

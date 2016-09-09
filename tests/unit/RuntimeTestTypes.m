@@ -17,28 +17,72 @@
 #import "RuntimeTestTypes.h"
 #import <XCTest/XCTest.h>
 
-@implementation TestPerformer {
+@implementation TestPerformerA {
   TestState *_targetState;
 }
 
 - (instancetype)initWithTarget:(id)target {
   self = [super init];
   if (self) {
-    _targetState = target;
+    if ([target isMemberOfClass:[TestState class]]) {
+      _targetState = target;
+    }
   }
   return self;
 }
 
-- (void)addPlan:(TestPlan *)plan {
+- (void)addPlan:(TestPlanA *)plan {
   _targetState.boolean = plan.desiredBoolean;
 }
 
 @end
 
-@implementation TestPlan
+@implementation TestPerformerB {
+  TestState *_targetState;
+}
+
+- (instancetype)initWithTarget:(id)target {
+  self = [super init];
+  if (self) {
+    if ([target isMemberOfClass:[TestState class]]) {
+      _targetState = target;
+    }
+  }
+  return self;
+}
+
+- (void)addPlan:(TestPlanB *)plan {
+  _targetState.boolean = plan.desiredBoolean;
+}
+
+@end
+
+@implementation TestPerformerSubclass
+@end
+
+@implementation TestPlanA
 
 - (Class)performerClass {
-  return [TestPerformer class];
+  return [TestPerformerA class];
+}
+
+@end
+
+@implementation TestPlanB
+
+- (Class)performerClass {
+  return [TestPerformerSubclass class];
+}
+
+@end
+
+@implementation TestPlanSubclassA
+@end
+
+@implementation TestPlanSubclassB
+
+- (Class)performerClass {
+  return [TestPerformerA class];
 }
 
 @end

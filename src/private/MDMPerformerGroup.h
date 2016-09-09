@@ -16,6 +16,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "MDMEvent.h"
+
 @class MDMScheduler;
 @class MDMTransactionLog;
 @protocol MDMPerformerGroupDelegate;
@@ -36,3 +38,10 @@
 - (void)executeLog:(MDMTransactionLog *)log;
 
 @end
+
+#pragma mark - Event Broadcasting
+
+/**
+ This is the name of the NSNotification fired when this event happens. Its userInfo will contain an MDMEvent of the type below.
+ */
+FOUNDATION_EXPORT MDMEventIdentifier const _Nonnull MDMEventIdentifierPerformersCreated;

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3630F1AF1D3E9BC1001E1C83 /* RuntimeTestTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 3630F1AB1D3E99CF001E1C83 /* RuntimeTestTypes.m */; };
+		3696FD981D41363000535C4E /* TwoDifferentPlansTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3696FD961D4135D900535C4E /* TwoDifferentPlansTests.m */; };
 		36A920011D2D56900001C0B0 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A920001D2D56900001C0B0 /* MainViewController.m */; };
 		3C3D2B52435BC7B4312983A3 /* Pods_MaterialMotionRuntime_Catalog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E9F0FB5FB808715EC1FC0B7 /* Pods_MaterialMotionRuntime_Catalog.framework */; };
 		4489E3B5A134470DCF97D0CD /* Pods_MaterialMotionRuntime_UnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2B624803B0AE3BEB727C4F2 /* Pods_MaterialMotionRuntime_UnitTests.framework */; };
@@ -37,6 +38,7 @@
 		03F5D02B2B631F68A32B4870 /* Pods-MaterialMotionRuntime-Catalog.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaterialMotionRuntime-Catalog.release.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MaterialMotionRuntime-Catalog/Pods-MaterialMotionRuntime-Catalog.release.xcconfig"; sourceTree = "<group>"; };
 		3630F1AB1D3E99CF001E1C83 /* RuntimeTestTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RuntimeTestTypes.m; sourceTree = "<group>"; };
 		3630F1AE1D3E9B82001E1C83 /* RuntimeTestTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RuntimeTestTypes.h; sourceTree = "<group>"; };
+		3696FD961D4135D900535C4E /* TwoDifferentPlansTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwoDifferentPlansTests.m; sourceTree = "<group>"; };
 		36A91FFF1D2D56900001C0B0 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		36A920001D2D56900001C0B0 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		3BAE67A62BB80977FDFFDEDC /* Pods-MaterialMotionRuntime-Catalog.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaterialMotionRuntime-Catalog.debug.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MaterialMotionRuntime-Catalog/Pods-MaterialMotionRuntime-Catalog.debug.xcconfig"; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				661369701D5BE7CB00F6830F /* ComposedPerformanceTests.swift */,
 				6624C6421D466D7C00DF3108 /* DelegatedPerformanceTests.swift */,
 				6625A5521D467EBD00FD10F7 /* TestSchedulerDelegate.swift */,
+				3696FD961D4135D900535C4E /* TwoDifferentPlansTests.m */,
 			);
 			path = unit;
 			sourceTree = "<group>";
@@ -249,6 +252,7 @@
 					};
 					66876C5A1D25ED610054CED4 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -393,6 +397,7 @@
 				6624C6431D466D7C00DF3108 /* DelegatedPerformanceTests.swift in Sources */,
 				3630F1AF1D3E9BC1001E1C83 /* RuntimeTestTypes.m in Sources */,
 				66251F1E1D360C8E006EBC89 /* MDMRuntimeTests.m in Sources */,
+				3696FD981D41363000535C4E /* TwoDifferentPlansTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -559,10 +564,13 @@
 			baseConfigurationReference = 3BAE67A62BB80977FDFFDEDC /* Pods-MaterialMotionRuntime-Catalog.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = src/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.google.Catalog;
 				PRODUCT_NAME = Catalog;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -571,10 +579,12 @@
 			baseConfigurationReference = 03F5D02B2B631F68A32B4870 /* Pods-MaterialMotionRuntime-Catalog.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = src/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.google.Catalog;
 				PRODUCT_NAME = Catalog;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

@@ -69,13 +69,24 @@
 }
 
 - (void)executeLog:(MDMTransactionLog *)log {
+  // Event data collection
+  NSMutableArray *performersCreationEventArray = [NSMutableArray arrayWithCapacity:log.plans.count];
+
   for (id<MDMPlan> plan in log.plans) {
     id<MDMPerforming> performer = [self performerForPlan:plan];
+
+    // Event data collection
+    [performersCreationEventArray addObject:performer];
 
     if ([performer respondsToSelector:@selector(addPlan:)]) {
       [(id<MDMPlanPerforming>)performer addPlan:plan];
     }
   }
+
+  // Event notification
+  MDMSchedulerExecutionPerformersCreatedEvent *event = [MDMSchedulerExecutionPerformersCreatedEvent new];
+  event.performers = performersCreationEventArray;
+  [[NSNotificationCenter defaultCenter] postNotificationName:MDMEventIdentifierPerformersCreated object:nil userInfo:@{MDMEventNotificationKeyEvent : event}];
 }
 
 #pragma mark - Private
@@ -173,3 +184,7 @@
 }
 
 @end
+
+#pragma mark - Event Broadcasting
+
+MDMEventIdentifier const MDMEventIdentifierPerformersCreated = @"MDMEventIdentifierPerformersCreated";

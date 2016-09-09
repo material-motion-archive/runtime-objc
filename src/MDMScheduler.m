@@ -93,10 +93,6 @@
 
 MDMEventIdentifier const MDMEventIdentifierPerformerGroupCreated = @"MDMEventIdentifierPerformerGroupCreated";
 
-@implementation MDMSchedulerPerformerGroupCreatedEvent
-
-@end
-
 @implementation MDMSchedulerExecutionPerformersCreatedEvent
 
 @end

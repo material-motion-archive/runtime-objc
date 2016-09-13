@@ -92,7 +92,7 @@
 
   if ([trace.committedPlans count]) {
     MDMSchedulerPlansCommittedTracePayload *payload = [MDMSchedulerPlansCommittedTracePayload new];
-    payload.committedPlans = trace.committedPlans;
+    payload.committedPlans = [trace.committedPlans copy];
 
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc postNotificationName:MDMTraceNotificationNamePlansCommitted
@@ -101,7 +101,7 @@
   }
   if ([trace.createdPerformers count]) {
     MDMSchedulerPerformersCreatedTracePayload *event = [MDMSchedulerPerformersCreatedTracePayload new];
-    event.createdPerformers = trace.createdPerformers;
+    event.createdPerformers = [trace.createdPerformers copy];
 
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc postNotificationName:MDMTraceNotificationNamePerformersCreated

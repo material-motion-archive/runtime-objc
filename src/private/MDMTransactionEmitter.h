@@ -25,6 +25,6 @@
 - (nonnull instancetype)initWithScheduler:(nonnull MDMScheduler *)scheduler;
 
 /** Use initWithScheduler: instead. */
-- (instancetype)init NS_UNAVAILABLE;
+- (nonnull instancetype)init NS_UNAVAILABLE;
 
 @end

@@ -31,8 +31,8 @@
 @end
 
 @interface MDMPerformerInfo : NSObject
-@property(nonnull, strong) id<MDMPerforming> performer;
-@property(nonnull, strong) NSMutableSet<MDMDelegatedPerformanceToken *> *delegatedPerformanceTokens;
+@property(nonatomic, nonnull, strong) id<MDMPerforming> performer;
+@property(nonatomic, nonnull, strong) NSMutableSet<MDMDelegatedPerformanceToken *> *delegatedPerformanceTokens;
 @end
 
 @implementation MDMPerformerInfo

@@ -67,7 +67,7 @@ class LifeOfAConfigurablePlanViewController: UIViewController {
   }
 }
 
-private class Draggable: NSObject, Plan {
+class Draggable: NSObject, Plan {
   var panGestureRecognizer: UIPanGestureRecognizer?
 
   init(panGestureRecognizer: UIPanGestureRecognizer) {

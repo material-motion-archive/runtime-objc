@@ -19,6 +19,7 @@
 		669F4A301D85F60A00B0C45C /* LifeOfAPlanExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669F4A2F1D85F60A00B0C45C /* LifeOfAPlanExample.swift */; };
 		669F4A321D86013A00B0C45C /* LifeOfAConfigurablePlanExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669F4A311D86013A00B0C45C /* LifeOfAConfigurablePlanExample.swift */; };
 		669F4A341D86073A00B0C45C /* TableOfContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669F4A331D86073A00B0C45C /* TableOfContents.swift */; };
+		669F4A3C1D860F1E00B0C45C /* TossExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669F4A3A1D860F1E00B0C45C /* TossExample.swift */; };
 		66F0320F1D8336C70094B9C9 /* SchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F0320E1D8336C70094B9C9 /* SchedulerTests.swift */; };
 		66F032111D8349200094B9C9 /* NoopDelegation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F032101D8349200094B9C9 /* NoopDelegation.swift */; };
 		66F032151D8349560094B9C9 /* Emit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F032141D8349560094B9C9 /* Emit.swift */; };
@@ -56,6 +57,7 @@
 		669F4A2F1D85F60A00B0C45C /* LifeOfAPlanExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeOfAPlanExample.swift; sourceTree = "<group>"; };
 		669F4A311D86013A00B0C45C /* LifeOfAConfigurablePlanExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeOfAConfigurablePlanExample.swift; sourceTree = "<group>"; };
 		669F4A331D86073A00B0C45C /* TableOfContents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableOfContents.swift; path = ../../TableOfContents.swift; sourceTree = "<group>"; };
+		669F4A3A1D860F1E00B0C45C /* TossExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TossExample.swift; sourceTree = "<group>"; };
 		66F0320E1D8336C70094B9C9 /* SchedulerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchedulerTests.swift; sourceTree = "<group>"; };
 		66F032101D8349200094B9C9 /* NoopDelegation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoopDelegation.swift; sourceTree = "<group>"; };
 		66F032141D8349560094B9C9 /* Emit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emit.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 			children = (
 				669F4A2F1D85F60A00B0C45C /* LifeOfAPlanExample.swift */,
 				669F4A311D86013A00B0C45C /* LifeOfAConfigurablePlanExample.swift */,
+				669F4A3A1D860F1E00B0C45C /* TossExample.swift */,
 			);
 			name = examples;
 			path = ../..;
@@ -414,6 +417,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				669F4A3C1D860F1E00B0C45C /* TossExample.swift in Sources */,
 				66876C631D25ED610054CED4 /* AppDelegate.m in Sources */,
 				669F4A301D85F60A00B0C45C /* LifeOfAPlanExample.swift in Sources */,
 				669F4A321D86013A00B0C45C /* LifeOfAConfigurablePlanExample.swift in Sources */,

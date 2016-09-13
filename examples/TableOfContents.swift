@@ -27,3 +27,9 @@ extension LifeOfAConfigurablePlanViewController {
     return ["2. Life of a Configurable Plan"]
   }
 }
+
+extension TossViewController {
+  class func catalogBreadcrumbs() -> [String] {
+    return ["3. Tossable"]
+  }
+}

@@ -125,4 +125,55 @@ class SchedulerTests: XCTestCase {
 
     XCTAssertEqual(state.boolean, true)
   }
+
+  // Verify that we're unable to request a delegated performance token after the scheduler has been
+  // released.
+  func testDelayedDelegationIsIgnored() {
+    var scheduler: Scheduler? = Scheduler()
+
+    let transaction = Transaction()
+    let plan = HijackedDelegation()
+    transaction.add(plan: plan, to: NSObject())
+    scheduler!.commit(transaction: transaction)
+
+    // Force the scheduler to be deallocated.
+    scheduler = nil
+
+    XCTAssertNil(plan.willStart!())
+    plan.didEnd!(FakeToken()) // Should silently succeed because scheduler is gone
+  }
+
+  // A fake token for use in tests.
+  private class FakeToken: NSObject, DelegatedPerformingToken {}
+
+  // A plan that enables hijacking of the delegated performance token blocks.
+  private class HijackedDelegation: NSObject, Plan {
+    var willStart: DelegatedPerformanceTokenReturnBlock?
+    var didEnd: DelegatedPerformanceTokenArgBlock?
+
+    func performerClass() -> AnyClass {
+      return Performer.self
+    }
+
+    private class Performer: NSObject, PlanPerforming, DelegatedPerforming {
+      let target: Any
+      required init(target: Any) {
+        self.target = target
+      }
+
+      func add(plan: Plan) {
+        let delayedDelegation = plan as! HijackedDelegation
+        delayedDelegation.willStart = willStart
+        delayedDelegation.didEnd = didEnd
+      }
+
+      var willStart: DelegatedPerformanceTokenReturnBlock!
+      var didEnd: DelegatedPerformanceTokenArgBlock!
+      func setDelegatedPerformance(willStart: @escaping DelegatedPerformanceTokenReturnBlock,
+                                   didEnd: @escaping DelegatedPerformanceTokenArgBlock) {
+        self.willStart = willStart
+        self.didEnd = didEnd
+      }
+    }
+  }
 }

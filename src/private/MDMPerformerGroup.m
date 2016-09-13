@@ -132,7 +132,7 @@
     MDMDelegatedPerformanceTokenReturnBlock willStartBlock = ^(void) {
       MDMPerformerInfo *strongInfo = weakInfo;
       MDMPerformerGroup *strongSelf = weakSelf;
-      if (!strongInfo || !strongSelf) {
+      if (!strongInfo || !strongSelf || !strongSelf->_scheduler) {
         return (id<MDMDelegatedPerformingToken>)nil;
       }
 
@@ -160,7 +160,7 @@
     MDMDelegatedPerformanceTokenArgBlock didEndBlock = ^(id<MDMDelegatedPerformingToken> token) {
       MDMPerformerInfo *strongInfo = weakInfo;
       MDMPerformerGroup *strongSelf = weakSelf;
-      if (!strongInfo) {
+      if (!strongInfo || !strongSelf || !strongSelf->_scheduler) {
         return;
       }
 

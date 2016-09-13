@@ -70,6 +70,8 @@
 }
 
 - (void)executeLog:(MDMTransactionLog *)log trace:(MDMTrace *)trace {
+  [trace.committedPlans addObjectsFromArray:log.plans];
+
   for (id<MDMPlan> plan in log.plans) {
     BOOL isNew = NO;
     id<MDMPerforming> performer = [self performerForPlan:plan isNew:&isNew];

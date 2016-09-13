@@ -19,11 +19,18 @@
 @interface MDMTrace : NSObject
 
 @property(nonatomic, nonnull, readonly) NSMutableSet* createdPerformers;
+@property(nonatomic, nonnull, readonly) NSMutableArray* committedPlans;
 
 @end
 
 @interface MDMSchedulerPerformersCreatedTracePayload ()
 
 @property(nonatomic, copy, nonnull) NSSet<MDMPerforming>* createdPerformers;
+
+@end
+
+@interface MDMSchedulerPlansCommittedTracePayload ()
+
+@property(nonatomic, copy, nonnull) NSArray<MDMPlan>* committedPlans;
 
 @end

@@ -17,6 +17,7 @@
 #import <Foundation/Foundation.h>
 
 @protocol MDMPerforming;
+@protocol MDMPlan;
 
 #pragma mark - Trace Notification Name
 
@@ -59,5 +60,30 @@ NS_SWIFT_NAME(SchedulerPerformersCreatedTracePayload)
 
 /** The set of performers that were created by the transaction. */
 @property(nonatomic, copy, nonnull, readonly) NSSet<MDMPerforming>* createdPerformers;
+
+@end
+
+#pragma mark Notification: Plans Committed
+
+/**
+ Name of the notification that is fired when new plans are committed to a scheduler.
+
+ Sent on completion of a MDMScheduler commitTransaction: invocation only if plans were committed.
+
+ The notification's user info MDMTraceNotificationPayloadKey's value is an instance of
+ MDMSchedulerPlansCommittedTracePayload.
+ */
+FOUNDATION_EXPORT MDMTraceNotificationName _Nonnull MDMTraceNotificationNamePlansCommitted;
+
+/** Data for the MDMTraceNotificationNamePerformersCreated notification. */
+NS_SWIFT_NAME(SchedulerPlansCommittedTracePayload)
+@interface MDMSchedulerPlansCommittedTracePayload : NSObject
+
+/**
+ The set of plans that were committed by the transaction.
+
+ Order matches the transaction's order.
+ */
+@property(nonatomic, copy, nonnull, readonly) NSArray<MDMPlan>* committedPlans;
 
 @end

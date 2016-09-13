@@ -29,9 +29,9 @@
   return self;
 }
 
-- (void)addPlan:(id<MDMPlan>)plan toTarget:(id)target {
+- (void)addPlan:(NSObject<MDMPlan> *)plan toTarget:(id)target {
   MDMTransactionLog *log = [MDMTransactionLog new];
-  log.plans = @[ plan ];
+  log.plans = @[ [plan copy] ];
   log.target = target;
   [_logs addObject:log];
 }

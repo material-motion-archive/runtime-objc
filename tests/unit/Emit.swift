@@ -27,6 +27,10 @@ class Emit: NSObject, Plan {
     return Performer.self
   }
 
+  public func copy(with zone: NSZone? = nil) -> Any {
+    return Emit(plan: plan)
+  }
+
   private class Performer: NSObject, PlanPerforming, ComposablePerforming {
     let target: Any
     required init(target: Any) {

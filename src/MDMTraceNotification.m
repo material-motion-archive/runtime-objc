@@ -23,8 +23,12 @@ NSString* const _Nonnull MDMTraceNotificationPayloadKey = @"MDMTraceNotification
 #pragma mark - Trace notification names
 
 MDMTraceNotificationName _Nonnull MDMTraceNotificationNamePerformersCreated = @"MDMTraceNotificationNamePerformersCreated";
+MDMTraceNotificationName _Nonnull MDMTraceNotificationNamePlansCommitted = @"MDMTraceNotificationNamePlansCommitted";
 
 #pragma mark - Trace notification payloads
 
 @implementation MDMSchedulerPerformersCreatedTracePayload
+@end
+
+@implementation MDMSchedulerPlansCommittedTracePayload
 @end

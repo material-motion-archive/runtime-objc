@@ -25,6 +25,10 @@ class NoopDelegation: NSObject, Plan {
     return Performer.self
   }
 
+  public func copy(with zone: NSZone? = nil) -> Any {
+    return NoopDelegation()
+  }
+
   private class Performer: NSObject, DelegatedPerforming {
     let target: Any
     required init(target: Any) {

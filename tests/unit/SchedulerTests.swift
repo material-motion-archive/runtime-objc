@@ -19,6 +19,28 @@ import MaterialMotionRuntime
 
 class SchedulerTests: XCTestCase {
 
+  // Verify that a plan committed to a scheduler is copied.
+  func testPlansAreCopied() {
+    let state = State()
+    state.boolean = false
+
+    let plan = ChangeBoolean(desiredBoolean: true)
+
+    let scheduler = Scheduler()
+
+    expectation(forNotification: TraceNotificationName.plansCommitted._rawValue as String, object: scheduler) { notification -> Bool in
+      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPlansCommittedTracePayload
+      XCTAssertNotEqual(event.committedPlans[0] as! ChangeBoolean, plan)
+      return event.committedPlans.count == 1
+    }
+
+    let transaction = Transaction()
+    transaction.add(plan: plan, to: state)
+    scheduler.commit(transaction: transaction)
+
+    waitForExpectations(timeout: 0.1)
+  }
+
   // Verify that a plan committed to a scheduler immediately executes its add(plan:) logic.
   func testAddPlanInvokedImmediately() {
     let state = State()
@@ -49,6 +71,10 @@ class SchedulerTests: XCTestCase {
 
     func performerClass() -> AnyClass {
       return Performer.self
+    }
+
+    public func copy(with zone: NSZone? = nil) -> Any {
+      return ChangeBoolean(desiredBoolean: desiredBoolean)
     }
 
     private class Performer: NSObject, Performing, PlanPerforming {
@@ -139,8 +165,8 @@ class SchedulerTests: XCTestCase {
     // Force the scheduler to be deallocated.
     scheduler = nil
 
-    XCTAssertNil(plan.willStart!())
-    plan.didEnd!(FakeToken()) // Should silently succeed because scheduler is gone
+    XCTAssertNil(plan.state.willStart!())
+    plan.state.didEnd!(FakeToken()) // Should silently succeed because scheduler is gone
   }
 
   // A fake token for use in tests.
@@ -148,11 +174,20 @@ class SchedulerTests: XCTestCase {
 
   // A plan that enables hijacking of the delegated performance token blocks.
   private class HijackedDelegation: NSObject, Plan {
-    var willStart: DelegatedPerformanceTokenReturnBlock?
-    var didEnd: DelegatedPerformanceTokenArgBlock?
+    class State {
+      var willStart: DelegatedPerformanceTokenReturnBlock?
+      var didEnd: DelegatedPerformanceTokenArgBlock?
+    }
+    var state = State()
 
     func performerClass() -> AnyClass {
       return Performer.self
+    }
+
+    public func copy(with zone: NSZone? = nil) -> Any {
+      let copy = HijackedDelegation()
+      copy.state = state
+      return copy
     }
 
     private class Performer: NSObject, PlanPerforming, DelegatedPerforming {
@@ -163,8 +198,8 @@ class SchedulerTests: XCTestCase {
 
       func add(plan: Plan) {
         let delayedDelegation = plan as! HijackedDelegation
-        delayedDelegation.willStart = willStart
-        delayedDelegation.didEnd = didEnd
+        delayedDelegation.state.willStart = willStart
+        delayedDelegation.state.didEnd = didEnd
       }
 
       var willStart: DelegatedPerformanceTokenReturnBlock!

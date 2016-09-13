@@ -90,6 +90,15 @@
     [[self performerGroupForTarget:log.target] executeLog:log trace:trace];
   }
 
+  if ([trace.committedPlans count]) {
+    MDMSchedulerPlansCommittedTracePayload *payload = [MDMSchedulerPlansCommittedTracePayload new];
+    payload.committedPlans = trace.committedPlans;
+
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc postNotificationName:MDMTraceNotificationNamePlansCommitted
+                      object:self
+                    userInfo:@{MDMTraceNotificationPayloadKey : payload}];
+  }
   if ([trace.createdPerformers count]) {
     MDMSchedulerPerformersCreatedTracePayload *event = [MDMSchedulerPerformersCreatedTracePayload new];
     event.createdPerformers = trace.createdPerformers;

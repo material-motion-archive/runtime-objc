@@ -71,8 +71,8 @@ class SchedulerTests: XCTestCase {
 
     let scheduler = Scheduler()
 
-    expectation(forNotification: EventName.performersCreated._rawValue as String, object: scheduler) { notification -> Bool in
-      let event = notification.userInfo![EventNotificationEventKey] as! SchedulerPerformersCreatedEvent
+    expectation(forNotification: TraceNotificationName.performersCreated._rawValue as String, object: scheduler) { notification -> Bool in
+      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPerformersCreatedTracePayload
       return event.createdPerformers.count == 1
     }
 
@@ -91,8 +91,8 @@ class SchedulerTests: XCTestCase {
 
     let scheduler = Scheduler()
 
-    expectation(forNotification: EventName.performersCreated._rawValue as String, object: scheduler) { notification -> Bool in
-      let event = notification.userInfo![EventNotificationEventKey] as! SchedulerPerformersCreatedEvent
+    expectation(forNotification: TraceNotificationName.performersCreated._rawValue as String, object: scheduler) { notification -> Bool in
+      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPerformersCreatedTracePayload
       return event.createdPerformers.count == 2
     }
 

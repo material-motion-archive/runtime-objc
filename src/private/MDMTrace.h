@@ -14,10 +14,16 @@
  limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "MDMTraceNotification.h"
 
 @interface MDMTrace : NSObject
 
-@property(nonatomic, nonnull, readonly) NSMutableSet *createdPerformers;
+@property(nonatomic, nonnull, readonly) NSMutableSet* createdPerformers;
+
+@end
+
+@interface MDMSchedulerPerformersCreatedTracePayload ()
+
+@property(nonatomic, copy, nonnull) NSSet<MDMPerforming>* createdPerformers;
 
 @end

@@ -14,6 +14,17 @@
  limitations under the License.
  */
 
-#import "MDMEvent.h"
+#import "MDMTraceNotification.h"
 
-NSString* const _Nonnull MDMEventNotificationEventKey = @"MDMEventNotificationEventKey";
+#import "MDMTrace.h"
+
+NSString* const _Nonnull MDMTraceNotificationPayloadKey = @"MDMTraceNotificationPayloadKey";
+
+#pragma mark - Trace notification names
+
+MDMTraceNotificationName _Nonnull MDMTraceNotificationNamePerformersCreated = @"MDMTraceNotificationNamePerformersCreated";
+
+#pragma mark - Trace notification payloads
+
+@implementation MDMSchedulerPerformersCreatedTracePayload
+@end

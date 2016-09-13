@@ -16,8 +16,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "MDMEvent.h"
-
 @class MDMScheduler;
 @class MDMTrace;
 @class MDMTransactionLog;

@@ -19,6 +19,7 @@
 #import "MDMPerformerGroup.h"
 #import "MDMPerformerGroupDelegate.h"
 #import "MDMTrace.h"
+#import "MDMTraceNotification.h"
 #import "MDMTransaction+Private.h"
 
 @interface MDMScheduler () <MDMPerformerGroupDelegate>
@@ -90,21 +91,14 @@
   }
 
   if ([trace.createdPerformers count]) {
-    MDMSchedulerPerformersCreatedEvent *event = [MDMSchedulerPerformersCreatedEvent new];
+    MDMSchedulerPerformersCreatedTracePayload *event = [MDMSchedulerPerformersCreatedTracePayload new];
     event.createdPerformers = trace.createdPerformers;
 
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    [nc postNotificationName:MDMEventNamePerformersCreated
+    [nc postNotificationName:MDMTraceNotificationNamePerformersCreated
                       object:self
-                    userInfo:@{MDMEventNotificationEventKey : event}];
+                    userInfo:@{MDMTraceNotificationPayloadKey : event}];
   }
 }
 
-@end
-
-#pragma mark - Event Broadcasting
-
-MDMEventName _Nonnull MDMEventNamePerformersCreated = @"MDMEventNamePerformersCreated";
-
-@implementation MDMSchedulerPerformersCreatedEvent
 @end

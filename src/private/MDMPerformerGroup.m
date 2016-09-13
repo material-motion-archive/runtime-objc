@@ -20,6 +20,7 @@
 #import "MDMPerforming.h"
 #import "MDMPlan.h"
 #import "MDMScheduler.h"
+#import "MDMTrace.h"
 #import "MDMTransaction+Private.h"
 #import "MDMTransactionEmitter.h"
 
@@ -68,34 +69,29 @@
   return self;
 }
 
-- (void)executeLog:(MDMTransactionLog *)log {
-  // Event data collection
-  NSMutableArray *performersCreationEventArray = [NSMutableArray arrayWithCapacity:log.plans.count];
-
+- (void)executeLog:(MDMTransactionLog *)log trace:(MDMTrace *)trace {
   for (id<MDMPlan> plan in log.plans) {
-    id<MDMPerforming> performer = [self performerForPlan:plan];
+    BOOL isNew = NO;
+    id<MDMPerforming> performer = [self performerForPlan:plan isNew:&isNew];
 
-    // Event data collection
-    [performersCreationEventArray addObject:performer];
+    if (isNew) {
+      [trace.createdPerformers addObject:performer];
+    }
 
     if ([performer respondsToSelector:@selector(addPlan:)]) {
       [(id<MDMPlanPerforming>)performer addPlan:plan];
     }
   }
-
-  // Event notification
-  MDMSchedulerExecutionPerformersCreatedEvent *event = [MDMSchedulerExecutionPerformersCreatedEvent new];
-  event.performers = performersCreationEventArray;
-  [[NSNotificationCenter defaultCenter] postNotificationName:MDMEventIdentifierPerformersCreated object:nil userInfo:@{MDMEventNotificationKeyEvent : event}];
 }
 
 #pragma mark - Private
 
-- (id<MDMPerforming>)performerForPlan:(id<MDMPlan>)plan {
+- (id<MDMPerforming>)performerForPlan:(id<MDMPlan>)plan isNew:(BOOL *)isNew {
   Class performerClass = [plan performerClass];
   id performerClassName = NSStringFromClass(performerClass);
   MDMPerformerInfo *performerInfo = self.performerClassNameToPerformerInfo[performerClassName];
   if (performerInfo) {
+    *isNew = NO;
     return performerInfo.performer;
   }
 
@@ -108,6 +104,8 @@
   self.performerClassNameToPerformerInfo[performerClassName] = performerInfo;
 
   [self setUpFeaturesForPerformerInfo:performerInfo];
+
+  *isNew = YES;
 
   return performer;
 }
@@ -184,7 +182,3 @@
 }
 
 @end
-
-#pragma mark - Event Broadcasting
-
-MDMEventIdentifier const MDMEventIdentifierPerformersCreated = @"MDMEventIdentifierPerformersCreated";

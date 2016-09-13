@@ -19,6 +19,7 @@
 #import "MDMEvent.h"
 
 @class MDMScheduler;
+@class MDMTrace;
 @class MDMTransactionLog;
 @protocol MDMPerformerGroupDelegate;
 
@@ -35,13 +36,6 @@
 // nil by default. Useful for view duplication.
 @property(nonatomic, nullable) id schedulerTarget;
 
-- (void)executeLog:(nonnull MDMTransactionLog *)log;
+- (void)executeLog:(nonnull MDMTransactionLog *)log trace:(nonnull MDMTrace *)trace;
 
 @end
-
-#pragma mark - Event Broadcasting
-
-/**
- This is the name of the NSNotification fired when this event happens. Its userInfo will contain an MDMEvent of the type below.
- */
-FOUNDATION_EXPORT MDMEventIdentifier const _Nonnull MDMEventIdentifierPerformersCreated;

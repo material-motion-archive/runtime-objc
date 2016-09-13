@@ -26,10 +26,10 @@ class SchedulerTests: XCTestCase {
 
     let plan = ChangeBoolean(desiredBoolean: true)
 
+    let scheduler = Scheduler()
+
     let transaction = Transaction()
     transaction.add(plan: plan, to: state)
-
-    let scheduler = Scheduler()
     scheduler.commit(transaction: transaction)
 
     XCTAssertEqual(state.boolean, plan.desiredBoolean)
@@ -62,5 +62,67 @@ class SchedulerTests: XCTestCase {
         target.boolean = testPlan.desiredBoolean
       }
     }
+  }
+
+  // Verify that two plans of the same type creates only one performer.
+  func testTwoSamePlansCreatesOnePerformer() {
+    let state = State()
+    state.boolean = false
+
+    let scheduler = Scheduler()
+
+    expectation(forNotification: EventName.performersCreated._rawValue as String, object: scheduler) { notification -> Bool in
+      let event = notification.userInfo![EventNotificationEventKey] as! SchedulerPerformersCreatedEvent
+      return event.createdPerformers.count == 1
+    }
+
+    let transaction = Transaction()
+    transaction.add(plan: ChangeBoolean(desiredBoolean: true), to: state)
+    transaction.add(plan: ChangeBoolean(desiredBoolean: false), to: state)
+    scheduler.commit(transaction: transaction)
+
+    waitForExpectations(timeout: 0.1)
+  }
+
+  // Verify that two plans of different types creates two performers.
+  func testTwoDifferentPlansCreatesTwoPerformers() {
+    let state = State()
+    state.boolean = false
+
+    let scheduler = Scheduler()
+
+    expectation(forNotification: EventName.performersCreated._rawValue as String, object: scheduler) { notification -> Bool in
+      let event = notification.userInfo![EventNotificationEventKey] as! SchedulerPerformersCreatedEvent
+      return event.createdPerformers.count == 2
+    }
+
+    let transaction = Transaction()
+    transaction.add(plan: ChangeBoolean(desiredBoolean: true), to: state)
+    transaction.add(plan: NoopDelegation(), to: state)
+    scheduler.commit(transaction: transaction)
+
+    waitForExpectations(timeout: 0.1)
+  }
+
+  // Verify that order of plans is respected in a transaction.
+  func testTwoPlansOrderIsRespected() {
+    let state = State()
+    state.boolean = false
+
+    let scheduler = Scheduler()
+
+    var transaction = Transaction()
+    transaction.add(plan: ChangeBoolean(desiredBoolean: true), to: state)
+    transaction.add(plan: ChangeBoolean(desiredBoolean: false), to: state)
+    scheduler.commit(transaction: transaction)
+
+    XCTAssertEqual(state.boolean, false)
+
+    transaction = Transaction()
+    transaction.add(plan: ChangeBoolean(desiredBoolean: false), to: state)
+    transaction.add(plan: ChangeBoolean(desiredBoolean: true), to: state)
+    scheduler.commit(transaction: transaction)
+
+    XCTAssertEqual(state.boolean, true)
   }
 }

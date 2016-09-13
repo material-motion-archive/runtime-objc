@@ -16,21 +16,45 @@
 
 #import <Foundation/Foundation.h>
 
-/**
- This will allow const identifiers to be easily used in Swift 3.
- */
-typedef NSString *MDMEventIdentifier NS_EXTENSIBLE_STRING_ENUM NS_SWIFT_NAME(Identifier);
+@protocol MDMPerforming;
 
 /**
- A key used in the userInfo dictionary of an NSNotification. The key's value should be an instance of a class that implements MDMEvent.
+ Enable support for treating event identifiers as Swift enums.
+
+ Any event identifier defined with the MDMEventIdentifier type will be made available as an
+ EventIdentifier.<eventName> type in Swift code.
  */
-static NSString *_Nonnull MDMEventNotificationKeyEvent = @"MDMEventNotificationKeyEvent";
+typedef NSNotificationName MDMEventName NS_EXTENSIBLE_STRING_ENUM NS_SWIFT_NAME(EventName);
 
 /**
- Classes implementing this protocol are official, testable events.
- */
+ A key whose value is an object conforming to MDMEvent that contains information relevant to the
+ corresponding notification.
 
+ This key is used with all MDMEventName notifications.
+ */
+FOUNDATION_EXTERN NSString* const _Nonnull MDMEventNotificationEventKey NS_SWIFT_NAME(EventNotificationEventKey);
+
+/** All objects emitted by scheduler events conform to this type. */
 NS_SWIFT_NAME(Event)
 @protocol MDMEvent <NSObject>
+@end
+
+/**
+ Name of the event that is fired when new performers are created as part of a transaction.
+
+ Sent on completion of a MDMScheduler commitTransaction: invocation only if new performers were
+ created.
+
+ The notification's user info MDMEventNotificationEventKey's value is an instance of
+ MDMSchedulerPerformersCreatedEvent.
+ */
+FOUNDATION_EXPORT MDMEventName _Nonnull MDMEventNamePerformersCreated;
+
+/** Data for the MDMEventNamePerformersCreated event. */
+NS_SWIFT_NAME(SchedulerPerformersCreatedEvent)
+@interface MDMSchedulerPerformersCreatedEvent : NSObject <MDMEvent>
+
+/** The set of performers that were created by the transaction. */
+@property(nonatomic, copy, nonnull) NSSet<MDMPerforming>* createdPerformers;
 
 @end

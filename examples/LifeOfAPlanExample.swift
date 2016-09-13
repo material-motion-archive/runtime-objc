@@ -131,11 +131,3 @@ private class Draggable: NSObject, Plan {
 private func +(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
   return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
 }
-
-// MARK: Catalog by convention
-
-extension LifeOfAPlanViewController {
-  class func catalogBreadcrumbs() -> [String] {
-    return ["1. Life of a Plan"]
-  }
-}

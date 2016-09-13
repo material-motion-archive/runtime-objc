@@ -16,8 +16,7 @@
 		66876C631D25ED610054CED4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66876C621D25ED610054CED4 /* AppDelegate.m */; };
 		66876C6B1D25ED610054CED4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66876C6A1D25ED610054CED4 /* Assets.xcassets */; };
 		66876C6E1D25ED610054CED4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66876C6C1D25ED610054CED4 /* LaunchScreen.storyboard */; };
-		66DBB8D21D341BFB0048FC80 /* PlanFadeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DBB8CF1D341BFB0048FC80 /* PlanFadeViewController.m */; };
-		66DBB8D31D341BFB0048FC80 /* Tween.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DBB8D11D341BFB0048FC80 /* Tween.m */; };
+		669F4A301D85F60A00B0C45C /* LifeOfAPlanExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669F4A2F1D85F60A00B0C45C /* LifeOfAPlanExample.swift */; };
 		66F0320F1D8336C70094B9C9 /* SchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F0320E1D8336C70094B9C9 /* SchedulerTests.swift */; };
 		66F032111D8349200094B9C9 /* NoopDelegation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F032101D8349200094B9C9 /* NoopDelegation.swift */; };
 		66F032151D8349560094B9C9 /* Emit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F032141D8349560094B9C9 /* Emit.swift */; };
@@ -52,10 +51,7 @@
 		66876C6A1D25ED610054CED4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		66876C6D1D25ED610054CED4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		66876C6F1D25ED610054CED4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		66DBB8CE1D341BFB0048FC80 /* PlanFadeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlanFadeViewController.h; sourceTree = "<group>"; };
-		66DBB8CF1D341BFB0048FC80 /* PlanFadeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlanFadeViewController.m; sourceTree = "<group>"; };
-		66DBB8D01D341BFB0048FC80 /* Tween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tween.h; sourceTree = "<group>"; };
-		66DBB8D11D341BFB0048FC80 /* Tween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tween.m; sourceTree = "<group>"; };
+		669F4A2F1D85F60A00B0C45C /* LifeOfAPlanExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeOfAPlanExample.swift; sourceTree = "<group>"; };
 		66F0320E1D8336C70094B9C9 /* SchedulerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchedulerTests.swift; sourceTree = "<group>"; };
 		66F032101D8349200094B9C9 /* NoopDelegation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoopDelegation.swift; sourceTree = "<group>"; };
 		66F032141D8349560094B9C9 /* Emit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emit.swift; sourceTree = "<group>"; };
@@ -109,8 +105,8 @@
 		66876C521D25ED610054CED4 = {
 			isa = PBXGroup;
 			children = (
-				66876C5D1D25ED610054CED4 /* src */,
 				66DBB8CD1D341BE80048FC80 /* examples */,
+				66876C5D1D25ED610054CED4 /* app */,
 				66251F121D360C65006EBC89 /* tests */,
 				66876C5C1D25ED610054CED4 /* Products */,
 				8C0B878FA36FECEAB1371636 /* Pods */,
@@ -127,7 +123,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		66876C5D1D25ED610054CED4 /* src */ = {
+		66876C5D1D25ED610054CED4 /* app */ = {
 			isa = PBXGroup;
 			children = (
 				66876C611D25ED610054CED4 /* AppDelegate.h */,
@@ -137,6 +133,7 @@
 				66876C6F1D25ED610054CED4 /* Info.plist */,
 				66876C5E1D25ED610054CED4 /* Supporting Files */,
 			);
+			name = app;
 			path = src;
 			sourceTree = "<group>";
 		};
@@ -151,10 +148,7 @@
 		66DBB8CD1D341BE80048FC80 /* examples */ = {
 			isa = PBXGroup;
 			children = (
-				66DBB8CE1D341BFB0048FC80 /* PlanFadeViewController.h */,
-				66DBB8CF1D341BFB0048FC80 /* PlanFadeViewController.m */,
-				66DBB8D01D341BFB0048FC80 /* Tween.h */,
-				66DBB8D11D341BFB0048FC80 /* Tween.m */,
+				669F4A2F1D85F60A00B0C45C /* LifeOfAPlanExample.swift */,
 			);
 			name = examples;
 			path = ../..;
@@ -415,8 +409,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				66876C631D25ED610054CED4 /* AppDelegate.m in Sources */,
-				66DBB8D31D341BFB0048FC80 /* Tween.m in Sources */,
-				66DBB8D21D341BFB0048FC80 /* PlanFadeViewController.m in Sources */,
+				669F4A301D85F60A00B0C45C /* LifeOfAPlanExample.swift in Sources */,
 				66876C601D25ED610054CED4 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,6 +440,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 410EA1DE9CF79CEBF25C7B38 /* Pods-MaterialMotionRuntime-UnitTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = UnitTests/Info.plist;
@@ -465,6 +459,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 586FE8540230E626300786A1 /* Pods-MaterialMotionRuntime-UnitTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = UnitTests/Info.plist;

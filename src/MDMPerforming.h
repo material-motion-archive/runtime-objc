@@ -71,14 +71,6 @@ typedef _Nullable id<MDMDelegatedPerformingToken> (^MDMDelegatedPerformanceToken
 NS_SWIFT_NAME(DelegatedPerformanceTokenArgBlock)
 typedef void (^MDMDelegatedPerformanceTokenArgBlock)(_Nonnull id<MDMDelegatedPerformingToken>);
 
-/** A block that provides a transaction that will be committed to a scheduler. */
-NS_SWIFT_NAME(TransactionBlock)
-typedef void (^MDMTransactionBlock)(MDMTransaction* _Nonnull);
-
-/** A block that initiates a new transaction. */
-NS_SWIFT_NAME(TransactBlock)
-typedef void (^MDMTransactBlock)(_Nonnull MDMTransactionBlock);
-
 /**
  A class conforming to MDMDelegatedPerforming is expected to delegate execution to an external system.
  */

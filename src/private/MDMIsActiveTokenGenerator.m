@@ -53,6 +53,8 @@
   if (self) {
     _performerGroup = performerGroup;
     _performerInfo = performerInfo;
+
+    [self.performerGroup registerIsActiveToken:self withPerformerInfo:self.performerInfo];
   }
   return self;
 }
@@ -82,10 +84,8 @@
   if (!self.performerInfo.performer) {
     return nil;
   }
-  MDMIsActiveToken *token = [[MDMIsActiveToken alloc] initWithPerformerGroup:self.performerGroup
-                                                               performerInfo:self.performerInfo];
-  [self.performerGroup registerIsActiveToken:token withPerformerInfo:self.performerInfo];
-  return token;
+  return [[MDMIsActiveToken alloc] initWithPerformerGroup:self.performerGroup
+                                            performerInfo:self.performerInfo];
 }
 
 @end

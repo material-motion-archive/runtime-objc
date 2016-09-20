@@ -58,6 +58,7 @@ commands:
 3. [How to commit a plan to a scheduler](#how-to-commit-a-plan-to-a-scheduler)
 4. [How to configure performers with plans](#how-to-configure-performers-with-plans)
 5. [How to use composition to fulfill plans](#how-to-use-composition-to-fulfill-plans)
+6. [How to indicate continuous performance](#how-to-indicate-continuous-performance)
 
 ### Architecture
 
@@ -356,7 +357,7 @@ Code snippets:
 
 ```objc
 @interface <#Performer#> ()
-@property(nonnull, strong) id<MDMTransactionEmitting> transactionEmitter;
+@property(nonatomic, strong) id<MDMTransactionEmitting> transactionEmitter;
 @end
 
 @interface <#Performer#> (Composition) <MDMComposablePerforming>
@@ -411,6 +412,95 @@ MDMTransaction *transaction = [MDMTransaction new];
 let transaction = Transaction()
 transaction.add(plan: <#T##Plan#>, to: target)
 emitter.emit(transaction: transaction)
+```
+
+### How to indicate continuous performance
+
+Oftentimes performers will perform their actions over a period of time or while an interaction is
+active. These types of performers are called continuous performers.
+
+A continuous performer is able to affect the active state of the scheduler by generating is-active
+tokens. The scheduler is considered active so long as an is-active token exists and has not been
+terminated. Continuous performers are expected to terminate a token when its corresponding work has
+completed.
+
+For example, a performer that registers a platform animation might generate a token when the
+animation starts. When the animation completes the token would be terminated.
+
+#### Step 1: Conform to ContinuousPerforming and store the token generator
+
+Code snippets:
+
+***In Objective-C:***
+
+```objc
+@interface <#Performer#> ()
+@property(nonatomic, strong) id<MDMIsActiveTokenGenerating> tokenGenerator;
+@end
+
+@interface <#Performer#> (Composition) <MDMComposablePerforming>
+@end
+
+@implementation <#Performer#> (Composition)
+
+- (void)setIsActiveTokenGenerator:(id<MDMIsActiveTokenGenerating>)isActiveTokenGenerator {
+  self.tokenGenerator = isActiveTokenGenerator;
+}
+
+@end
+```
+
+***In Swift:***
+
+```swift
+// Store the emitter in your class' definition.
+class <#Performer#>: ... {
+  ...
+  var tokenGenerator: IsActiveTokenGenerating!
+  ...
+}
+
+extension <#Performer#>: ContinuousPerforming {
+  func set(isActiveTokenGenerator: IsActiveTokenGenerating) {
+    tokenGenerator = isActiveTokenGenerator
+  }
+}
+```
+
+#### Step 2: Generate a token when some continuous work has started
+
+You will likely need to store the token in order to be able to reference it at a later point.
+
+Code snippets:
+
+***In Objective-C:***
+
+```objc
+id<MDMIsActiveTokenable> token = [self.tokenGenerator generate];
+tokenMap[animation] = token;
+```
+
+***In Swift:***
+
+```swift
+let token = tokenGenerator.generate()!
+tokenMap[animation] = token
+```
+
+#### Step 3: Terminate the token when work has completed
+
+Code snippets:
+
+***In Objective-C:***
+
+```objc
+[token terminate];
+```
+
+***In Swift:***
+
+```swift
+token.terminate()
 ```
 
 ## Contributing

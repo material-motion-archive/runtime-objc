@@ -1,10 +1,5 @@
 # 3.0.0
 
-## Documentation changes
-
-- Catalog examples now each builds off their previous example.
-- README.md now includes a variety of how to guides.
-
 ## New features
 
 - Composable performing. Performers can now emit more plans.
@@ -15,6 +10,11 @@
 - MDMPlan now conforms to NSCopying. All plans must now implement `copy(with zone:)`.
 - *removed* property: `delegatedPerformanceWillStartNamed` in `MDMDelegatedPerforming`
 - *removed* property: `delegatedPerformanceDidEndNamed` in `MDMDelegatedPerforming`
+
+## Documentation changes
+
+- Catalog examples now each builds off their previous example.
+- README.md now includes a variety of how to guides.
 
 ## Source changes
 

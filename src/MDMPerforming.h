@@ -41,7 +41,7 @@ NS_SWIFT_NAME(PlanPerforming)
 #pragma mark Adding plans to a performer
 
 /**
- Provides the performer with an plan.
+ Provides the performer with a plan.
 
  The performer may choose to store this plan or to simply extract necessary information and cache
  it separately.

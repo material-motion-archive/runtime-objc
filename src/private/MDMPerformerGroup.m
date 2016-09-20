@@ -27,8 +27,11 @@
 #import "MDMTransactionEmitter.h"
 
 // TODO: Remove upon deletion of deprecation delegation APIs.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 @interface MDMDelegatedPerformanceToken : NSObject <MDMDelegatedPerformingToken>
 @end
+#pragma clang diagnostic pop
 
 @implementation MDMDelegatedPerformanceToken
 @end
@@ -144,6 +147,8 @@
   // TODO: Remove upon deletion of deprecation delegation APIs.
 
   if ([performer respondsToSelector:@selector(setDelegatedPerformanceWillStart:didEnd:)]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     id<MDMDelegatedPerforming> delegatedPerformer = (id<MDMDelegatedPerforming>)performer;
 
     __weak MDMPerformerInfo *weakInfo = performerInfo;
@@ -185,6 +190,7 @@
     };
 
     [delegatedPerformer setDelegatedPerformanceWillStart:willStartBlock didEnd:didEndBlock];
+#pragma clang diagnostic pop
   }
 }
 

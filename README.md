@@ -56,8 +56,8 @@ commands:
 1. [Architecture](#architecture)
 2. [How to define a new plan and performer type](#how-to-create-a-new-plan-and-performer-type)
 3. [How to commit a plan to a scheduler](#how-to-commit-a-plan-to-a-scheduler)
-4. [Configuring performers with plans](#configuring-performers-with-plans)
-5. [Using composition to fulfill plans](#using-composition-to-fulfill-plans)
+4. [How to configure performers with plans](#how-to-configure-performers-with-plans)
+5. [How to use composition to fulfill plans](#how-to-use-composition-to-fulfill-plans)
 
 ### Architecture
 
@@ -132,15 +132,15 @@ class <#Plan#>: NSObject {
 
 Performers are responsible for fulfilling plans. Fulfillment is possible in a variety of ways:
 
-- [PlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPlanPerforming.html): [Configuring performers with plans](#configuring-performers-with-plans)
+- [PlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPlanPerforming.html): [How to configure performers with plans](#how-to-configure-performers-with-plans)
 - [DelegatedPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMDelegatedPerforming.html)
-- [ComposablePerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMComposablePerforming.html): [Using composition to fulfill plans](#using-composition-to-fulfill-plans)
+- [ComposablePerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMComposablePerforming.html): [How to use composition to fulfill plans](#how-to-use-composition-to-fulfill-plans)
 
 See the associated links for more details on each performing type.
 
 > Note: only one instance of a type of performer **per target** is ever created. This allows you to
 > register multiple plans to the same target in order to configure a performer. See
-> [Configuring performers with plans](#configuring-performers-with-plans) for more details.
+> [How to configure performers with plans](#how-to-configure-performers-with-plans) for more details.
 
 Code snippets:
 
@@ -281,7 +281,7 @@ Code snippets:
 scheduler.commit(transaction: transaction)
 ```
 
-### Configuring performers with plans
+### How to configure performers with plans
 
 Configuring performers with plans starts by making your performer conform to
 [PlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPlanPerforming.html).
@@ -343,7 +343,7 @@ func add(plan: Plan) {
 }
 ```
 
-### Using composition to fulfill plans
+### How to use composition to fulfill plans
 
 A composition performer is able to emit new transactions using an emitter object. This feature
 enables the reuse of plans and the creation of higher-order abstractions.

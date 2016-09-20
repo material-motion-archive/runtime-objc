@@ -2,7 +2,7 @@
 
 ## New features
 
-- Composable performing. Performers can now emit more plans.
+- Composable performing. Performers can now emit plans.
 - Continuous performing. These APIs were previously named Delegated performing.
 
 ## Breaking changes

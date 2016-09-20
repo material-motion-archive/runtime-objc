@@ -1,6 +1,7 @@
-# release-candidate
+# 3.0.1
 
- TODO: Enumerate changes.
+- Minor CocoaPods compatibility fixes.
+
 # 3.0.0
 
 ## New features

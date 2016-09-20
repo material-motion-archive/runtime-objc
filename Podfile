@@ -1,5 +1,7 @@
 abstract_target 'MaterialMotionRuntime' do
   pod 'MaterialMotionRuntime', :path => './'
+  pod 'CatalogByConvention'
+
   workspace 'MaterialMotionRuntime.xcworkspace'
   use_frameworks!
 
@@ -15,6 +17,7 @@ abstract_target 'MaterialMotionRuntime' do
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |configuration|
         configuration.build_settings['SWIFT_VERSION'] = "3.0"
+        configuration.build_settings['WARNING_CFLAGS'] ="$(inherited) -Wall -Wcast-align -Wconversion -Werror -Wextra -Wimplicit-atomic-properties -Wmissing-prototypes -Wno-error=deprecated -Wno-error=deprecated-implementations -Wno-sign-conversion -Wno-unused-parameter -Woverlength-strings -Wshadow -Wstrict-selector-match -Wundeclared-selector -Wunreachable-code"
       end
     end
   end

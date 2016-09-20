@@ -14,20 +14,23 @@
  limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "MDMTraceNotification.h"
 
-@import MaterialMotionRuntime;
+@interface MDMTrace : NSObject
 
-@interface Tween : NSObject <MDMPlan, NSCopying>
+@property(nonatomic, nonnull, readonly) NSMutableSet* createdPerformers;
+@property(nonatomic, nonnull, readonly) NSMutableArray* committedPlans;
 
-@property(nonatomic, copy, nonnull) NSString* property;
-@property(nonatomic) float from;
-@property(nonatomic) float to;
+@end
 
-@property(nonatomic, copy, nonnull) NSString* name;
+@interface MDMSchedulerPerformersCreatedTracePayload ()
 
-- (nonnull instancetype)initWithProperty:(nonnull NSString*)property name:(nonnull NSString*)name NS_DESIGNATED_INITIALIZER;
+@property(nonatomic, copy, nonnull) NSSet<MDMPerforming>* createdPerformers;
 
-- (nonnull instancetype)init NS_UNAVAILABLE;
+@end
+
+@interface MDMSchedulerPlansCommittedTracePayload ()
+
+@property(nonatomic, copy, nonnull) NSArray<MDMPlan>* committedPlans;
 
 @end

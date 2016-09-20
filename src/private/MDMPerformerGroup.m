@@ -16,37 +16,37 @@
 
 #import "MDMPerformerGroup.h"
 
+#import "MDMIsActiveTokenGenerator.h"
 #import "MDMPerformerGroupDelegate.h"
+#import "MDMPerformerInfo.h"
 #import "MDMPerforming.h"
 #import "MDMPlan.h"
 #import "MDMScheduler.h"
+#import "MDMTrace.h"
 #import "MDMTransaction+Private.h"
+#import "MDMTransactionEmitter.h"
 
+// TODO: Remove upon deletion of deprecation delegation APIs.
 @interface MDMDelegatedPerformanceToken : NSObject <MDMDelegatedPerformingToken>
-@end
-
-@interface MDMPerformerInfo : NSObject
-@property(nonnull, strong) id<MDMPerforming> performer;
-@property(nonnull, strong) NSMutableSet<NSString *> *delegatedPerformanceNames;
-@property(nonnull, strong) NSMutableSet<MDMDelegatedPerformanceToken *> *delegatedPerformanceTokens;
-@end
-
-@interface MDMPerformerGroup ()
-@property(nonatomic, strong) NSMutableArray<MDMPerformerInfo *> *performerInfos;
-
-@property(nonatomic, strong) NSMutableDictionary *performerClassNameToPerformerInfo;
-@property(nonatomic, strong) NSMutableSet *activePerformers;
 @end
 
 @implementation MDMDelegatedPerformanceToken
 @end
 
+@interface MDMPerformerGroup ()
+@property(nonatomic, weak) MDMScheduler *scheduler;
+@property(nonatomic, strong, readonly) NSMutableArray<MDMPerformerInfo *> *performerInfos;
+@property(nonatomic, strong, readonly) NSMutableDictionary *performerClassNameToPerformerInfo;
+@property(nonatomic, strong, readonly) NSMutableSet *activePerformers;
+@end
+
 @implementation MDMPerformerGroup
 
-- (instancetype)initWithTarget:(id)target {
+- (instancetype)initWithTarget:(id)target scheduler:(MDMScheduler *)scheduler {
   self = [super init];
   if (self) {
     _target = target;
+    _scheduler = scheduler;
 
     _performerInfos = [NSMutableArray array];
     _performerClassNameToPerformerInfo = [NSMutableDictionary dictionary];
@@ -55,9 +55,16 @@
   return self;
 }
 
-- (void)executeLog:(MDMTransactionLog *)log {
+- (void)executeLog:(MDMTransactionLog *)log trace:(MDMTrace *)trace {
+  [trace.committedPlans addObjectsFromArray:log.plans];
+
   for (id<MDMPlan> plan in log.plans) {
-    id<MDMPerforming> performer = [self performerForPlan:plan];
+    BOOL isNew = NO;
+    id<MDMPerforming> performer = [self performerForPlan:plan isNew:&isNew];
+
+    if (isNew) {
+      [trace.createdPerformers addObject:performer];
+    }
 
     if ([performer respondsToSelector:@selector(addPlan:)]) {
       [(id<MDMPlanPerforming>)performer addPlan:plan];
@@ -65,13 +72,34 @@
   }
 }
 
+- (void)registerIsActiveToken:(id<MDMIsActiveTokenable>)token
+            withPerformerInfo:(MDMPerformerInfo *)performerInfo {
+  NSAssert(performerInfo.performer, @"Performer no longer exists.");
+
+  [performerInfo.isActiveTokens addObject:token];
+
+  [self didRegisterTokenForPerformerInfo:performerInfo];
+}
+
+- (void)terminateIsActiveToken:(id<MDMIsActiveTokenable>)token
+             withPerformerInfo:(MDMPerformerInfo *)performerInfo {
+  NSAssert(performerInfo.performer, @"Performer no longer exists.");
+  NSAssert([performerInfo.isActiveTokens containsObject:token],
+           @"Token is not active. May have already been terminated by a previous invocation.");
+
+  [performerInfo.isActiveTokens removeObject:token];
+
+  [self didTerminateTokenForPerformerInfo:performerInfo];
+}
+
 #pragma mark - Private
 
-- (id<MDMPerforming>)performerForPlan:(id<MDMPlan>)plan {
+- (id<MDMPerforming>)performerForPlan:(id<MDMPlan>)plan isNew:(BOOL *)isNew {
   Class performerClass = [plan performerClass];
   id performerClassName = NSStringFromClass(performerClass);
   MDMPerformerInfo *performerInfo = self.performerClassNameToPerformerInfo[performerClassName];
   if (performerInfo) {
+    *isNew = NO;
     return performerInfo.performer;
   }
 
@@ -85,77 +113,45 @@
 
   [self setUpFeaturesForPerformerInfo:performerInfo];
 
+  *isNew = YES;
+
   return performer;
 }
 
 - (void)setUpFeaturesForPerformerInfo:(MDMPerformerInfo *)performerInfo {
   id<MDMPerforming> performer = performerInfo.performer;
 
-  // Delegated performance
+  // Composable performance
 
-  BOOL canStartDelegated = [performer respondsToSelector:@selector(setDelegatedPerformanceWillStartNamed:)];
-  BOOL canEndDelegated = [performer respondsToSelector:@selector(setDelegatedPerformanceDidEndNamed:)];
-  if (canStartDelegated && canEndDelegated) {
-    id<MDMDelegatedPerforming> delegatedPerformer = (id<MDMDelegatedPerforming>)performer;
+  if ([performer respondsToSelector:@selector(setTransactionEmitter:)]) {
+    id<MDMComposablePerforming> composablePerformer = (id<MDMComposablePerforming>)performer;
 
-    __weak MDMPerformerInfo *weakInfo = performerInfo;
-    __weak MDMPerformerGroup *weakSelf = self;
-    void (^willStartNamed)(NSString *_Nonnull) = ^(NSString *name) {
-      MDMPerformerInfo *strongInfo = weakInfo;
-      MDMPerformerGroup *strongSelf = weakSelf;
-      if (!strongInfo || !strongSelf) {
-        return;
-      }
-
-      // Register the work
-
-      [strongInfo.delegatedPerformanceNames addObject:name];
-
-      // Check our group's activity state
-
-      // TODO(featherless): If/when we explore multi-threaded schedulers we need to more cleanly
-      // propagate activity state up to the Scheduler. As it stands, this code is not thread-safe.
-
-      BOOL wasInactive = strongSelf.activePerformers.count == 0;
-
-      [strongSelf.activePerformers addObject:strongInfo.performer];
-
-      if (wasInactive) {
-        [strongSelf.delegate performerGroup:strongSelf activeStateDidChange:YES];
-      }
-    };
-
-    void (^didEndNamed)(NSString *_Nonnull) = ^(NSString *name) {
-      MDMPerformerInfo *strongInfo = weakInfo;
-      MDMPerformerGroup *strongSelf = weakSelf;
-      if (!strongInfo) {
-        return;
-      }
-
-      [strongInfo.delegatedPerformanceNames removeObject:name];
-
-      if (strongInfo.delegatedPerformanceNames.count == 0) {
-        [strongSelf.activePerformers removeObject:strongInfo.performer];
-
-        if (strongSelf.activePerformers.count == 0) {
-          [strongSelf.delegate performerGroup:strongSelf activeStateDidChange:NO];
-        }
-      }
-    };
-
-    [delegatedPerformer setDelegatedPerformanceWillStartNamed:willStartNamed];
-    [delegatedPerformer setDelegatedPerformanceDidEndNamed:didEndNamed];
+    MDMTransactionEmitter *emitter = [[MDMTransactionEmitter alloc] initWithScheduler:self.scheduler];
+    [composablePerformer setTransactionEmitter:emitter];
   }
+
+  // Is-active performance
+
+  if ([performer respondsToSelector:@selector(setIsActiveTokenGenerator:)]) {
+    id<MDMContinuousPerforming> continuousPerformer = (id<MDMContinuousPerforming>)performer;
+
+    MDMIsActiveTokenGenerator *generator = [[MDMIsActiveTokenGenerator alloc] initWithPerformerGroup:self
+                                                                                       performerInfo:performerInfo];
+    [continuousPerformer setIsActiveTokenGenerator:generator];
+  }
+
+  // Delegated performance
+  // TODO: Remove upon deletion of deprecation delegation APIs.
 
   if ([performer respondsToSelector:@selector(setDelegatedPerformanceWillStart:didEnd:)]) {
     id<MDMDelegatedPerforming> delegatedPerformer = (id<MDMDelegatedPerforming>)performer;
 
     __weak MDMPerformerInfo *weakInfo = performerInfo;
     __weak MDMPerformerGroup *weakSelf = self;
-    MDMDelegatedPerformanceTokenReturnBlock willStartNamed = ^(void) {
+    MDMDelegatedPerformanceTokenReturnBlock willStartBlock = ^(void) {
       MDMPerformerInfo *strongInfo = weakInfo;
       MDMPerformerGroup *strongSelf = weakSelf;
-      if (!strongInfo || !strongSelf) {
+      if (!strongInfo || !strongSelf || !strongSelf->_scheduler) {
         return (id<MDMDelegatedPerformingToken>)nil;
       }
 
@@ -169,21 +165,15 @@
       // TODO(featherless): If/when we explore multi-threaded schedulers we need to more cleanly
       // propagate activity state up to the Scheduler. As it stands, this code is not thread-safe.
 
-      BOOL wasInactive = strongSelf.activePerformers.count == 0;
-
-      [strongSelf.activePerformers addObject:strongInfo.performer];
-
-      if (wasInactive) {
-        [strongSelf.delegate performerGroup:strongSelf activeStateDidChange:YES];
-      }
+      [self didRegisterTokenForPerformerInfo:performerInfo];
 
       return (id<MDMDelegatedPerformingToken>)token;
     };
 
-    MDMDelegatedPerformanceTokenArgBlock didEndNamed = ^(id<MDMDelegatedPerformingToken> token) {
+    MDMDelegatedPerformanceTokenArgBlock didEndBlock = ^(id<MDMDelegatedPerformingToken> token) {
       MDMPerformerInfo *strongInfo = weakInfo;
       MDMPerformerGroup *strongSelf = weakSelf;
-      if (!strongInfo) {
+      if (!strongInfo || !strongSelf || !strongSelf->_scheduler) {
         return;
       }
 
@@ -191,30 +181,31 @@
                @"Token is not active. May have already been terminated by a previous invocation.");
       [strongInfo.delegatedPerformanceTokens removeObject:token];
 
-      if (strongInfo.delegatedPerformanceTokens.count == 0) {
-        [strongSelf.activePerformers removeObject:strongInfo.performer];
-
-        if (strongSelf.activePerformers.count == 0) {
-          [strongSelf.delegate performerGroup:strongSelf activeStateDidChange:NO];
-        }
-      }
+      [strongSelf didTerminateTokenForPerformerInfo:strongInfo];
     };
 
-    [delegatedPerformer setDelegatedPerformanceWillStart:willStartNamed didEnd:didEndNamed];
+    [delegatedPerformer setDelegatedPerformanceWillStart:willStartBlock didEnd:didEndBlock];
   }
 }
 
-@end
+- (void)didRegisterTokenForPerformerInfo:(MDMPerformerInfo *)performerInfo {
+  BOOL wasInactive = self.activePerformers.count == 0;
 
-@implementation MDMPerformerInfo
+  [self.activePerformers addObject:performerInfo.performer];
 
-- (instancetype)init {
-  self = [super init];
-  if (self) {
-    _delegatedPerformanceNames = [NSMutableSet set];
-    _delegatedPerformanceTokens = [NSMutableSet set];
+  if (wasInactive) {
+    [self.delegate performerGroup:self activeStateDidChange:YES];
   }
-  return self;
+}
+
+- (void)didTerminateTokenForPerformerInfo:(MDMPerformerInfo *)performerInfo {
+  if (performerInfo.isActiveTokens.count == 0 && performerInfo.delegatedPerformanceTokens.count == 0) {
+    [self.activePerformers removeObject:performerInfo.performer];
+
+    if (self.activePerformers.count == 0) {
+      [self.delegate performerGroup:self activeStateDidChange:NO];
+    }
+  }
 }
 
 @end

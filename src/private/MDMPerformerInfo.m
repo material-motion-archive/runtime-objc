@@ -14,33 +14,19 @@
  limitations under the License.
  */
 
-#import "MDMTransaction.h"
-#import "MDMTransaction+Private.h"
+#import "MDMPerformerInfo.h"
 
-@implementation MDMTransaction {
-  NSMutableArray *_logs;
-}
+@implementation MDMPerformerInfo
 
 - (instancetype)init {
   self = [super init];
   if (self) {
-    _logs = [NSMutableArray array];
+    _isActiveTokens = [NSMutableSet set];
+
+    // TODO: Remove upon deletion of deprecation delegation APIs.
+    _delegatedPerformanceTokens = [NSMutableSet set];
   }
   return self;
 }
 
-- (void)addPlan:(NSObject<MDMPlan> *)plan toTarget:(id)target {
-  MDMTransactionLog *log = [MDMTransactionLog new];
-  log.plans = @[ [plan copy] ];
-  log.target = target;
-  [_logs addObject:log];
-}
-
-- (NSArray<MDMTransactionLog *> *)logs {
-  return _logs;
-}
-
-@end
-
-@implementation MDMTransactionLog
 @end

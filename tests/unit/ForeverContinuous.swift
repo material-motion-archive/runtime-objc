@@ -14,33 +14,28 @@
  limitations under the License.
  */
 
-#import "MDMTransaction.h"
-#import "MDMTransaction+Private.h"
+import MaterialMotionRuntime
 
-@implementation MDMTransaction {
-  NSMutableArray *_logs;
-}
-
-- (instancetype)init {
-  self = [super init];
-  if (self) {
-    _logs = [NSMutableArray array];
+/**
+ A plan that immediately starts some delegated work the first time a plan is added to a target.
+ */
+class ForeverContinuous: NSObject, Plan {
+  func performerClass() -> AnyClass {
+    return Performer.self
   }
-  return self;
+
+  public func copy(with zone: NSZone? = nil) -> Any {
+    return ForeverContinuous()
+  }
+
+  private class Performer: NSObject, ContinuousPerforming {
+    let target: Any
+    required init(target: Any) {
+      self.target = target
+    }
+
+    func set(isActiveTokenGenerator: IsActiveTokenGenerating) {
+      isActiveTokenGenerator.generate()
+    }
+  }
 }
-
-- (void)addPlan:(NSObject<MDMPlan> *)plan toTarget:(id)target {
-  MDMTransactionLog *log = [MDMTransactionLog new];
-  log.plans = @[ [plan copy] ];
-  log.target = target;
-  [_logs addObject:log];
-}
-
-- (NSArray<MDMTransactionLog *> *)logs {
-  return _logs;
-}
-
-@end
-
-@implementation MDMTransactionLog
-@end

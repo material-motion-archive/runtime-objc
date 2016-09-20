@@ -14,29 +14,17 @@
  limitations under the License.
  */
 
-#import <XCTest/XCTest.h>
-#import "RuntimeTestTypes.h"
-@import MaterialMotionRuntime;
+#import "MDMTrace.h"
 
-@interface MDMRuntimeTests : XCTestCase
-@end
+@implementation MDMTrace
 
-@implementation MDMRuntimeTests
-
-- (void)testLifeOfAPlan {
-  TestState *state = [TestState new];
-  state.boolean = false;
-
-  TestPlan *plan = [TestPlan new];
-  plan.desiredBoolean = true;
-
-  MDMTransaction *transaction = [MDMTransaction new];
-  [transaction addPlan:plan toTarget:state];
-
-  MDMScheduler *scheduler = [MDMScheduler new];
-  [scheduler commitTransaction:transaction];
-
-  XCTAssertEqual(state.boolean, plan.desiredBoolean);
+- (instancetype)init {
+  self = [super init];
+  if (self) {
+    _createdPerformers = [NSMutableSet set];
+    _committedPlans = [NSMutableArray array];
+  }
+  return self;
 }
 
 @end

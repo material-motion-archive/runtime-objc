@@ -14,33 +14,24 @@
  limitations under the License.
  */
 
-#import "MDMTransaction.h"
-#import "MDMTransaction+Private.h"
+import XCTest
+import MaterialMotionRuntime
 
-@implementation MDMTransaction {
-  NSMutableArray *_logs;
-}
+// Tests related to performer delegation.
+@available(iOS, deprecated)
+class DelegationTests: XCTestCase {
 
-- (instancetype)init {
-  self = [super init];
-  if (self) {
-    _logs = [NSMutableArray array];
+  func testDelegationPerformerCausesActivityStateChange() {
+    let scheduler = Scheduler()
+
+    let delegate = TestSchedulerDelegate()
+    scheduler.delegate = delegate
+
+    let transaction = Transaction()
+    transaction.add(plan: NoopDelegation(), to: NSObject())
+    scheduler.commit(transaction: transaction)
+
+    XCTAssertTrue(delegate.activityStateDidChange)
+    XCTAssertTrue(scheduler.activityState == .idle)
   }
-  return self;
 }
-
-- (void)addPlan:(NSObject<MDMPlan> *)plan toTarget:(id)target {
-  MDMTransactionLog *log = [MDMTransactionLog new];
-  log.plans = @[ [plan copy] ];
-  log.target = target;
-  [_logs addObject:log];
-}
-
-- (NSArray<MDMTransactionLog *> *)logs {
-  return _logs;
-}
-
-@end
-
-@implementation MDMTransactionLog
-@end

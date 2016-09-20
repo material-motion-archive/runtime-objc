@@ -18,6 +18,7 @@
 
 @class MDMScheduler;
 @protocol MDMSchedulerDelegate;
+@protocol MDMPerforming;
 
 /**
  The possible activity states a scheduler can be in.

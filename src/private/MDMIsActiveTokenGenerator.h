@@ -14,33 +14,18 @@
  limitations under the License.
  */
 
-#import "MDMTransaction.h"
-#import "MDMTransaction+Private.h"
+#import "MDMPerforming.h"
 
-@implementation MDMTransaction {
-  NSMutableArray *_logs;
-}
+@class MDMPerformerInfo;
+@class MDMPerformerGroup;
 
-- (instancetype)init {
-  self = [super init];
-  if (self) {
-    _logs = [NSMutableArray array];
-  }
-  return self;
-}
+@interface MDMIsActiveTokenGenerator : NSObject <MDMIsActiveTokenGenerating>
 
-- (void)addPlan:(NSObject<MDMPlan> *)plan toTarget:(id)target {
-  MDMTransactionLog *log = [MDMTransactionLog new];
-  log.plans = @[ [plan copy] ];
-  log.target = target;
-  [_logs addObject:log];
-}
+- (nonnull instancetype)initWithPerformerGroup:(nonnull MDMPerformerGroup *)performerGroup
+                                 performerInfo:(nonnull MDMPerformerInfo *)performerInfo
+    NS_DESIGNATED_INITIALIZER;
 
-- (NSArray<MDMTransactionLog *> *)logs {
-  return _logs;
-}
++ (nonnull instancetype) new NS_UNAVAILABLE;
+- (nonnull instancetype)init NS_UNAVAILABLE;
 
-@end
-
-@implementation MDMTransactionLog
 @end

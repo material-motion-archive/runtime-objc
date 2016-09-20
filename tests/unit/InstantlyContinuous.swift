@@ -14,13 +14,30 @@
  limitations under the License.
  */
 
-import XCTest
 import MaterialMotionRuntime
 
-class TestSchedulerDelegate: NSObject, SchedulerDelegate {
-  var activityStateDidChange = false
+/**
+ A plan that immediately starts and completes some delegated work the first time a plan is
+ added to a target.
+ */
+class InstantlyContinuous: NSObject, Plan {
+  func performerClass() -> AnyClass {
+    return Performer.self
+  }
 
-  func schedulerActivityStateDidChange(_ scheduler: Scheduler) {
-    self.activityStateDidChange = true
+  public func copy(with zone: NSZone? = nil) -> Any {
+    return InstantlyContinuous()
+  }
+
+  private class Performer: NSObject, ContinuousPerforming {
+    let target: Any
+    required init(target: Any) {
+      self.target = target
+    }
+
+    func set(isActiveTokenGenerator: IsActiveTokenGenerating) {
+      let token = isActiveTokenGenerator.generate()!
+      token.terminate()
+    }
   }
 }

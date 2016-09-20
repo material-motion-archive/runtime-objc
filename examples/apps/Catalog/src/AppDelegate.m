@@ -15,8 +15,8 @@
  */
 
 #import "AppDelegate.h"
-#import "MainViewController.h"
-#import "PlanFadeViewController.h"
+
+@import CatalogByConvention;
 
 @interface AppDelegate ()
 @end
@@ -27,7 +27,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-  self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[MainViewController new]];
+  CBCNodeListViewController *rootViewController = [[CBCNodeListViewController alloc] initWithNode:CBCCreateNavigationTree()];
+  rootViewController.title = @"Material Motion Runtime Catalog";
+  self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
   [self.window makeKeyAndVisible];
   return YES;
 }

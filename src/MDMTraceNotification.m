@@ -14,33 +14,21 @@
  limitations under the License.
  */
 
-#import "MDMTransaction.h"
-#import "MDMTransaction+Private.h"
+#import "MDMTraceNotification.h"
 
-@implementation MDMTransaction {
-  NSMutableArray *_logs;
-}
+#import "MDMTrace.h"
 
-- (instancetype)init {
-  self = [super init];
-  if (self) {
-    _logs = [NSMutableArray array];
-  }
-  return self;
-}
+NSString* const _Nonnull MDMTraceNotificationPayloadKey = @"MDMTraceNotificationPayloadKey";
 
-- (void)addPlan:(NSObject<MDMPlan> *)plan toTarget:(id)target {
-  MDMTransactionLog *log = [MDMTransactionLog new];
-  log.plans = @[ [plan copy] ];
-  log.target = target;
-  [_logs addObject:log];
-}
+#pragma mark - Trace notification names
 
-- (NSArray<MDMTransactionLog *> *)logs {
-  return _logs;
-}
+MDMTraceNotificationName _Nonnull MDMTraceNotificationNamePerformersCreated = @"MDMTraceNotificationNamePerformersCreated";
+MDMTraceNotificationName _Nonnull MDMTraceNotificationNamePlansCommitted = @"MDMTraceNotificationNamePlansCommitted";
 
+#pragma mark - Trace notification payloads
+
+@implementation MDMSchedulerPerformersCreatedTracePayload
 @end
 
-@implementation MDMTransactionLog
+@implementation MDMSchedulerPlansCommittedTracePayload
 @end

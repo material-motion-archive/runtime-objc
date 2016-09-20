@@ -14,33 +14,17 @@
  limitations under the License.
  */
 
-#import "MDMTransaction.h"
-#import "MDMTransaction+Private.h"
+#import "MDMPerforming.h"
 
-@implementation MDMTransaction {
-  NSMutableArray *_logs;
-}
+@class MDMScheduler;
 
-- (instancetype)init {
-  self = [super init];
-  if (self) {
-    _logs = [NSMutableArray array];
-  }
-  return self;
-}
+/** The object provided to performers when they conform to MDMTransactionEmitting. */
+@interface MDMTransactionEmitter : NSObject <MDMTransactionEmitting>
 
-- (void)addPlan:(NSObject<MDMPlan> *)plan toTarget:(id)target {
-  MDMTransactionLog *log = [MDMTransactionLog new];
-  log.plans = @[ [plan copy] ];
-  log.target = target;
-  [_logs addObject:log];
-}
+/** Initialize a newly created transaction emitter with the provided scheduler. */
+- (nonnull instancetype)initWithScheduler:(nonnull MDMScheduler *)scheduler;
 
-- (NSArray<MDMTransactionLog *> *)logs {
-  return _logs;
-}
+/** Use initWithScheduler: instead. */
+- (nonnull instancetype)init NS_UNAVAILABLE;
 
-@end
-
-@implementation MDMTransactionLog
 @end

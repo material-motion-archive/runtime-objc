@@ -14,7 +14,22 @@
  limitations under the License.
  */
 
-#import <UIKit/UIKit.h>
+// MARK: Catalog by convention
 
-@interface PlanFadeViewController : UIViewController
-@end
+extension LifeOfAPlanViewController {
+  class func catalogBreadcrumbs() -> [String] {
+    return ["1. Life of a Plan"]
+  }
+}
+
+extension LifeOfAConfigurablePlanViewController {
+  class func catalogBreadcrumbs() -> [String] {
+    return ["2. Life of a Configurable Plan"]
+  }
+}
+
+extension TossViewController {
+  class func catalogBreadcrumbs() -> [String] {
+    return ["3. Tossable"]
+  }
+}

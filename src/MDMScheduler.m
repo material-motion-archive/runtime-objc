@@ -18,6 +18,8 @@
 
 #import "MDMPerformerGroup.h"
 #import "MDMPerformerGroupDelegate.h"
+#import "MDMTrace.h"
+#import "MDMTraceNotification.h"
 #import "MDMTransaction+Private.h"
 
 @interface MDMScheduler () <MDMPerformerGroupDelegate>
@@ -47,13 +49,14 @@
 - (MDMPerformerGroup *)performerGroupForTarget:(id)target {
   MDMPerformerGroup *performerGroup = [_targetToPerformerGroup objectForKey:target];
   if (!performerGroup) {
-    performerGroup = [[MDMPerformerGroup alloc] initWithTarget:target];
+    performerGroup = [[MDMPerformerGroup alloc] initWithTarget:target scheduler:self];
     performerGroup.delegate = self;
     [self.targetToPerformerGroup setObject:performerGroup forKey:target];
 
     // TODO: Add event hook for plugins. This is where a plugin might provide a scheduler target. This
     // is how view duplicaion gets hooked in to the scheduler.
   }
+
   return performerGroup;
 }
 
@@ -81,8 +84,29 @@
 }
 
 - (void)commitTransaction:(MDMTransaction *)transaction {
+  MDMTrace *trace = [MDMTrace new];
+
   for (MDMTransactionLog *log in [transaction logs]) {
-    [[self performerGroupForTarget:log.target] executeLog:log];
+    [[self performerGroupForTarget:log.target] executeLog:log trace:trace];
+  }
+
+  if ([trace.committedPlans count]) {
+    MDMSchedulerPlansCommittedTracePayload *payload = [MDMSchedulerPlansCommittedTracePayload new];
+    payload.committedPlans = [trace.committedPlans copy];
+
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc postNotificationName:MDMTraceNotificationNamePlansCommitted
+                      object:self
+                    userInfo:@{MDMTraceNotificationPayloadKey : payload}];
+  }
+  if ([trace.createdPerformers count]) {
+    MDMSchedulerPerformersCreatedTracePayload *event = [MDMSchedulerPerformersCreatedTracePayload new];
+    event.createdPerformers = [trace.createdPerformers copy];
+
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc postNotificationName:MDMTraceNotificationNamePerformersCreated
+                      object:self
+                    userInfo:@{MDMTraceNotificationPayloadKey : event}];
   }
 }
 

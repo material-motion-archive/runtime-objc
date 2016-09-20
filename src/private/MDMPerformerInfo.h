@@ -13,8 +13,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-#import <UIKit/UIKit.h>
 
-@interface MainViewController : UIViewController
+#import <Foundation/Foundation.h>
 
+@protocol MDMPerforming;
+@protocol MDMIsActiveTokenable;
+@class MDMDelegatedPerformanceToken;
+
+@interface MDMPerformerInfo : NSObject
+@property(nonatomic, nonnull, strong) id<MDMPerforming> performer;
+@property(nonatomic, nonnull, strong) NSMutableSet<id<MDMIsActiveTokenable>> *isActiveTokens;
+@property(nonatomic, nonnull, strong) NSMutableSet<MDMDelegatedPerformanceToken *> *delegatedPerformanceTokens;
 @end

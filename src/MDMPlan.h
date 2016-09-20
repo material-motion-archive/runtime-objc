@@ -22,7 +22,7 @@
  Plans are translated into performers by an instance of MDMScheduler.
  */
 NS_SWIFT_NAME(Plan)
-@protocol MDMPlan <NSObject>
+@protocol MDMPlan <NSObject, NSCopying>
 
 #pragma mark Defining the performer class
 

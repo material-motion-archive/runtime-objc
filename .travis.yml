@@ -7,6 +7,7 @@ before_install:
   - gem install cocoapods --no-rdoc --no-ri --no-document --quiet
   - git clone https://github.com/phacility/arcanist.git
   - git clone https://github.com/phacility/libphutil.git
+  - git clone --recursive https://github.com/material-foundation/material-arc-tools.git
   - pod install
 script:
   - set -o pipefail

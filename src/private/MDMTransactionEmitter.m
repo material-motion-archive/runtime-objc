@@ -14,33 +14,30 @@
  limitations under the License.
  */
 
-#import "MDMTransaction.h"
-#import "MDMTransaction+Private.h"
+#import "MDMTransactionEmitter.h"
 
-@implementation MDMTransaction {
-  NSMutableArray *_logs;
-}
+#import "MDMScheduler.h"
 
-- (instancetype)init {
+@interface MDMTransactionEmitter ()
+
+@property(nonatomic, weak) MDMScheduler *scheduler;
+
+@end
+
+@implementation MDMTransactionEmitter
+
+- (instancetype)initWithScheduler:(MDMScheduler *)scheduler {
   self = [super init];
   if (self) {
-    _logs = [NSMutableArray array];
+    self.scheduler = scheduler;
   }
   return self;
 }
 
-- (void)addPlan:(NSObject<MDMPlan> *)plan toTarget:(id)target {
-  MDMTransactionLog *log = [MDMTransactionLog new];
-  log.plans = @[ [plan copy] ];
-  log.target = target;
-  [_logs addObject:log];
+#pragma mark - MDMTransactionEmitting
+
+- (void)emitTransaction:(nonnull MDMTransaction *)transaction {
+  [self.scheduler commitTransaction:transaction];
 }
 
-- (NSArray<MDMTransactionLog *> *)logs {
-  return _logs;
-}
-
-@end
-
-@implementation MDMTransactionLog
 @end

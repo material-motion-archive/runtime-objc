@@ -17,46 +17,34 @@
 import XCTest
 import MaterialMotionRuntime
 
-class DelegatedPerformanceTests: XCTestCase {
+// Tests related to continuous performers.
+class ContinuousPerformingTests: XCTestCase {
 
-  func testDelegatedPerformanceCausesActivityStateChange() {
-    let transaction = Transaction()
-    transaction.add(plan: DelegatedPlan(), to: NSObject())
-
+  func testContinuousPerformerCausesActivityStateChange() {
     let scheduler = Scheduler()
+
     let delegate = TestSchedulerDelegate()
     scheduler.delegate = delegate
 
+    let transaction = Transaction()
+    transaction.add(plan: InstantlyContinuous(), to: NSObject())
     scheduler.commit(transaction: transaction)
 
     XCTAssertTrue(delegate.activityStateDidChange)
     XCTAssertTrue(scheduler.activityState == .idle)
   }
-}
 
-@objc class DelegatedPlan: NSObject, Plan {
-  func performerClass() -> AnyClass {
-    return DelegatedPerformer.self
-  }
-}
+  func testForeverContinuousPerformerCausesActivityStateChange() {
+    let scheduler = Scheduler()
 
-@objc class DelegatedPerformer: NSObject, PlanPerforming, DelegatedPerforming {
-  let target: AnyObject
-  var willStart: DelegatedPerformanceTokenReturnBlock!
-  var didEnd: DelegatedPerformanceTokenArgBlock!
+    let delegate = TestSchedulerDelegate()
+    scheduler.delegate = delegate
 
-  required init(target: AnyObject) {
-    self.target = target
-  }
+    let transaction = Transaction()
+    transaction.add(plan: ForeverContinuous(), to: NSObject())
+    scheduler.commit(transaction: transaction)
 
-  func add(plan: Plan) {
-    let token = self.willStart()!
-    self.didEnd(token)
-  }
-
-  func setDelegatedPerformance(willStart: DelegatedPerformanceTokenReturnBlock,
-                               didEnd: DelegatedPerformanceTokenArgBlock) {
-    self.willStart = willStart
-    self.didEnd = didEnd
+    XCTAssertTrue(delegate.activityStateDidChange)
+    XCTAssertTrue(scheduler.activityState == .active)
   }
 }

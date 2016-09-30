@@ -26,16 +26,6 @@
 #import "MDMTransaction+Private.h"
 #import "MDMTransactionEmitter.h"
 
-// TODO: Remove upon deletion of deprecation delegation APIs.
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-@interface MDMDelegatedPerformanceToken : NSObject <MDMDelegatedPerformingToken>
-@end
-#pragma clang diagnostic pop
-
-@implementation MDMDelegatedPerformanceToken
-@end
-
 @interface MDMPerformerGroup ()
 @property(nonatomic, weak) MDMScheduler *scheduler;
 @property(nonatomic, strong, readonly) NSMutableArray<MDMPerformerInfo *> *performerInfos;
@@ -141,56 +131,6 @@
     MDMIsActiveTokenGenerator *generator = [[MDMIsActiveTokenGenerator alloc] initWithPerformerGroup:self
                                                                                        performerInfo:performerInfo];
     [continuousPerformer setIsActiveTokenGenerator:generator];
-  }
-
-  // Delegated performance
-  // TODO: Remove upon deletion of deprecation delegation APIs.
-
-  if ([performer respondsToSelector:@selector(setDelegatedPerformanceWillStart:didEnd:)]) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    id<MDMDelegatedPerforming> delegatedPerformer = (id<MDMDelegatedPerforming>)performer;
-
-    __weak MDMPerformerInfo *weakInfo = performerInfo;
-    __weak MDMPerformerGroup *weakSelf = self;
-    MDMDelegatedPerformanceTokenReturnBlock willStartBlock = ^(void) {
-      MDMPerformerInfo *strongInfo = weakInfo;
-      MDMPerformerGroup *strongSelf = weakSelf;
-      if (!strongInfo || !strongSelf || !strongSelf->_scheduler) {
-        return (id<MDMDelegatedPerformingToken>)nil;
-      }
-
-      // Register the work
-
-      MDMDelegatedPerformanceToken *token = [MDMDelegatedPerformanceToken new];
-      [strongInfo.delegatedPerformanceTokens addObject:token];
-
-      // Check our group's activity state
-
-      // TODO(featherless): If/when we explore multi-threaded schedulers we need to more cleanly
-      // propagate activity state up to the Scheduler. As it stands, this code is not thread-safe.
-
-      [self didRegisterTokenForPerformerInfo:performerInfo];
-
-      return (id<MDMDelegatedPerformingToken>)token;
-    };
-
-    MDMDelegatedPerformanceTokenArgBlock didEndBlock = ^(id<MDMDelegatedPerformingToken> token) {
-      MDMPerformerInfo *strongInfo = weakInfo;
-      MDMPerformerGroup *strongSelf = weakSelf;
-      if (!strongInfo || !strongSelf || !strongSelf->_scheduler) {
-        return;
-      }
-
-      NSAssert([strongInfo.delegatedPerformanceTokens containsObject:token],
-               @"Token is not active. May have already been terminated by a previous invocation.");
-      [strongInfo.delegatedPerformanceTokens removeObject:token];
-
-      [strongSelf didTerminateTokenForPerformerInfo:strongInfo];
-    };
-
-    [delegatedPerformer setDelegatedPerformanceWillStart:willStartBlock didEnd:didEndBlock];
-#pragma clang diagnostic pop
   }
 }
 

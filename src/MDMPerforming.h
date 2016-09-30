@@ -124,13 +124,29 @@ NS_SWIFT_NAME(IsActiveTokenGenerating)
 
 #pragma mark - Composition
 
+/**
+ A plan emitter allows an object to emit new plans to a backing scheduler for the target to which
+ the performer is associated.
+ */
+NS_SWIFT_NAME(PlanEmitting)
+@protocol MDMPlanEmitting <NSObject>
+
+/** Emit a new plan. The plan will immediately be added to the backing scheduler. */
+- (void)emitPlan:(nonnull NSObject<MDMPlan> *)plan
+    NS_SWIFT_NAME(emitPlan(_:));
+
+@end
+
+// clang-format off
 /** A transaction emitter allows a performer to commit new plans to a scheduler. */
+__deprecated_msg("Use PlanEmitting instead.")
 NS_SWIFT_NAME(TransactionEmitting)
 @protocol MDMTransactionEmitting <NSObject>
 
 /** Emit a new transaction. The transaction will immediately be committed to the scheduler. */
 - (void)emitTransaction:(nonnull MDMTransaction*)transaction
-    NS_SWIFT_NAME(emit(transaction:));
+    NS_SWIFT_NAME(emit(transaction:))
+    __deprecated_msg("Use PlanEmitting instead.");
 
 @end
 
@@ -142,8 +158,18 @@ NS_SWIFT_NAME(ComposablePerforming)
 
 #pragma mark Composable performing
 
+@optional // TODO: Make required after next release.
+
+/** The performer is provided a plan emitter shortly after initialization. */
+- (void)setPlanEmitter:(nonnull id<MDMPlanEmitting>)planEmitter
+    NS_SWIFT_NAME(setPlanEmitter(_:));
+
+@optional
+
 /** The performer will be provided with a method for initiating a new transaction. */
 - (void)setTransactionEmitter:(nonnull id<MDMTransactionEmitting>)transactionEmitter
-    NS_SWIFT_NAME(set(transactionEmitter:));
+    NS_SWIFT_NAME(set(transactionEmitter:))
+__deprecated_msg("Use setPlanEmitter instead.");
 
 @end
+    // clang-format on

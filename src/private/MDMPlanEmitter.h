@@ -14,26 +14,16 @@
  limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "MDMPerforming.h"
 
-@protocol MDMPlan;
+@class MDMScheduler;
 
-// clang-format off
-/**
- The MDMTransaction class acts as a register of operations that may be committed to an instance of
- MDMScheduler.
- */
-__deprecated_msg("Add plans directly to a scheduler instead.")
-NS_SWIFT_NAME(Transaction)
-@interface MDMTransaction : NSObject
+@interface MDMPlanEmitter : NSObject <MDMPlanEmitting>
 
-#pragma mark Adding plans to a transaction
+/** Initialize a newly allocated emitter with the provided scheduler and target. */
+- (nonnull instancetype)initWithScheduler:(nonnull MDMScheduler *)scheduler target:(nonnull id)target;
 
-/** Associate an plan with a given target. */
-- (void)addPlan:(nonnull id<MDMPlan>)plan
-       toTarget:(nonnull id)target
-    NS_SWIFT_NAME(add(plan:to:))
-    __deprecated_msg("Add plans directly to a scheduler instead.");
+/** Use initWithScheduler:target: instead. */
+- (nonnull instancetype)init NS_UNAVAILABLE;
 
 @end
-    // clang-format on

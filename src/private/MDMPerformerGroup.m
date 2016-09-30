@@ -21,6 +21,7 @@
 #import "MDMPerformerInfo.h"
 #import "MDMPerforming.h"
 #import "MDMPlan.h"
+#import "MDMPlanEmitter.h"
 #import "MDMScheduler.h"
 #import "MDMTrace.h"
 #import "MDMTransaction+Private.h"
@@ -48,20 +49,18 @@
   return self;
 }
 
-- (void)executeLog:(MDMTransactionLog *)log trace:(MDMTrace *)trace {
-  [trace.committedPlans addObjectsFromArray:log.plans];
+- (void)addPlan:(id<MDMPlan>)plan trace:(MDMTrace *)trace {
+  [trace.committedPlans addObject:plan];
 
-  for (id<MDMPlan> plan in log.plans) {
-    BOOL isNew = NO;
-    id<MDMPerforming> performer = [self performerForPlan:plan isNew:&isNew];
+  BOOL isNew = NO;
+  id<MDMPerforming> performer = [self performerForPlan:plan isNew:&isNew];
 
-    if (isNew) {
-      [trace.createdPerformers addObject:performer];
-    }
+  if (isNew) {
+    [trace.createdPerformers addObject:performer];
+  }
 
-    if ([performer respondsToSelector:@selector(addPlan:)]) {
-      [(id<MDMPlanPerforming>)performer addPlan:plan];
-    }
+  if ([performer respondsToSelector:@selector(addPlan:)]) {
+    [(id<MDMPlanPerforming>)performer addPlan:plan];
   }
 }
 
@@ -115,13 +114,22 @@
   id<MDMPerforming> performer = performerInfo.performer;
 
   // Composable performance
+  if ([performer respondsToSelector:@selector(setPlanEmitter:)]) {
+    id<MDMComposablePerforming> composablePerformer = (id<MDMComposablePerforming>)performer;
 
+    MDMPlanEmitter *emitter = [[MDMPlanEmitter alloc] initWithScheduler:self.scheduler target:self.target];
+    [composablePerformer setPlanEmitter:emitter];
+  }
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
   if ([performer respondsToSelector:@selector(setTransactionEmitter:)]) {
     id<MDMComposablePerforming> composablePerformer = (id<MDMComposablePerforming>)performer;
 
     MDMTransactionEmitter *emitter = [[MDMTransactionEmitter alloc] initWithScheduler:self.scheduler];
     [composablePerformer setTransactionEmitter:emitter];
   }
+#pragma clang diagnostic pop
 
   // Is-active performance
 
@@ -151,6 +159,14 @@
     if (self.activePerformers.count == 0) {
       [self.delegate performerGroup:self activeStateDidChange:NO];
     }
+  }
+}
+
+#pragma mark - Deprecated
+
+- (void)executeLog:(MDMTransactionLog *)log trace:(MDMTrace *)trace {
+  for (id<MDMPlan> plan in log.plans) {
+    [self addPlan:plan trace:trace];
   }
 }
 

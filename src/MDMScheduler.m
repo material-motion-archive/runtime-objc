@@ -80,7 +80,7 @@
   return (self.activePerformerGroups.count > 0) ? MDMSchedulerActivityStateActive : MDMSchedulerActivityStateIdle;
 }
 
-- (void)addPlan:(NSObject<MDMPlan> *)plan toTarget:(id)target {
+- (void)addPlan:(NSObject<MDMPlan> *)plan to:(id)target {
   MDMTrace *trace = [MDMTrace new];
 
   NSObject<MDMPlan> *copiedPlan = [plan copy];
@@ -128,6 +128,10 @@
 }
 
 #pragma mark - Deprecated
+
+- (void)addPlan:(NSObject<MDMPlan> *)plan toTarget:(id)target {
+  [self addPlan:plan to:target];
+}
 
 - (void)commitTransaction:(MDMTransaction *)transaction {
   MDMTrace *trace = [MDMTrace new];

@@ -24,6 +24,7 @@
 #import "MDMPlanEmitter.h"
 #import "MDMScheduler.h"
 #import "MDMTrace.h"
+#import "MDMTracing.h"
 #import "MDMTransaction+Private.h"
 #import "MDMTransactionEmitter.h"
 
@@ -57,6 +58,12 @@
 
   if (isNew) {
     [trace.createdPerformers addObject:performer];
+
+    for (id<MDMTracing> tracer in self.scheduler.tracers) {
+      if ([tracer respondsToSelector:@selector(didCreatePerformer:for:)]) {
+        [tracer didCreatePerformer:performer for:self.target];
+      }
+    }
   }
 
   if ([performer respondsToSelector:@selector(addPlan:)]) {
@@ -167,6 +174,12 @@
 - (void)executeLog:(MDMTransactionLog *)log trace:(MDMTrace *)trace {
   for (id<MDMPlan> plan in log.plans) {
     [self addPlan:plan trace:trace];
+
+    for (id<MDMTracing> tracer in self.scheduler.tracers) {
+      if ([tracer respondsToSelector:@selector(didAddPlan:to:)]) {
+        [tracer didAddPlan:plan to:log.target];
+      }
+    }
   }
 }
 

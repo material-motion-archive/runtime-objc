@@ -27,16 +27,13 @@ class SchedulerTests: XCTestCase {
     let plan = ChangeBoolean(desiredBoolean: true)
 
     let scheduler = Scheduler()
-
-    expectation(forNotification: TraceNotificationName.plansCommitted._rawValue as String, object: scheduler) { notification -> Bool in
-      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPlansCommittedTracePayload
-      XCTAssertNotEqual(event.committedPlans[0] as! ChangeBoolean, plan)
-      return event.committedPlans.count == 1
-    }
+    let tracer = StorageTracer()
+    scheduler.addTracer(tracer)
 
     scheduler.addPlan(plan, to: state)
 
-    waitForExpectations(timeout: 0.1)
+    XCTAssertEqual(tracer.addedPlans.count, 1)
+    XCTAssertNotEqual(tracer.addedPlans[0] as! ChangeBoolean, plan)
   }
 
   // Verify that a plan committed to a scheduler immediately executes its add(plan:) logic.
@@ -91,16 +88,13 @@ class SchedulerTests: XCTestCase {
     state.boolean = false
 
     let scheduler = Scheduler()
-
-    expectation(forNotification: TraceNotificationName.performersCreated._rawValue as String, object: scheduler) { notification -> Bool in
-      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPerformersCreatedTracePayload
-      return event.createdPerformers.count == 1
-    }
+    let tracer = StorageTracer()
+    scheduler.addTracer(tracer)
 
     scheduler.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
     scheduler.addPlan(ChangeBoolean(desiredBoolean: false), to: state)
 
-    waitForExpectations(timeout: 0.1)
+    XCTAssertEqual(tracer.createdPerformers.count, 1)
   }
 
   // Verify that two plans of different types creates two performers.
@@ -109,18 +103,13 @@ class SchedulerTests: XCTestCase {
     state.boolean = false
 
     let scheduler = Scheduler()
-
-    var numberOfCreatedPerformers = 0
-    expectation(forNotification: TraceNotificationName.performersCreated._rawValue as String, object: scheduler) { notification -> Bool in
-      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPerformersCreatedTracePayload
-      numberOfCreatedPerformers = numberOfCreatedPerformers + event.createdPerformers.count
-      return numberOfCreatedPerformers == 2
-    }
+    let tracer = StorageTracer()
+    scheduler.addTracer(tracer)
 
     scheduler.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
     scheduler.addPlan(InstantlyContinuous(), to: state)
 
-    waitForExpectations(timeout: 0.1)
+    XCTAssertEqual(tracer.createdPerformers.count, 2)
   }
 
   // Verify that order of plans is respected in a transaction.

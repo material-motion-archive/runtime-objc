@@ -20,25 +20,25 @@
 #import "MDMPerformerGroupDelegate.h"
 #import "MDMTrace.h"
 #import "MDMTraceNotification.h"
+#import "MDMTracing.h"
 #import "MDMTransaction+Private.h"
 
 @interface MDMScheduler () <MDMPerformerGroupDelegate>
 
 @property(nonatomic, strong) NSMapTable *targetToPerformerGroup;
-
 @property(nonatomic, strong) NSMutableSet *activePerformerGroups;
 
 @end
 
-@implementation MDMScheduler
+@implementation MDMScheduler {
+  NSMutableOrderedSet *_tracers;
+}
 
 - (instancetype)init {
   self = [super init];
   if (self) {
-    NSPointerFunctionsOptions keyOptions = (NSPointerFunctionsObjectPointerPersonality | NSPointerFunctionsWeakMemory);
-    NSPointerFunctionsOptions valueOptions = (NSPointerFunctionsObjectPointerPersonality | NSPointerFunctionsStrongMemory);
-    _targetToPerformerGroup = [NSMapTable mapTableWithKeyOptions:keyOptions valueOptions:valueOptions];
-
+    _tracers = [NSMutableOrderedSet orderedSet];
+    _targetToPerformerGroup = [NSMapTable weakToStrongObjectsMapTable];
     _activePerformerGroups = [NSMutableSet set];
   }
   return self;
@@ -52,9 +52,6 @@
     performerGroup = [[MDMPerformerGroup alloc] initWithTarget:target scheduler:self];
     performerGroup.delegate = self;
     [self.targetToPerformerGroup setObject:performerGroup forKey:target];
-
-    // TODO: Add event hook for plugins. This is where a plugin might provide a scheduler target. This
-    // is how view duplicaion gets hooked in to the scheduler.
   }
 
   return performerGroup;
@@ -85,7 +82,12 @@
 
 - (void)addPlan:(NSObject<MDMPlan> *)plan toTarget:(id)target {
   MDMTrace *trace = [MDMTrace new];
-  [[self performerGroupForTarget:target] addPlan:[plan copy] trace:trace];
+
+  NSObject<MDMPlan> *copiedPlan = [plan copy];
+  [[self performerGroupForTarget:target] addPlan:copiedPlan trace:trace];
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
   if ([trace.committedPlans count]) {
     MDMSchedulerPlansCommittedTracePayload *payload = [MDMSchedulerPlansCommittedTracePayload new];
     payload.committedPlans = [trace.committedPlans copy];
@@ -104,6 +106,25 @@
                       object:self
                     userInfo:@{MDMTraceNotificationPayloadKey : event}];
   }
+#pragma clang diagnostic pop
+
+  for (id<MDMTracing> tracer in _tracers) {
+    if ([tracer respondsToSelector:@selector(didAddPlan:to:)]) {
+      [tracer didAddPlan:copiedPlan to:target];
+    }
+  }
+}
+
+- (void)addTracer:(nonnull id<MDMTracing>)tracer {
+  [_tracers addObject:tracer];
+}
+
+- (void)removeTracer:(nonnull id<MDMTracing>)tracer {
+  [_tracers removeObject:tracer];
+}
+
+- (nonnull NSArray<id<MDMTracing>> *)tracers {
+  return _tracers.array;
 }
 
 #pragma mark - Deprecated
@@ -115,6 +136,8 @@
     [[self performerGroupForTarget:log.target] executeLog:log trace:trace];
   }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
   if ([trace.committedPlans count]) {
     MDMSchedulerPlansCommittedTracePayload *payload = [MDMSchedulerPlansCommittedTracePayload new];
     payload.committedPlans = [trace.committedPlans copy];
@@ -133,6 +156,7 @@
                       object:self
                     userInfo:@{MDMTraceNotificationPayloadKey : event}];
   }
+#pragma clang diagnostic pop
 }
 
 @end

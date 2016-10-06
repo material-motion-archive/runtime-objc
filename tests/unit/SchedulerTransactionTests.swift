@@ -28,18 +28,15 @@ class SchedulerTransactionTests: XCTestCase {
     let plan = ChangeBoolean(desiredBoolean: true)
 
     let scheduler = Scheduler()
-
-    expectation(forNotification: TraceNotificationName.plansCommitted._rawValue as String, object: scheduler) { notification -> Bool in
-      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPlansCommittedTracePayload
-      XCTAssertNotEqual(event.committedPlans[0] as! ChangeBoolean, plan)
-      return event.committedPlans.count == 1
-    }
+    let tracer = StorageTracer()
+    scheduler.addTracer(tracer)
 
     let transaction = Transaction()
     transaction.add(plan: plan, to: state)
     scheduler.commit(transaction: transaction)
 
-    waitForExpectations(timeout: 0.1)
+    XCTAssertEqual(tracer.addedPlans.count, 1)
+    XCTAssertNotEqual(tracer.addedPlans[0] as! ChangeBoolean, plan)
   }
 
   // Verify that a plan committed to a scheduler immediately executes its add(plan:) logic.

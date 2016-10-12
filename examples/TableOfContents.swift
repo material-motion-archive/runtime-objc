@@ -18,18 +18,18 @@
 
 extension LifeOfAPlanViewController {
   class func catalogBreadcrumbs() -> [String] {
-    return ["1. Life of a Plan"]
+    return ["1. Life of a plan"]
   }
 }
 
 extension LifeOfAConfigurablePlanViewController {
   class func catalogBreadcrumbs() -> [String] {
-    return ["2. Life of a Configurable Plan"]
+    return ["2. Life of a configurable plan"]
   }
 }
 
-extension TossViewController {
+extension LifeOfAComposablePlanExampleController {
   class func catalogBreadcrumbs() -> [String] {
-    return ["3. Tossable"]
+    return ["3. Life of a composable plan"]
   }
 }

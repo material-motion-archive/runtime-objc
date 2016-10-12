@@ -51,7 +51,7 @@ commands:
     pod install
     open MaterialMotionRuntime.xcworkspace
 
-## Guides
+# Guides
 
 1. [Architecture](#architecture)
 2. [How to define a new plan and performer type](#how-to-create-a-new-plan-and-performer-type)
@@ -61,19 +61,19 @@ commands:
 6. [How to indicate continuous performance](#how-to-indicate-continuous-performance)
 7. [How to trace internal scheduler events](#how-to-trace-internal-scheduler-events)
 
-### Architecture
+## Architecture
 
 The Material Motion Runtime consists of two groups of APIs: a scheduler/transaction object and a
 constellation of protocols loosely consisting of plan and performing types.
 
-#### Scheduler
+### Scheduler
 
 The [Scheduler](https://material-motion.github.io/material-motion-runtime-objc/Classes/MDMScheduler.html)
 object is a coordinating entity whose primary responsibility is to fulfill plans by creating
 performers. You can create many schedulers throughout the lifetime of your application. A good rule
 of thumb is to have one scheduler per interaction or transition.
 
-#### Plan + Performing types
+### Plan + Performing types
 
 The [Plan](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPlan.html)
 and [Performing](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPerforming.html)
@@ -86,11 +86,11 @@ Performer behavior is configured by the provided plan instances.
 Learn more about the Material Motion Runtime by reading the
 [Starmap](https://material-motion.gitbooks.io/material-motion-starmap/content/specifications/runtime/).
 
-### How to create a new plan and performer type
+## How to create a new plan and performer type
 
 The following steps provide copy-pastable snippets of code.
 
-#### Step 1: Define the plan type
+### Step 1: Define the plan type
 
 Questions to ask yourself when creating a new plan type:
 
@@ -125,7 +125,7 @@ class <#Plan#>: NSObject {
 }
 ```
 
-#### Step 2: Define the performer type
+### Step 2: Define the performer type
 
 Performers are responsible for fulfilling plans. Fulfillment is possible in a variety of ways:
 
@@ -175,7 +175,7 @@ class <#Performer#>: NSObject, Performing {
 }
 ```
 
-#### Step 3: Make the plan type a formal Plan
+### Step 3: Make the plan type a formal Plan
 
 Conforming to Plan requires:
 
@@ -216,9 +216,9 @@ class <#Plan#>: NSObject, Plan {
 }
 ```
 
-### How to commit a plan to a scheduler
+## How to commit a plan to a scheduler
 
-#### Step 1: Create and store a reference to a scheduler instance
+### Step 1: Create and store a reference to a scheduler instance
 
 Code snippets:
 
@@ -244,7 +244,7 @@ class MyClass {
 }
 ```
 
-#### Step 2: Associate plans with targets
+### Step 2: Associate plans with targets
 
 Code snippets:
 
@@ -260,7 +260,7 @@ Code snippets:
 scheduler.addPlan(<#Plan instance#>, to:<#View instance#>)
 ```
 
-### How to configure performers with plans
+## How to configure performers with plans
 
 Configuring performers with plans starts by making your performer conform to
 [PlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPlanPerforming.html).
@@ -321,12 +321,12 @@ func add(plan: Plan) {
 }
 ```
 
-### How to use composition to fulfill plans
+## How to use composition to fulfill plans
 
 A composition performer is able to emit new plans using a plan emitter. This feature enables the
 reuse of plans and the creation of higher-order abstractions.
 
-#### Step 1: Conform to ComposablePerforming and store the plan emitter
+### Step 1: Conform to ComposablePerforming and store the plan emitter
 
 Code snippets:
 
@@ -367,7 +367,7 @@ extension <#Performer#>: ComposablePerforming {
 }
 ```
 
-#### Step 2: Emit plans
+### Step 2: Emit plans
 
 Performers are only able to emit plans for their associated target.
 
@@ -385,7 +385,7 @@ Code snippets:
 emitter.emitPlan<#T##Plan#>)
 ```
 
-### How to indicate continuous performance
+## How to indicate continuous performance
 
 Oftentimes performers will perform their actions over a period of time or while an interaction is
 active. These types of performers are called continuous performers.
@@ -398,7 +398,7 @@ completed.
 For example, a performer that registers a platform animation might generate a token when the
 animation starts. When the animation completes the token would be terminated.
 
-#### Step 1: Conform to ContinuousPerforming and store the token generator
+### Step 1: Conform to ContinuousPerforming and store the token generator
 
 Code snippets:
 
@@ -438,7 +438,7 @@ extension <#Performer#>: ContinuousPerforming {
 }
 ```
 
-#### Step 2: Generate a token when some continuous work has started
+### Step 2: Generate a token when some continuous work has started
 
 You will likely need to store the token in order to be able to reference it at a later point.
 
@@ -458,7 +458,7 @@ let token = tokenGenerator.generate()!
 tokenMap[animation] = token
 ```
 
-#### Step 3: Terminate the token when work has completed
+### Step 3: Terminate the token when work has completed
 
 Code snippets:
 
@@ -474,7 +474,7 @@ Code snippets:
 token.terminate()
 ```
 
-### How to trace internal scheduler events
+## How to trace internal scheduler events
 
 Tracing allows you to observe internal events occuring within a scheduler. This information may be
 used for the following purposes:
@@ -484,7 +484,7 @@ used for the following purposes:
 
 Use for other purposes is unsupported.
 
-#### Step 1: Create a tracer class
+### Step 1: Create a tracer class
 
 Code snippets:
 
@@ -505,7 +505,7 @@ class <#Custom tracer#>: NSObject, Tracing {
 }
 ```
 
-#### Step 2: Implement methods
+### Step 2: Implement methods
 
 The documentation for the Tracing protocol enumerates the available methods.
 

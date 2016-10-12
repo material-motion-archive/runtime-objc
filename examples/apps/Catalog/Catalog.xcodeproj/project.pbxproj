@@ -101,12 +101,12 @@
 		66251F1B1D360C87006EBC89 /* unit */ = {
 			isa = PBXGroup;
 			children = (
+				66F0320E1D8336C70094B9C9 /* SchedulerTests.swift */,
 				66EF8FBA1D9F27DF003F063C /* SchedulerTransactionTests.swift */,
 				661369701D5BE7CB00F6830F /* CompositionTests.swift */,
 				6624C6421D466D7C00DF3108 /* ContinuousPerformingTests.swift */,
 				66F032131D8349440094B9C9 /* Helpers */,
 				66F032121D8349370094B9C9 /* Plans */,
-				66F0320E1D8336C70094B9C9 /* SchedulerTests.swift */,
 				6625A5511D467D1C00FD10F7 /* UnitTests-Bridging-Header.h */,
 			);
 			path = unit;

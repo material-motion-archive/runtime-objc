@@ -39,18 +39,10 @@ class SchedulerTests: XCTestCase {
     let plan = ChangeBoolean(desiredBoolean: true)
 
     let scheduler = Scheduler()
-
-    expectation(forNotification: TraceNotificationName.plansCommitted._rawValue as String, object: scheduler) { notification -> Bool in
-      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPlansCommittedTracePayload
-      XCTAssertNotEqual(event.committedAddPlans[0] as! ChangeBoolean, plan)
-      return event.committedAddPlans.count == 1
-    }
-
     let tracer = StorageTracer()
     scheduler.addTracer(tracer)
+
     scheduler.addPlan(plan, to: state)
-    
-    waitForExpectations(timeout: 0.1)
 
     XCTAssertEqual(tracer.addedPlans.count, 1)
     XCTAssertNotEqual(tracer.addedPlans[0] as! ChangeBoolean, plan)

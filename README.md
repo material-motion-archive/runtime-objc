@@ -387,7 +387,7 @@ emitter.emitPlan<#T##Plan#>)
 
 ## How to indicate continuous performance
 
-Oftentimes performers will perform their actions over a period of time or while an interaction is
+Performers will often perform their actions over a period of time or while an interaction is
 active. These types of performers are called continuous performers.
 
 A continuous performer is able to affect the active state of the scheduler by generating is-active

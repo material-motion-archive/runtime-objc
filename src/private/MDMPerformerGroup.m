@@ -32,6 +32,7 @@
 @property(nonatomic, weak) MDMScheduler *scheduler;
 @property(nonatomic, strong, readonly) NSMutableArray<MDMPerformerInfo *> *performerInfos;
 @property(nonatomic, strong, readonly) NSMutableDictionary *performerClassNameToPerformerInfo;
+@property(nonatomic, strong, readonly) NSMutableDictionary *performerPlanNameToPerformerInfo;
 @property(nonatomic, strong, readonly) NSMutableSet *activePerformers;
 @end
 
@@ -42,33 +43,40 @@
   if (self) {
     _target = target;
     _scheduler = scheduler;
-
     _performerInfos = [NSMutableArray array];
     _performerClassNameToPerformerInfo = [NSMutableDictionary dictionary];
+    _performerPlanNameToPerformerInfo = [NSMutableDictionary dictionary];
     _activePerformers = [NSMutableSet set];
   }
   return self;
 }
 
-- (void)addPlan:(id<MDMPlan>)plan trace:(MDMTrace *)trace {
-  [trace.committedPlans addObject:plan];
-
+- (void)addPlan:(nonnull id<MDMPlan>)plan to:(nonnull id)target trace:(MDMTrace *)trace {
   BOOL isNew = NO;
-  id<MDMPerforming> performer = [self performerForPlan:plan isNew:&isNew];
-
-  if (isNew) {
-    [trace.createdPerformers addObject:performer];
-
-    for (id<MDMTracing> tracer in self.scheduler.tracers) {
-      if ([tracer respondsToSelector:@selector(didCreatePerformer:for:)]) {
-        [tracer didCreatePerformer:performer for:self.target];
-      }
-    }
-  }
-
+  id<MDMPerforming> performer = [self findOrCreatePerformerForPlan:plan trace:trace isNew:&isNew];
+  [self notifyPlanAdded:plan to:target trace:trace isNew:isNew performer:performer];
   if ([performer respondsToSelector:@selector(addPlan:)]) {
     [(id<MDMPlanPerforming>)performer addPlan:plan];
   }
+}
+
+- (void)addPlan:(nonnull id<MDMNamedPlan>)plan named:(nonnull NSString *)name to:(nonnull id)target trace:(MDMTrace *)trace {
+  // remove first
+  BOOL isNew = NO;
+  MDMPerformerInfo *performerInfo = [self findOrCreatePerformerInfoForNamedPlan:plan named:name trace:trace isNew:&isNew];
+  [self removePlanNamed:name from:target withPerformerInfo:performerInfo];
+  [trace.committedRemovePlans addObject:plan];
+  // then add
+  id<MDMPerforming> performer = performerInfo.performer;
+  self.performerPlanNameToPerformerInfo[name] = performerInfo;
+  [self notifyPlanAdded:plan to:target trace:trace isNew:isNew performer:performer];
+  if ([performer respondsToSelector:@selector(addPlan:named:)]) {
+    [(id<MDMNamedPlanPerforming>)performer addPlan:plan named:name];
+  }
+}
+
+- (void)removePlanNamed:(nonnull NSString *)name from:(nonnull id)target {
+  [self removePlanNamed:name from:target withPerformerInfo:self.performerPlanNameToPerformerInfo[name]];
 }
 
 - (void)registerIsActiveToken:(id<MDMIsActiveTokenable>)token
@@ -93,28 +101,53 @@
 
 #pragma mark - Private
 
-- (id<MDMPerforming>)performerForPlan:(id<MDMPlan>)plan isNew:(BOOL *)isNew {
+- (void)removePlanNamed:(nonnull NSString *)name from:(nonnull id)target withPerformerInfo:(nullable MDMPerformerInfo *)performerInfo {
+  if (performerInfo != nil) {
+    id<MDMPerforming> performer = performerInfo.performer;
+    if ([performer respondsToSelector:@selector(removePlanNamed:)]) {
+      [(id<MDMNamedPlanPerforming>)performer removePlanNamed:name];
+    }
+    [self.performerPlanNameToPerformerInfo removeObjectForKey:name];
+  }
+}
+
+- (id<MDMPerforming>)findOrCreatePerformerForPlan:(id<MDMPlan>)plan trace:(MDMTrace *)trace isNew:(BOOL *)isNew {
+  return [self findOrCreatePerformerInfoForPlan:plan trace:trace isNew:isNew].performer;
+}
+
+- (MDMPerformerInfo *)findOrCreatePerformerInfoForNamedPlan:(id<MDMNamedPlan>)plan named:(NSString *)name trace:(MDMTrace *)trace isNew:(BOOL *)isNew {
+  // maybe this is a simple lookup
+  MDMPerformerInfo *performerInfo = self.performerPlanNameToPerformerInfo[name];
+  if (performerInfo) {
+    *isNew = NO;
+    return performerInfo;
+  }
+  // see if we can look it up by class name instead
+  performerInfo = [self findOrCreatePerformerInfoForPlan:plan trace:trace isNew:isNew];
+  // stash this perfomer info in case we ever want to look it up again
+  self.performerPlanNameToPerformerInfo[name] = performerInfo;
+  return performerInfo;
+}
+
+- (MDMPerformerInfo *)findOrCreatePerformerInfoForPlan:(id<MDMPlan>)plan trace:(MDMTrace *)trace isNew:(BOOL *)isNew {
   Class performerClass = [plan performerClass];
   id performerClassName = NSStringFromClass(performerClass);
   MDMPerformerInfo *performerInfo = self.performerClassNameToPerformerInfo[performerClassName];
   if (performerInfo) {
     *isNew = NO;
-    return performerInfo.performer;
+    return performerInfo;
   }
-
   id<MDMPerforming> performer = [[performerClass alloc] initWithTarget:self.target];
-
   performerInfo = [[MDMPerformerInfo alloc] init];
   performerInfo.performer = performer;
-
   [self.performerInfos addObject:performerInfo];
-  self.performerClassNameToPerformerInfo[performerClassName] = performerInfo;
-
+  if (performerClassName != nil) {
+    self.performerClassNameToPerformerInfo[performerClassName] = performerInfo;
+  }
   [self setUpFeaturesForPerformerInfo:performerInfo];
-
+  [trace.createdPerformers addObject:performer];
   *isNew = YES;
-
-  return performer;
+  return performerInfo;
 }
 
 - (void)setUpFeaturesForPerformerInfo:(MDMPerformerInfo *)performerInfo {
@@ -169,16 +202,30 @@
   }
 }
 
+- (void)notifyPlanAdded:(id<MDMPlan>)plan to:(id)target trace:(MDMTrace *)trace isNew:(BOOL)isNew performer:(id<MDMPerforming>)performer {
+  [trace.committedAddPlans addObject:plan];
+  for (id<MDMTracing> tracer in self.scheduler.tracers) {
+    if ([tracer respondsToSelector:@selector(didAddPlan:to:)]) {
+      [tracer didAddPlan:plan to:target];
+    }
+  }
+  if (isNew) {
+    for (id<MDMTracing> tracer in self.scheduler.tracers) {
+      if ([tracer respondsToSelector:@selector(didCreatePerformer:for:)]) {
+        [tracer didCreatePerformer:performer for:self.target];
+      }
+    }
+  }
+}
+
 #pragma mark - Deprecated
 
 - (void)executeLog:(MDMTransactionLog *)log trace:(MDMTrace *)trace {
   for (id<MDMPlan> plan in log.plans) {
-    [self addPlan:plan trace:trace];
-
-    for (id<MDMTracing> tracer in self.scheduler.tracers) {
-      if ([tracer respondsToSelector:@selector(didAddPlan:to:)]) {
-        [tracer didAddPlan:plan to:log.target];
-      }
+    if (log.name.length) {
+      [self addPlan:(id<MDMNamedPlan>)plan named:log.name to:log.target trace:trace];
+    } else {
+      [self addPlan:plan to:log.target trace:trace];
     }
   }
 }

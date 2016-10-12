@@ -32,6 +32,7 @@ NS_SWIFT_NAME(Performing)
 
 @class MDMTransaction;
 @protocol MDMPlan;
+@protocol MDMNamedPlan;
 
 /** A class conforming to this protocol will be provided with plan instances. */
 
@@ -50,6 +51,30 @@ NS_SWIFT_NAME(PlanPerforming)
  */
 - (void)addPlan:(nonnull id<MDMPlan>)plan
     NS_SWIFT_NAME(add(plan:));
+
+@end
+
+/** Specifics for a named plan performer to allow named plans to be added and removed. */
+NS_SWIFT_NAME(NamedPlanPerforming)
+@protocol MDMNamedPlanPerforming <MDMPerforming>
+
+/**
+ Provides the performer with a plan and an associated name.
+ 
+ @param plan The plan that required this type of performer.
+ @param name The name by which the plan can be identified.
+ */
+- (void)addPlan:(nonnull id<MDMNamedPlan>)plan
+          named:(nonnull NSString *)name
+    NS_SWIFT_NAME(addPlan(_:named:));
+
+/**
+ Removes a named plan from a performer.
+ 
+ @param name The name by which the plan can be identified.
+ */
+- (void)removePlanNamed:(nonnull NSString *)name
+    NS_SWIFT_NAME(removePlan(named:));
 
 @end
 

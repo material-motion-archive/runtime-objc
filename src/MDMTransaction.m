@@ -16,6 +16,8 @@
 
 #import "MDMTransaction.h"
 #import "MDMTransaction+Private.h"
+#import "MDMPerforming.h"
+#import "MDMPlan.h"
 
 @implementation MDMTransaction {
   NSMutableArray *_logs;
@@ -30,10 +32,7 @@
 }
 
 - (void)addPlan:(NSObject<MDMPlan> *)plan toTarget:(id)target {
-  MDMTransactionLog *log = [MDMTransactionLog new];
-  log.plans = @[ [plan copy] ];
-  log.target = target;
-  [_logs addObject:log];
+  [_logs addObject:[[MDMTransactionLog alloc] initWithPlans:@[plan] target:target name:nil]];
 }
 
 - (NSArray<MDMTransactionLog *> *)logs {
@@ -43,4 +42,15 @@
 @end
 
 @implementation MDMTransactionLog
+
+- (instancetype)initWithPlans:(NSArray<NSObject<MDMPlan> *> *)plans target:(id)target name:(NSString *)name {
+  self = [super init];
+  if (self) {
+    _plans = [[NSArray alloc] initWithArray:plans copyItems:TRUE];
+    _target = target;
+    _name = [name copy];
+  }
+  return self;
+}
+
 @end

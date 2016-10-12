@@ -82,38 +82,25 @@
 
 - (void)addPlan:(NSObject<MDMPlan> *)plan to:(id)target {
   MDMTrace *trace = [MDMTrace new];
-
-  NSObject<MDMPlan> *copiedPlan = [plan copy];
-  [[self performerGroupForTarget:target] addPlan:copiedPlan trace:trace];
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-  if ([trace.committedPlans count]) {
-    MDMSchedulerPlansCommittedTracePayload *payload = [MDMSchedulerPlansCommittedTracePayload new];
-    payload.committedPlans = [trace.committedPlans copy];
-
-    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    [nc postNotificationName:MDMTraceNotificationNamePlansCommitted
-                      object:self
-                    userInfo:@{MDMTraceNotificationPayloadKey : payload}];
-  }
-  if ([trace.createdPerformers count]) {
-    MDMSchedulerPerformersCreatedTracePayload *event = [MDMSchedulerPerformersCreatedTracePayload new];
-    event.createdPerformers = [trace.createdPerformers copy];
-
-    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    [nc postNotificationName:MDMTraceNotificationNamePerformersCreated
-                      object:self
-                    userInfo:@{MDMTraceNotificationPayloadKey : event}];
-  }
-#pragma clang diagnostic pop
-
-  for (id<MDMTracing> tracer in _tracers) {
-    if ([tracer respondsToSelector:@selector(didAddPlan:to:)]) {
-      [tracer didAddPlan:copiedPlan to:target];
-    }
-  }
+  id<MDMPlan> copiedPlan = [plan copy];
+  [[self performerGroupForTarget:target] addPlan:copiedPlan to:target trace:trace];
+  [self publishAddTrace:trace];
 }
+
+- (void)addPlan:(NSObject<MDMNamedPlan> *)plan named:(NSString *)name to:(id)target {
+  NSParameterAssert(name.length > 0);
+  MDMTrace *trace = [MDMTrace new];
+  id<MDMNamedPlan> copiedPlan = [plan copy];
+  [[self performerGroupForTarget:target] addPlan:copiedPlan named:name to:target trace:trace];
+  [self publishAddTrace:trace];
+}
+
+- (void)removePlanNamed:(NSString *)name from:(id)target {
+  NSParameterAssert(name.length > 0);
+  [[self performerGroupForTarget:target] removePlanNamed:name from:target];
+}
+
+#pragma mark - Private
 
 - (void)addTracer:(nonnull id<MDMTracing>)tracer {
   [_tracers addObject:tracer];
@@ -135,17 +122,20 @@
 
 - (void)commitTransaction:(MDMTransaction *)transaction {
   MDMTrace *trace = [MDMTrace new];
-
   for (MDMTransactionLog *log in [transaction logs]) {
     [[self performerGroupForTarget:log.target] executeLog:log trace:trace];
   }
+  [self publishAddTrace:trace];
+}
 
+- (void)publishAddTrace:(MDMTrace *)trace {
+  if ([trace.committedAddPlans count] || [trace.committedRemovePlans count]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-  if ([trace.committedPlans count]) {
     MDMSchedulerPlansCommittedTracePayload *payload = [MDMSchedulerPlansCommittedTracePayload new];
-    payload.committedPlans = [trace.committedPlans copy];
-
+    payload.committedAddPlans = [trace.committedAddPlans copy];
+    payload.committedRemovePlans = [trace.committedRemovePlans copy];
+    
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc postNotificationName:MDMTraceNotificationNamePlansCommitted
                       object:self
@@ -154,7 +144,7 @@
   if ([trace.createdPerformers count]) {
     MDMSchedulerPerformersCreatedTracePayload *event = [MDMSchedulerPerformersCreatedTracePayload new];
     event.createdPerformers = [trace.createdPerformers copy];
-
+    
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc postNotificationName:MDMTraceNotificationNamePerformersCreated
                       object:self

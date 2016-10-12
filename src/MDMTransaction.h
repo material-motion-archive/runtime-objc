@@ -32,8 +32,8 @@ NS_SWIFT_NAME(Transaction)
 /** Associate an plan with a given target. */
 - (void)addPlan:(nonnull id<MDMPlan>)plan
        toTarget:(nonnull id)target
-    NS_SWIFT_NAME(add(plan:to:))
-    __deprecated_msg("Add plans directly to a scheduler instead.");
+NS_SWIFT_NAME(add(plan:to:))
+__deprecated_msg("Add plans directly to a scheduler instead.");
 
 @end
     // clang-format on

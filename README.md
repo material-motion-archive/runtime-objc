@@ -132,7 +132,8 @@ class <#Plan#>: NSObject {
 Performers are responsible for fulfilling plans. Fulfillment is possible in a variety of ways:
 
 - [PlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPlanPerforming.html): [How to configure performers with plans](#how-to-configure-performers-with-plans)
-- [DelegatedPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMDelegatedPerforming.html)
+- [NamedPlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMNamedPlanPerforming.html): [How to configure performers with named plans](#how-to-configure-performers-with-named-plans)
+- [ContinuousPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMContinuousPerforming.html): [How to indicate continuous performance](#how-to-indicate-continuous-performance)
 - [ComposablePerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMComposablePerforming.html): [How to use composition to fulfill plans](#how-to-use-composition-to-fulfill-plans)
 
 See the associated links for more details on each performing type.

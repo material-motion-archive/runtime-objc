@@ -87,7 +87,7 @@ class SchedulerTests: XCTestCase {
         self.target = target as! State
       }
 
-      func add(plan: Plan) {
+      func addPlan(_ plan: Plan) {
         let testPlan = plan as! ChangeBoolean
         target.boolean = testPlan.desiredBoolean
       }
@@ -322,7 +322,7 @@ class SchedulerTests: XCTestCase {
         self.target = target
       }
 
-      func add(plan: Plan) {
+      func addPlan(_ plan: Plan) {
         let delayedDelegation = plan as! HijackedIsActiveTokenGenerator
         delayedDelegation.state.tokenGenerator = tokenGenerator
       }
@@ -355,7 +355,7 @@ class SchedulerTests: XCTestCase {
         self.target = target
       }
 
-      func add(plan: Plan) {
+      func addPlan(_ plan: Plan) {
         if let unwrappedTarget = self.target as? UITextView {
           unwrappedTarget.text = unwrappedTarget.text + "addInvoked"
         }
@@ -421,7 +421,7 @@ class SchedulerTests: XCTestCase {
         self.target = target
       }
 
-      func add(plan: Plan) {
+      func addPlan(_ plan: Plan) {
         if let unwrappedTarget = self.target as? UITextView {
           unwrappedTarget.text = unwrappedTarget.text + "addInvoked"
         }

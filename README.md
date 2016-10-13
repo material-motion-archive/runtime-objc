@@ -337,7 +337,7 @@ Code snippets:
 
 ```swift
 extension <#Performer#>: PlanPerforming {
-  func add(plan: Plan) {
+  func addPlan(_ plan: Plan) {
     let <#casted plan instance#> = plan as! <#Plan#>
 
     // Do something with the plan.
@@ -350,7 +350,7 @@ extension <#Performer#>: PlanPerforming {
 Make use of Swift's typed switch/casing to handle multiple plan types.
 
 ```swift
-func add(plan: Plan) {
+func addPlan(_ plan: Plan) {
   switch plan {
   case let <#plan instance 1#> as <#Plan type 1#>:
     ()

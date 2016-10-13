@@ -14,18 +14,17 @@
  limitations under the License.
  */
 
-#import "MDMTrace.h"
+import MaterialMotionRuntime
 
-@implementation MDMTrace
+class StorageTracer: NSObject, Tracing {
+  var addedPlans: [Plan] = []
+  var createdPerformers: [Performing] = []
 
-- (instancetype)init {
-  self = [super init];
-  if (self) {
-    _createdPerformers = [NSMutableSet set];
-    _committedAddPlans = [NSMutableArray array];
-    _committedRemovePlans = [NSMutableArray array];
+  func didAddPlan(_ plan: Plan, to target: Any) {
+    addedPlans.append(plan)
   }
-  return self;
-}
 
-@end
+  func didCreatePerformer(_ performer: Performing, for target: Any) {
+    createdPerformers.append(performer)
+  }
+}

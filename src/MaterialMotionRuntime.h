@@ -17,4 +17,5 @@
 #import "MDMPerforming.h"
 #import "MDMPlan.h"
 #import "MDMScheduler.h"
+#import "MDMTracing.h"
 #import "MDMTransaction.h"

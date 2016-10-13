@@ -14,22 +14,25 @@
  limitations under the License.
  */
 
-#import "MDMTransaction.h"
+#import <Foundation/Foundation.h>
 
+@protocol MDMPerforming;
 @protocol MDMPlan;
 
-@interface MDMTransactionLog : NSObject
+/**
+ A tracer object may implement a variety of hooks for the purposes of observing changes to the
+ internal workings of a scheduler.
+ */
+NS_SWIFT_NAME(Tracing)
+@protocol MDMTracing <NSObject>
+@optional
 
-@property(nonatomic, copy) NSArray<id<MDMPlan>> *plans;
-@property(nonatomic, strong) id target;
-@property(nonatomic, copy) NSString *name;
+/** Invoked after a plan has been added to the scheduler. */
+- (void)didAddPlan:(nonnull id<MDMPlan>)plan to:(nonnull id)target
+    NS_SWIFT_NAME(didAddPlan(_:to:));
 
-- (instancetype)initWithPlans:(NSArray<NSObject<MDMPlan> *> *)plans target:(id)target name:(NSString *)name;
-
-@end
-
-@interface MDMTransaction ()
-
-- (NSArray<MDMTransactionLog *> *)logs;
+/** Invoked after a performer has been created by the scheduler. */
+- (void)didCreatePerformer:(nonnull id<MDMPerforming>)performer for:(nonnull id)target
+    NS_SWIFT_NAME(didCreatePerformer(_:for:));
 
 @end

@@ -16,9 +16,10 @@
 
 #import <Foundation/Foundation.h>
 
-@class MDMScheduler;
 @protocol MDMSchedulerDelegate;
-@protocol MDMPerforming;
+@protocol MDMPlan;
+@protocol MDMNamedPlan;
+@protocol MDMTracing;
 
 /**
  The possible activity states a scheduler can be in.
@@ -48,11 +49,10 @@ typedef NS_ENUM(NSUInteger, MDMSchedulerActivityState) {
  Generally-speaking, one scheduler is created per interaction. An interaction might be a transition,
  a one-off animation, or a complex multi-state interaction.
 
- To add plans to a scheduler you must create an instance of MDMTransaction. A transaction captures
- a series of operations that associate plans with targets.
+ Plans can be associated with targets by using addPlan:to:.
 
- Once a transaction is committed to a scheduler, the scheduler creates performer instances.
- Performers are expected to fulfill the described plans.
+ The scheduler creates performer instances when plans are added to a scheduler. Performers are
+ expected to fulfill the provided plans.
 
  ## Lifecycle
 
@@ -61,11 +61,68 @@ typedef NS_ENUM(NSUInteger, MDMSchedulerActivityState) {
 NS_SWIFT_NAME(Scheduler)
 @interface MDMScheduler : NSObject
 
+/** Associate a plan with a given target. */
+- (void)addPlan:(nonnull NSObject<MDMPlan> *)plan to:(nonnull id)target
+    NS_SWIFT_NAME(addPlan(_:to:));
+
+/**
+ Associates a named plan with a given target.
+
+ @param plan The plan to add to this transaction.
+ @param name String identifier for the plan.
+ @param target The target on which the plan can operate.
+ */
+- (void)addPlan:(nonnull id<MDMNamedPlan>)plan
+          named:(nonnull NSString *)name
+             to:(nonnull id)target
+NS_SWIFT_NAME(addPlan(_:named:to:));
+
+/**
+ Removes any plan associated with the given name on the given target.
+
+ @param name String identifier for the plan.
+ @param target The target on which the plan can operate.
+ */
+- (void)removePlanNamed:(nonnull NSString *)name
+                   from:(nonnull id)target
+NS_SWIFT_NAME(removePlan(named:from:));
+
+// clang-format off
+/** Associate a plan with a given target. */
+- (void)addPlan:(nonnull NSObject<MDMPlan> *)plan toTarget:(nonnull id)target
+    __deprecated_msg("Use addPlan:to: instead.")
+    NS_SWIFT_UNAVAILABLE("Use addPlan(_:to:) instead.");
+// clang-format on
+
+#pragma mark Tracing
+
+/**
+ Registers a tracer with the scheduler.
+
+ The tracer will be strongly held by the scheduler.
+ */
+- (void)addTracer:(nonnull id<MDMTracing>)tracer
+    NS_SWIFT_NAME(addTracer(_:));
+
+/**
+ Removes a tracer from the scheduler.
+
+ Does nothing if the tracer is not currently associated with the scheduler.
+ */
+- (void)removeTracer:(nonnull id<MDMTracing>)tracer
+    NS_SWIFT_NAME(removeTracer(_:));
+
+/** Returns the list of registered tracers. */
+- (nonnull NSArray<id<MDMTracing>> *)tracers;
+
 #pragma mark Committing transactions
 
+// clang-format off
 /** Commits the provided transaction to the receiver. */
 - (void)commitTransaction:(nonnull MDMTransaction *)transaction
-    NS_SWIFT_NAME(commit(transaction:));
+    NS_SWIFT_NAME(commit(transaction:))
+    __deprecated_msg("Use addPlan(_:to:) instead.");
+// clang-format on
 
 #pragma mark State
 

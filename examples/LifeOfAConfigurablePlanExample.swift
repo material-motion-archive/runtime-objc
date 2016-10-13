@@ -45,11 +45,7 @@ class LifeOfAConfigurablePlanViewController: UIViewController {
     let panGestureRecognizer = UIPanGestureRecognizer()
     view.addGestureRecognizer(panGestureRecognizer)
 
-    let plan = Draggable(panGestureRecognizer: panGestureRecognizer)
-
-    let transaction = Transaction()
-    transaction.add(plan: plan, to: squareView)
-    scheduler.commit(transaction: transaction)
+    scheduler.addPlan(Draggable(panGestureRecognizer: panGestureRecognizer), to: squareView)
   }
 
   // MARK: Routing initializers
@@ -100,7 +96,7 @@ class Draggable: NSObject, Plan {
       super.init()
     }
 
-    func add(plan: Plan) {
+    func addPlan(_ plan: Plan) {
       // We must downcast our plan to the expected type in order to access its properties. We use
       // ! to enforce this expectation at runtime.
       let draggable = plan as! Draggable

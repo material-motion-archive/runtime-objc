@@ -14,18 +14,35 @@
  limitations under the License.
  */
 
-#import "MDMTrace.h"
+#import "MDMPlanEmitter.h"
 
-@implementation MDMTrace
+#import "MDMScheduler.h"
 
-- (instancetype)init {
+@interface MDMPlanEmitter ()
+
+@property(nonatomic, weak) MDMScheduler *scheduler;
+@property(nonatomic, weak) id target;
+
+@end
+
+@implementation MDMPlanEmitter
+
+- (nonnull instancetype)initWithScheduler:(nonnull MDMScheduler *)scheduler target:(nonnull id)target {
   self = [super init];
   if (self) {
-    _createdPerformers = [NSMutableSet set];
-    _committedAddPlans = [NSMutableArray array];
-    _committedRemovePlans = [NSMutableArray array];
+    self.scheduler = scheduler;
+    self.target = target;
   }
   return self;
+}
+
+#pragma mark - MDMPlanEmitting
+
+- (void)emitPlan:(NSObject<MDMPlan> *)plan {
+  if (!self.scheduler || !self.target) {
+    return;
+  }
+  [self.scheduler addPlan:plan to:self.target];
 }
 
 @end

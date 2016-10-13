@@ -20,25 +20,25 @@
 #import "MDMPerformerGroupDelegate.h"
 #import "MDMTrace.h"
 #import "MDMTraceNotification.h"
+#import "MDMTracing.h"
 #import "MDMTransaction+Private.h"
 
 @interface MDMScheduler () <MDMPerformerGroupDelegate>
 
 @property(nonatomic, strong) NSMapTable *targetToPerformerGroup;
-
 @property(nonatomic, strong) NSMutableSet *activePerformerGroups;
 
 @end
 
-@implementation MDMScheduler
+@implementation MDMScheduler {
+  NSMutableOrderedSet *_tracers;
+}
 
 - (instancetype)init {
   self = [super init];
   if (self) {
-    NSPointerFunctionsOptions keyOptions = (NSPointerFunctionsObjectPointerPersonality | NSPointerFunctionsWeakMemory);
-    NSPointerFunctionsOptions valueOptions = (NSPointerFunctionsObjectPointerPersonality | NSPointerFunctionsStrongMemory);
-    _targetToPerformerGroup = [NSMapTable mapTableWithKeyOptions:keyOptions valueOptions:valueOptions];
-
+    _tracers = [NSMutableOrderedSet orderedSet];
+    _targetToPerformerGroup = [NSMapTable weakToStrongObjectsMapTable];
     _activePerformerGroups = [NSMutableSet set];
   }
   return self;
@@ -52,9 +52,6 @@
     performerGroup = [[MDMPerformerGroup alloc] initWithTarget:target scheduler:self];
     performerGroup.delegate = self;
     [self.targetToPerformerGroup setObject:performerGroup forKey:target];
-
-    // TODO: Add event hook for plugins. This is where a plugin might provide a scheduler target. This
-    // is how view duplicaion gets hooked in to the scheduler.
   }
 
   return performerGroup;
@@ -83,17 +80,62 @@
   return (self.activePerformerGroups.count > 0) ? MDMSchedulerActivityStateActive : MDMSchedulerActivityStateIdle;
 }
 
+- (void)addPlan:(NSObject<MDMPlan> *)plan to:(id)target {
+  MDMTrace *trace = [MDMTrace new];
+  id<MDMPlan> copiedPlan = [plan copy];
+  [[self performerGroupForTarget:target] addPlan:copiedPlan to:target trace:trace];
+  [self publishAddTrace:trace];
+}
+
+- (void)addPlan:(NSObject<MDMNamedPlan> *)plan named:(NSString *)name to:(id)target {
+  NSParameterAssert(name.length > 0);
+  MDMTrace *trace = [MDMTrace new];
+  id<MDMNamedPlan> copiedPlan = [plan copy];
+  [[self performerGroupForTarget:target] addPlan:copiedPlan named:name to:target trace:trace];
+  [self publishAddTrace:trace];
+}
+
+- (void)removePlanNamed:(NSString *)name from:(id)target {
+  NSParameterAssert(name.length > 0);
+  [[self performerGroupForTarget:target] removePlanNamed:name from:target];
+}
+
+#pragma mark - Private
+
+- (void)addTracer:(nonnull id<MDMTracing>)tracer {
+  [_tracers addObject:tracer];
+}
+
+- (void)removeTracer:(nonnull id<MDMTracing>)tracer {
+  [_tracers removeObject:tracer];
+}
+
+- (nonnull NSArray<id<MDMTracing>> *)tracers {
+  return _tracers.array;
+}
+
+#pragma mark - Deprecated
+
+- (void)addPlan:(NSObject<MDMPlan> *)plan toTarget:(id)target {
+  [self addPlan:plan to:target];
+}
+
 - (void)commitTransaction:(MDMTransaction *)transaction {
   MDMTrace *trace = [MDMTrace new];
-
   for (MDMTransactionLog *log in [transaction logs]) {
     [[self performerGroupForTarget:log.target] executeLog:log trace:trace];
   }
+  [self publishAddTrace:trace];
+}
 
-  if ([trace.committedPlans count]) {
+- (void)publishAddTrace:(MDMTrace *)trace {
+  if ([trace.committedAddPlans count] || [trace.committedRemovePlans count]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     MDMSchedulerPlansCommittedTracePayload *payload = [MDMSchedulerPlansCommittedTracePayload new];
-    payload.committedPlans = [trace.committedPlans copy];
-
+    payload.committedAddPlans = [trace.committedAddPlans copy];
+    payload.committedRemovePlans = [trace.committedRemovePlans copy];
+    
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc postNotificationName:MDMTraceNotificationNamePlansCommitted
                       object:self
@@ -102,12 +144,13 @@
   if ([trace.createdPerformers count]) {
     MDMSchedulerPerformersCreatedTracePayload *event = [MDMSchedulerPerformersCreatedTracePayload new];
     event.createdPerformers = [trace.createdPerformers copy];
-
+    
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc postNotificationName:MDMTraceNotificationNamePerformersCreated
                       object:self
                     userInfo:@{MDMTraceNotificationPayloadKey : event}];
   }
+#pragma clang diagnostic pop
 }
 
 @end

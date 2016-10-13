@@ -19,6 +19,18 @@ import MaterialMotionRuntime
 
 class SchedulerTests: XCTestCase {
 
+  var target:UITextView!
+  private var incrementerTarget:IncrementerTarget!
+  var firstViewTargetAlteringPlan:NamedPlan!
+
+  override func setUp() {
+    super.setUp()
+    target = UITextView()
+    incrementerTarget = IncrementerTarget()
+    firstViewTargetAlteringPlan = ViewTargetAltering()
+    target.text = ""
+  }
+
   // Verify that a plan committed to a scheduler is copied.
   func testPlansAreCopied() {
     let state = State()
@@ -27,18 +39,13 @@ class SchedulerTests: XCTestCase {
     let plan = ChangeBoolean(desiredBoolean: true)
 
     let scheduler = Scheduler()
+    let tracer = StorageTracer()
+    scheduler.addTracer(tracer)
 
-    expectation(forNotification: TraceNotificationName.plansCommitted._rawValue as String, object: scheduler) { notification -> Bool in
-      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPlansCommittedTracePayload
-      XCTAssertNotEqual(event.committedPlans[0] as! ChangeBoolean, plan)
-      return event.committedPlans.count == 1
-    }
+    scheduler.addPlan(plan, to: state)
 
-    let transaction = Transaction()
-    transaction.add(plan: plan, to: state)
-    scheduler.commit(transaction: transaction)
-
-    waitForExpectations(timeout: 0.1)
+    XCTAssertEqual(tracer.addedPlans.count, 1)
+    XCTAssertNotEqual(tracer.addedPlans[0] as! ChangeBoolean, plan)
   }
 
   // Verify that a plan committed to a scheduler immediately executes its add(plan:) logic.
@@ -49,10 +56,7 @@ class SchedulerTests: XCTestCase {
     let plan = ChangeBoolean(desiredBoolean: true)
 
     let scheduler = Scheduler()
-
-    let transaction = Transaction()
-    transaction.add(plan: plan, to: state)
-    scheduler.commit(transaction: transaction)
+    scheduler.addPlan(plan, to: state)
 
     XCTAssertEqual(state.boolean, plan.desiredBoolean)
   }
@@ -83,7 +87,7 @@ class SchedulerTests: XCTestCase {
         self.target = target as! State
       }
 
-      func add(plan: Plan) {
+      func addPlan(_ plan: Plan) {
         let testPlan = plan as! ChangeBoolean
         target.boolean = testPlan.desiredBoolean
       }
@@ -96,18 +100,13 @@ class SchedulerTests: XCTestCase {
     state.boolean = false
 
     let scheduler = Scheduler()
+    let tracer = StorageTracer()
+    scheduler.addTracer(tracer)
 
-    expectation(forNotification: TraceNotificationName.performersCreated._rawValue as String, object: scheduler) { notification -> Bool in
-      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPerformersCreatedTracePayload
-      return event.createdPerformers.count == 1
-    }
+    scheduler.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
+    scheduler.addPlan(ChangeBoolean(desiredBoolean: false), to: state)
 
-    let transaction = Transaction()
-    transaction.add(plan: ChangeBoolean(desiredBoolean: true), to: state)
-    transaction.add(plan: ChangeBoolean(desiredBoolean: false), to: state)
-    scheduler.commit(transaction: transaction)
-
-    waitForExpectations(timeout: 0.1)
+    XCTAssertEqual(tracer.createdPerformers.count, 1)
   }
 
   // Verify that two plans of different types creates two performers.
@@ -116,38 +115,29 @@ class SchedulerTests: XCTestCase {
     state.boolean = false
 
     let scheduler = Scheduler()
+    let tracer = StorageTracer()
+    scheduler.addTracer(tracer)
 
-    expectation(forNotification: TraceNotificationName.performersCreated._rawValue as String, object: scheduler) { notification -> Bool in
-      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPerformersCreatedTracePayload
-      return event.createdPerformers.count == 2
-    }
+    scheduler.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
+    scheduler.addPlan(InstantlyContinuous(), to: state)
 
-    let transaction = Transaction()
-    transaction.add(plan: ChangeBoolean(desiredBoolean: true), to: state)
-    transaction.add(plan: InstantlyContinuous(), to: state)
-    scheduler.commit(transaction: transaction)
-
-    waitForExpectations(timeout: 0.1)
+    XCTAssertEqual(tracer.createdPerformers.count, 2)
   }
 
-  // Verify that order of plans is respected in a transaction.
+  // Verify that order of plans is respected in a scheduler.
   func testTwoPlansOrderIsRespected() {
     let state = State()
     state.boolean = false
 
     let scheduler = Scheduler()
 
-    var transaction = Transaction()
-    transaction.add(plan: ChangeBoolean(desiredBoolean: true), to: state)
-    transaction.add(plan: ChangeBoolean(desiredBoolean: false), to: state)
-    scheduler.commit(transaction: transaction)
+    scheduler.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
+    scheduler.addPlan(ChangeBoolean(desiredBoolean: false), to: state)
 
     XCTAssertEqual(state.boolean, false)
 
-    transaction = Transaction()
-    transaction.add(plan: ChangeBoolean(desiredBoolean: false), to: state)
-    transaction.add(plan: ChangeBoolean(desiredBoolean: true), to: state)
-    scheduler.commit(transaction: transaction)
+    scheduler.addPlan(ChangeBoolean(desiredBoolean: false), to: state)
+    scheduler.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
 
     XCTAssertEqual(state.boolean, true)
   }
@@ -157,15 +147,153 @@ class SchedulerTests: XCTestCase {
   func testPostDeallocTokenGenerationIsIgnored() {
     var scheduler: Scheduler? = Scheduler()
 
-    let transaction = Transaction()
     let plan = HijackedIsActiveTokenGenerator()
-    transaction.add(plan: plan, to: NSObject())
-    scheduler!.commit(transaction: transaction)
+    scheduler!.addPlan(plan, to: NSObject())
 
     // Force the scheduler to be deallocated.
     scheduler = nil
 
     XCTAssertNil(plan.state.tokenGenerator!.generate())
+  }
+
+  func testAddingNamedPlan() {
+    let scheduler = Scheduler()
+
+    scheduler.addPlan(firstViewTargetAlteringPlan, named: "common_name", to: target)
+
+    XCTAssertTrue(target.text! == "removePlanInvokedaddPlanInvoked")
+  }
+  
+  func testAddAndRemoveTheSameNamedPlan() {
+    let scheduler = Scheduler()
+    
+    scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
+    scheduler.removePlan(named: "name_one", from: target)
+    
+    XCTAssertTrue(target.text! == "removePlanInvokedaddPlanInvokedremovePlanInvoked")
+  }
+
+  func testRemoveNamedPlanThatIsntThere() {
+    let scheduler = Scheduler()
+
+    scheduler.addPlan(firstViewTargetAlteringPlan, named: "common_name", to: target)
+    scheduler.removePlan(named: "was_never_added_plan", from: target)
+
+    XCTAssertTrue(target.text! == "removePlanInvokedaddPlanInvoked")
+  }
+
+  func testNamedPlansOverwiteOneAnother() {
+    let scheduler = Scheduler()
+    let planA = IncrementerTargetPlan()
+    let planB = IncrementerTargetPlan()
+    scheduler.addPlan(planA, named: "common_name", to: incrementerTarget)
+    scheduler.addPlan(planB, named: "common_name", to: incrementerTarget)
+
+    XCTAssertTrue(incrementerTarget.addCounter == 2)
+    XCTAssertTrue(incrementerTarget.removeCounter == 2)
+  }
+
+  func testNamedPlansMakeAddAndRemoveCallbacks() {
+    let scheduler = Scheduler()
+    let plan = ViewTargetAltering()
+    scheduler.addPlan(plan, named: "one_name", to: target)
+    scheduler.addPlan(plan, named: "two_name", to: target)
+
+    XCTAssertTrue(target.text! == "removePlanInvokedaddPlanInvokedremovePlanInvokedaddPlanInvoked")
+  }
+
+  func testAddingTheSameNamedPlanTwiceToTheSameTarget() {
+    let scheduler = Scheduler()
+    let plan = IncrementerTargetPlan()
+    scheduler.addPlan(plan, named: "one", to: incrementerTarget)
+    scheduler.addPlan(plan, named: "one", to: incrementerTarget)
+
+    XCTAssertTrue(incrementerTarget.addCounter == 2)
+    XCTAssertTrue(incrementerTarget.removeCounter == 2)
+  }
+
+  func testAddingTheSamePlanWithSimilarNamesToTheSameTarget() {
+    let scheduler = Scheduler()
+    let firstPlan = IncrementerTargetPlan()
+    scheduler.addPlan(firstPlan, named: "one", to: incrementerTarget)
+    scheduler.addPlan(firstPlan, named: "One", to: incrementerTarget)
+    scheduler.addPlan(firstPlan, named: "1", to: incrementerTarget)
+    scheduler.addPlan(firstPlan, named: "ONE", to: incrementerTarget)
+
+    XCTAssertTrue(incrementerTarget.addCounter == 4)
+    XCTAssertTrue(incrementerTarget.removeCounter == 4)
+  }
+
+  func testAddingTheSameNamedPlanToDifferentTargets() {
+    let scheduler = Scheduler()
+    let firstPlan = IncrementerTargetPlan()
+    let secondIncrementerTarget = IncrementerTarget()
+    scheduler.addPlan(firstPlan, named: "one", to: incrementerTarget)
+    scheduler.addPlan(firstPlan, named: "one", to: secondIncrementerTarget)
+
+    XCTAssertTrue(incrementerTarget.addCounter == 1)
+    XCTAssertTrue(incrementerTarget.removeCounter == 1)
+    XCTAssertTrue(secondIncrementerTarget.addCounter == 1)
+    XCTAssertTrue(secondIncrementerTarget.removeCounter == 1)
+  }
+
+  func testNamedPlanOnlyInvokesNamedCallbacks() {
+    let scheduler = Scheduler()
+    let plan = ViewTargetAltering()
+    scheduler.addPlan(plan, named: "one_name", to: target)
+
+    XCTAssertTrue(target.text!.range(of: "addInvoked") == nil)
+  }
+
+  func testPlanOnlyInvokesPlanCallbacks() {
+    let scheduler = Scheduler()
+    let plan = RegularPlanTargetAlteringPlan()
+    scheduler.addPlan(plan, to: target)
+
+    XCTAssertTrue(target.text!.range(of: "addPlanInvoked") == nil)
+    XCTAssertTrue(target.text!.range(of: "removePlanInvoked") == nil)
+  }
+
+  func testNamedPlansReusePerformers() {
+    let scheduler = Scheduler()
+    var numberOfCreatedPerformers = 0
+    expectation(forNotification: TraceNotificationName.performersCreated._rawValue as String, object: scheduler) { notification -> Bool in
+      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPerformersCreatedTracePayload
+      numberOfCreatedPerformers = numberOfCreatedPerformers + event.createdPerformers.count
+      return numberOfCreatedPerformers == 1
+    }
+
+    scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
+    scheduler.removePlan(named: "name_one", from: target)
+
+    waitForExpectations(timeout: 0.1)
+  }
+
+  func testNamedPlansAreCommunicatedViaNSNotifications() {
+    let scheduler = Scheduler()
+
+    expectation(forNotification: TraceNotificationName.plansCommitted._rawValue as String, object: scheduler) { notification -> Bool in
+      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPlansCommittedTracePayload
+      return event.committedAddPlans.count == 1 && event.committedRemovePlans.count == 1
+    }
+
+    scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
+
+    waitForExpectations(timeout: 0.1)
+  }
+
+  func testNamedRemovePlansWithAddsAreNotCommunicatedViaNSNotifications() {
+    let scheduler = Scheduler()
+
+    expectation(forNotification: TraceNotificationName.plansCommitted._rawValue as String, object: scheduler) { notification -> Bool in
+      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPlansCommittedTracePayload
+      return event.committedAddPlans.count == 1 && event.committedRemovePlans.count == 1
+    }
+
+    scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
+    scheduler.removePlan(named: "name_one", from: target)
+
+    waitForExpectations(timeout: 0.1)
   }
 
   // A plan that enables hijacking of the delegated performance token blocks.
@@ -194,7 +322,7 @@ class SchedulerTests: XCTestCase {
         self.target = target
       }
 
-      func add(plan: Plan) {
+      func addPlan(_ plan: Plan) {
         let delayedDelegation = plan as! HijackedIsActiveTokenGenerator
         delayedDelegation.state.tokenGenerator = tokenGenerator
       }
@@ -206,65 +334,109 @@ class SchedulerTests: XCTestCase {
     }
   }
 
-  // Verify that we're unable to request a delegated performance token after the scheduler has been
-  // released.
-  @available(iOS, deprecated)
-  func testDelayedDelegationIsIgnored() {
-    var scheduler: Scheduler? = Scheduler()
-
-    let transaction = Transaction()
-    let plan = HijackedDelegation()
-    transaction.add(plan: plan, to: NSObject())
-    scheduler!.commit(transaction: transaction)
-
-    // Force the scheduler to be deallocated.
-    scheduler = nil
-
-    XCTAssertNil(plan.state.willStart!())
-    plan.state.didEnd!(FakeToken()) // Should silently succeed because scheduler is gone
+  private class IncrementerTarget: NSObject {
+    var addCounter = 0
+    var removeCounter = 0
   }
 
-  // A fake token for use in tests.
-  @available(iOS, deprecated)
-  private class FakeToken: NSObject, DelegatedPerformingToken {}
-
-  // A plan that enables hijacking of the delegated performance token blocks.
-  @available(iOS, deprecated)
-  private class HijackedDelegation: NSObject, Plan {
-    class State {
-      var willStart: DelegatedPerformanceTokenReturnBlock?
-      var didEnd: DelegatedPerformanceTokenArgBlock?
-    }
-    var state = State()
+  private class RegularPlanTargetAlteringPlan: NSObject, Plan {
 
     func performerClass() -> AnyClass {
       return Performer.self
     }
 
     public func copy(with zone: NSZone? = nil) -> Any {
-      let copy = HijackedDelegation()
-      copy.state = state
-      return copy
+      return RegularPlanTargetAlteringPlan()
     }
 
-    private class Performer: NSObject, PlanPerforming, DelegatedPerforming {
+    private class Performer: NSObject, NamedPlanPerforming, PlanPerforming {
       let target: Any
       required init(target: Any) {
         self.target = target
       }
 
-      func add(plan: Plan) {
-        let delayedDelegation = plan as! HijackedDelegation
-        delayedDelegation.state.willStart = willStart
-        delayedDelegation.state.didEnd = didEnd
+      func addPlan(_ plan: Plan) {
+        if let unwrappedTarget = self.target as? UITextView {
+          unwrappedTarget.text = unwrappedTarget.text + "addInvoked"
+        }
       }
 
-      var willStart: DelegatedPerformanceTokenReturnBlock!
-      var didEnd: DelegatedPerformanceTokenArgBlock!
-      func setDelegatedPerformance(willStart: @escaping DelegatedPerformanceTokenReturnBlock,
-                                   didEnd: @escaping DelegatedPerformanceTokenArgBlock) {
-        self.willStart = willStart
-        self.didEnd = didEnd
+      func addPlan(_ plan: NamedPlan, named name: String) {
+        if let unwrappedTarget = self.target as? UITextView {
+          unwrappedTarget.text = unwrappedTarget.text + "addPlanInvoked"
+        }
+      }
+
+      func removePlan(named name: String) {
+        if let unwrappedTarget = self.target as? UITextView {
+          unwrappedTarget.text = unwrappedTarget.text + "removePlanInvoked"
+        }
+      }
+    }
+  }
+
+  private class IncrementerTargetPlan: NSObject, NamedPlan {
+
+    func performerClass() -> AnyClass {
+      return Performer.self
+    }
+
+    public func copy(with zone: NSZone? = nil) -> Any {
+      return IncrementerTargetPlan()
+    }
+
+    private class Performer: NSObject, NamedPlanPerforming {
+      let target: Any
+      required init(target: Any) {
+        self.target = target
+      }
+
+      func addPlan(_ plan: NamedPlan, named name: String) {
+        if let unwrappedTarget = self.target as? IncrementerTarget {
+          unwrappedTarget.addCounter = unwrappedTarget.addCounter + 1
+        }
+      }
+
+      func removePlan(named name: String) {
+        if let unwrappedTarget = self.target as? IncrementerTarget {
+          unwrappedTarget.removeCounter = unwrappedTarget.removeCounter + 1
+        }
+      }
+    }
+  }
+
+  private class ViewTargetAltering: NSObject, NamedPlan {
+
+    func performerClass() -> AnyClass {
+      return Performer.self
+    }
+
+    public func copy(with zone: NSZone? = nil) -> Any {
+      return ViewTargetAltering()
+    }
+
+    private class Performer: NSObject, NamedPlanPerforming, PlanPerforming {
+      let target: Any
+      required init(target: Any) {
+        self.target = target
+      }
+
+      func addPlan(_ plan: Plan) {
+        if let unwrappedTarget = self.target as? UITextView {
+          unwrappedTarget.text = unwrappedTarget.text + "addInvoked"
+        }
+      }
+
+      func addPlan(_ plan: NamedPlan, named name: String) {
+        if let unwrappedTarget = self.target as? UITextView {
+          unwrappedTarget.text = unwrappedTarget.text + "addPlanInvoked"
+        }
+      }
+
+      func removePlan(named name: String) {
+        if let unwrappedTarget = self.target as? UITextView {
+          unwrappedTarget.text = unwrappedTarget.text + "removePlanInvoked"
+        }
       }
     }
   }

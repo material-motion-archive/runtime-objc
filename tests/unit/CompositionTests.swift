@@ -20,20 +20,13 @@ import MaterialMotionRuntime
 // Tests related to the composition of plans.
 class CompositionTests: XCTestCase {
 
-  /**
-   Test that plan composition results in the emitted plans being committed to the scheduler.
-
-   The expectation of this test is that the scheduler's activity state changes from active to idle.
-   */
   func testComposedDelegationCausesActivityStateChange() {
     let scheduler = Scheduler()
 
     let delegate = TestSchedulerDelegate()
     scheduler.delegate = delegate
 
-    let transaction = Transaction()
-    transaction.add(plan: Emit(plan: InstantlyContinuous()), to: NSObject())
-    scheduler.commit(transaction: transaction)
+    scheduler.addPlan(Emit(plan: InstantlyContinuous()), to: NSObject())
 
     // The following steps are now expected to have occurred:
     //

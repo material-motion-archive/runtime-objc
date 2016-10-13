@@ -51,33 +51,31 @@ commands:
     pod install
     open MaterialMotionRuntime.xcworkspace
 
-## Guides
+# Guides
 
 1. [Architecture](#architecture)
-2. [How to define a new plan and performer type](#how-to-create-a-new-plan-and-performer-type)
-3. [How to commit a plan to a scheduler](#how-to-commit-a-plan-to-a-scheduler)
-4. [How to configure performers with plans](#how-to-configure-performers-with-plans)
-5. [How to use composition to fulfill plans](#how-to-use-composition-to-fulfill-plans)
-6. [How to indicate continuous performance](#how-to-indicate-continuous-performance)
+1. [How to define a new plan and performer type](#how-to-create-a-new-plan-and-performer-type)
+1. [How to commit a plan to a scheduler](#how-to-commit-a-plan-to-a-scheduler)
+1. [How to commit a named plan to a scheduler](#how-to-commit-a-named-plan-to-a-scheduler)
+1. [How to configure performers with plans](#how-to-configure-performers-with-plans)
+1. [How to configure performers with named plans](#how-to-configure-performers-with-named-plans)
+1. [How to use composition to fulfill plans](#how-to-use-composition-to-fulfill-plans)
+1. [How to indicate continuous performance](#how-to-indicate-continuous-performance)
+1. [How to trace internal scheduler events](#how-to-trace-internal-scheduler-events)
 
-### Architecture
+## Architecture
 
 The Material Motion Runtime consists of two groups of APIs: a scheduler/transaction object and a
 constellation of protocols loosely consisting of plan and performing types.
 
-#### Scheduler + Transaction
+### Scheduler
 
 The [Scheduler](https://material-motion.github.io/material-motion-runtime-objc/Classes/MDMScheduler.html)
 object is a coordinating entity whose primary responsibility is to fulfill plans by creating
 performers. You can create many schedulers throughout the lifetime of your application. A good rule
 of thumb is to have one scheduler per interaction or transition.
 
-[Transactions](https://material-motion.github.io/material-motion-runtime-objc/Classes/MDMTransaction.html)
-are the mechanism by which plans are committed to a scheduler. Transactions allow the runtime to
-minimize the API surface area of the scheduler while providing a vessel for plans to be transported
-within.
-
-#### Plan + Performing types
+### Plan + Performing types
 
 The [Plan](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPlan.html)
 and [Performing](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPerforming.html)
@@ -90,11 +88,11 @@ Performer behavior is configured by the provided plan instances.
 Learn more about the Material Motion Runtime by reading the
 [Starmap](https://material-motion.gitbooks.io/material-motion-starmap/content/specifications/runtime/).
 
-### How to create a new plan and performer type
+## How to create a new plan and performer type
 
 The following steps provide copy-pastable snippets of code.
 
-#### Step 1: Define the plan type
+### Step 1: Define the plan type
 
 Questions to ask yourself when creating a new plan type:
 
@@ -129,12 +127,13 @@ class <#Plan#>: NSObject {
 }
 ```
 
-#### Step 2: Define the performer type
+### Step 2: Define the performer type
 
 Performers are responsible for fulfilling plans. Fulfillment is possible in a variety of ways:
 
 - [PlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPlanPerforming.html): [How to configure performers with plans](#how-to-configure-performers-with-plans)
-- [DelegatedPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMDelegatedPerforming.html)
+- [NamedPlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMNamedPlanPerforming.html): [How to configure performers with named plans](#how-to-configure-performers-with-named-plans)
+- [ContinuousPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMContinuousPerforming.html): [How to indicate continuous performance](#how-to-indicate-continuous-performance)
 - [ComposablePerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMComposablePerforming.html): [How to use composition to fulfill plans](#how-to-use-composition-to-fulfill-plans)
 
 See the associated links for more details on each performing type.
@@ -179,7 +178,7 @@ class <#Performer#>: NSObject, Performing {
 }
 ```
 
-#### Step 3: Make the plan type a formal Plan
+### Step 3: Make the plan type a formal Plan
 
 Conforming to Plan requires:
 
@@ -220,9 +219,9 @@ class <#Plan#>: NSObject, Plan {
 }
 ```
 
-### How to commit a plan to a scheduler
+## How to commit a plan to a scheduler
 
-#### Step 1: Create and store a reference to a scheduler instance
+### Step 1: Create and store a reference to a scheduler instance
 
 Code snippets:
 
@@ -248,48 +247,73 @@ class MyClass {
 }
 ```
 
-#### Step 2: Create a new transaction instance and associate plans with targets
+### Step 2: Associate plans with targets
 
 Code snippets:
 
 ***In Objective-C:***
 
 ```objc
-MDMTransaction *transaction = [MDMTransaction new];
-[transaction addPlan:<#Plan instance#> toTarget:<#View instance#>];
+[scheduler addPlan:<#Plan instance#> to:<#View instance#>];
 ```
 
 ***In Swift:***
 
 ```swift
-let transaction = Transaction()
-transaction.add(plan: <#Plan instance#>, to: <#View instance#>)
+scheduler.addPlan(<#Plan instance#>, to:<#View instance#>)
 ```
 
-#### Step 3: Commit the transaction to the scheduler
+## How to commit a named plan to a scheduler
+
+### Step 1: Create and store a reference to a scheduler instance
 
 Code snippets:
 
 ***In Objective-C:***
 
 ```objc
-[self.scheduler commitTransaction:transaction];
+@interface MyClass ()
+@property(nonatomic, strong) MDMScheduler* scheduler;
+@end
+
+- (instancetype)init... {
+  ...
+  self.scheduler = [MDMScheduler new];
+  ...
+}
 ```
 
 ***In Swift:***
 
 ```swift
-scheduler.commit(transaction: transaction)
+class MyClass {
+  let scheduler = Scheduler()
+}
 ```
 
-### How to configure performers with plans
+### Step 2: Associate named plans with targets
+
+Code snippets:
+
+***In Objective-C:***
+
+```objc
+[scheduler addPlan:<#Plan instance#> named:<#name#> to:<#View instance#>];
+```
+
+***In Swift:***
+
+```swift
+scheduler.addPlan(<#Plan instance#>, named:<#name#>, to:<#View instance#>)
+```
+
+## How to configure performers with plans
 
 Configuring performers with plans starts by making your performer conform to
 [PlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPlanPerforming.html).
 
-PlanPerforming requires that you implement the `addPlan:` method. This method will be called on a
-performer each time a plan is committed to the scheduler that expects to be fulfilled by the
-performer.
+PlanPerforming requires that you implement the `addPlan:` method. This method will only be invoked
+with plans that require use of this performer.
 
 Code snippets:
 
@@ -314,7 +338,7 @@ Code snippets:
 
 ```swift
 extension <#Performer#>: PlanPerforming {
-  func add(plan: Plan) {
+  func addPlan(_ plan: Plan) {
     let <#casted plan instance#> = plan as! <#Plan#>
 
     // Do something with the plan.
@@ -327,7 +351,7 @@ extension <#Performer#>: PlanPerforming {
 Make use of Swift's typed switch/casing to handle multiple plan types.
 
 ```swift
-func add(plan: Plan) {
+func addPlan(_ plan: Plan) {
   switch plan {
   case let <#plan instance 1#> as <#Plan type 1#>:
     ()
@@ -344,12 +368,53 @@ func add(plan: Plan) {
 }
 ```
 
-### How to use composition to fulfill plans
+## How to configure performers with named plans
 
-A composition performer is able to emit new transactions using an emitter object. This feature
-enables the reuse of plans and the creation of higher-order abstractions.
+Code snippets:
 
-#### Step 1: Conform to ComposablePerforming and store the transaction emitter
+***In Objective-C:***
+
+```objc
+@interface <#Performer#> (NamedPlanPerforming) <MDMNamedPlanPerforming>
+@end
+
+@implementation <#Performer#> (NamedPlanPerforming)
+
+- (void)addPlan:(id<MDMNamedPlan>)plan named:(NSString *)name {
+  <#Plan#>* <#casted plan instance#> = plan;
+
+  // Do something with the plan.
+}
+
+- (void)removePlanNamed:(NSString *)name {
+  // Remove any configuration associated with the given name.
+}
+
+@end
+```
+
+***In Swift:***
+
+```swift
+extension <#Performer#>: PlanPerforming {
+  func addPlan(_ plan: NamedPlan, named name: String) {
+    let <#casted plan instance#> = plan as! <#Plan#>
+
+    // Do something with the plan.
+  }
+
+  func removePlan(named name: String) {
+    // Remove any configuration associated with the given name.
+  }
+}
+```
+
+## How to use composition to fulfill plans
+
+A composition performer is able to emit new plans using a plan emitter. This feature enables the
+reuse of plans and the creation of higher-order abstractions.
+
+### Step 1: Conform to ComposablePerforming and store the plan emitter
 
 Code snippets:
 
@@ -357,7 +422,7 @@ Code snippets:
 
 ```objc
 @interface <#Performer#> ()
-@property(nonatomic, strong) id<MDMTransactionEmitting> transactionEmitter;
+@property(nonatomic, strong) id<MDMPlanEmitting> planEmitter;
 @end
 
 @interface <#Performer#> (Composition) <MDMComposablePerforming>
@@ -365,8 +430,8 @@ Code snippets:
 
 @implementation <#Performer#> (Composition)
 
-- (void)setTransactionEmitter:(id<MDMTransactionEmitting>)transactionEmitter {
-  self.transactionEmitter = transactionEmitter;
+- (void)setPlanEmitter:(id<MDMPlanEmitting>)planEmitter {
+  self.planEmitter = planEmitter;
 }
 
 @end
@@ -378,45 +443,39 @@ Code snippets:
 // Store the emitter in your class' definition.
 class <#Performer#>: ... {
   ...
-  var emitter: TransactionEmitting!
+  var emitter: PlanEmitting!
   ...
 }
 
 extension <#Performer#>: ComposablePerforming {
-  func set(transactionEmitter: TransactionEmitting) {
-    emitter = transactionEmitter
+  var emitter: PlanEmitting!
+  func setPlanEmitter(_ planEmitter: PlanEmitting) {
+    emitter = planEmitter
   }
 }
 ```
 
-#### Step 2: Emit transactions using the emitter
+### Step 2: Emit plans
 
-As a general practice performers should only associate plans with their target. If you find that a
-performer needs to associate plans with more than one target, you may want to consider whether a
-[director](https://material-motion.gitbooks.io/material-motion-starmap/content/specifications/directors.html)
-is a more applicable place to put this logic.
+Performers are only able to emit plans for their associated target.
 
 Code snippets:
 
 ***In Objective-C:***
 
 ```objc
-MDMTransaction *transaction = [MDMTransaction new];
-[transaction addPlan:<#(nonnull id<MDMPlan>)#> toTarget:self.target];
-[self.transactionEmitter emitTransaction:transaction];
+[self.planEmitter emitPlan:<#(nonnull id<MDMPlan>)#>];
 ```
 
 ***In Swift:***
 
 ```swift
-let transaction = Transaction()
-transaction.add(plan: <#T##Plan#>, to: target)
-emitter.emit(transaction: transaction)
+emitter.emitPlan<#T##Plan#>)
 ```
 
-### How to indicate continuous performance
+## How to indicate continuous performance
 
-Oftentimes performers will perform their actions over a period of time or while an interaction is
+Performers will often perform their actions over a period of time or while an interaction is
 active. These types of performers are called continuous performers.
 
 A continuous performer is able to affect the active state of the scheduler by generating is-active
@@ -427,7 +486,7 @@ completed.
 For example, a performer that registers a platform animation might generate a token when the
 animation starts. When the animation completes the token would be terminated.
 
-#### Step 1: Conform to ContinuousPerforming and store the token generator
+### Step 1: Conform to ContinuousPerforming and store the token generator
 
 Code snippets:
 
@@ -467,7 +526,7 @@ extension <#Performer#>: ContinuousPerforming {
 }
 ```
 
-#### Step 2: Generate a token when some continuous work has started
+### Step 2: Generate a token when some continuous work has started
 
 You will likely need to store the token in order to be able to reference it at a later point.
 
@@ -487,7 +546,7 @@ let token = tokenGenerator.generate()!
 tokenMap[animation] = token
 ```
 
-#### Step 3: Terminate the token when work has completed
+### Step 3: Terminate the token when work has completed
 
 Code snippets:
 
@@ -501,6 +560,65 @@ Code snippets:
 
 ```swift
 token.terminate()
+```
+
+## How to trace internal scheduler events
+
+Tracing allows you to observe internal events occuring within a scheduler. This information may be
+used for the following purposes:
+
+- Debug logging.
+- Inspection tooling.
+
+Use for other purposes is unsupported.
+
+### Step 1: Create a tracer class
+
+Code snippets:
+
+***In Objective-C:***
+
+```objc
+@interface <#Custom tracer#> : NSObject <MDMTracing>
+@end
+
+@implementation <#Custom tracer#>
+@end
+```
+
+***In Swift:***
+
+```swift
+class <#Custom tracer#>: NSObject, Tracing {
+}
+```
+
+### Step 2: Implement methods
+
+The documentation for the Tracing protocol enumerates the available methods.
+
+Code snippets:
+
+***In Objective-C:***
+
+```objc
+@implementation <#Custom tracer#>
+
+- (void)didAddPlan:(id<MDMPlan>)plan to:(id)target {
+
+}
+
+@end
+```
+
+***In Swift:***
+
+```swift
+class <#Custom tracer#>: NSObject, Tracing {
+  func didAddPlan(_ plan: Plan, to target: Any) {
+
+  }
+}
 ```
 
 ## Contributing

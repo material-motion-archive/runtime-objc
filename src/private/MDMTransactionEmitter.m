@@ -18,6 +18,8 @@
 
 #import "MDMScheduler.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 @interface MDMTransactionEmitter ()
 
 @property(nonatomic, weak) MDMScheduler *scheduler;
@@ -41,3 +43,4 @@
 }
 
 @end
+#pragma clang diagnostic pop

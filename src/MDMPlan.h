@@ -35,3 +35,11 @@ NS_SWIFT_NAME(Plan)
 - (nonnull Class)performerClass;
 
 @end
+
+/**
+ Instances of `MDMNamedPlan` can be added or removed as named plans to or from targets.
+ */
+NS_SWIFT_NAME(NamedPlan)
+@protocol MDMNamedPlan <MDMPlan>
+
+@end

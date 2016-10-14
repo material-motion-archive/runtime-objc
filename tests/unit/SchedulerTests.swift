@@ -93,35 +93,35 @@ class SchedulerTests: XCTestCase {
       }
     }
   }
-  
+
   private class ChangeBooleanNamedPlan: NSObject, NamedPlan {
     var desiredBoolean: Bool
-    
+
     init(desiredBoolean: Bool) {
       self.desiredBoolean = desiredBoolean
     }
-    
+
     func performerClass() -> AnyClass {
       return Performer.self
     }
-    
+
     public func copy(with zone: NSZone? = nil) -> Any {
       return ChangeBooleanNamedPlan(desiredBoolean: desiredBoolean)
     }
-    
+
     private class Performer: NSObject, Performing, NamedPlanPerforming {
       let target: State
       required init(target: Any) {
         self.target = target as! State
       }
-      
+
       func addPlan(_ plan: NamedPlan, named name: String) {
         let testPlan = plan as! ChangeBooleanNamedPlan
         target.boolean = testPlan.desiredBoolean
       }
-      
+
       func removePlan(named name: String) {
-        
+
       }
     }
   }
@@ -195,13 +195,13 @@ class SchedulerTests: XCTestCase {
 
     XCTAssertTrue(target.text! == "removePlanInvokedaddPlanInvoked")
   }
-  
+
   func testAddAndRemoveTheSameNamedPlan() {
     let scheduler = Scheduler()
-    
+
     scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
     scheduler.removePlan(named: "name_one", from: target)
-    
+
     XCTAssertTrue(target.text! == "removePlanInvokedaddPlanInvokedremovePlanInvoked")
   }
 
@@ -327,21 +327,34 @@ class SchedulerTests: XCTestCase {
 
     waitForExpectations(timeout: 0.1)
   }
-  
+
+  func testNamedTestsAreRemovedOnATracer() {
+    let scheduler = Scheduler()
+    let tracer = NamedStorageTracer()
+    scheduler.addTracer(tracer)
+
+    scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
+    scheduler.removePlan(named: "name_one", from: target)
+
+    XCTAssertTrue(tracer.removedPlanNames.count == 2)
+    XCTAssertTrue(tracer.removedPlanNames[0] == "name_one")
+    XCTAssertTrue(tracer.removedPlanNames[1] == "name_one")
+  }
+
   func testNamedPlansRespectTracers() {
     let differentPlan = ChangeBooleanNamedPlan(desiredBoolean:true)
     let state = State()
     let scheduler = Scheduler()
     let tracer = StorageTracer()
     scheduler.addTracer(tracer)
-    
+
     scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
     scheduler.addPlan(differentPlan, named: "name_two", to: state)
-    
+
     XCTAssertEqual(tracer.addedPlans.count, 2)
     XCTAssert(tracer.addedPlans[0] is NamedPlan)
     XCTAssert(tracer.addedPlans[1] is ChangeBooleanNamedPlan)
-    
+
     XCTAssert(target.text == "removePlanInvokedaddPlanInvoked")
     XCTAssert(state.boolean)
   }

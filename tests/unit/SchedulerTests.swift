@@ -81,7 +81,7 @@ class SchedulerTests: XCTestCase {
       return ChangeBoolean(desiredBoolean: desiredBoolean)
     }
 
-    private class Performer: NSObject, Performing, PlanPerforming {
+    private class Performer: NSObject, Performing {
       let target: State
       required init(target: Any) {
         self.target = target as! State
@@ -113,6 +113,10 @@ class SchedulerTests: XCTestCase {
       let target: State
       required init(target: Any) {
         self.target = target as! State
+      }
+
+      public func addPlan(_ plan: Plan) {
+        // No-op
       }
 
       func addPlan(_ plan: NamedPlan, named name: String) {
@@ -369,7 +373,7 @@ class SchedulerTests: XCTestCase {
       return copy
     }
 
-    private class Performer: NSObject, PlanPerforming, ContinuousPerforming {
+    private class Performer: NSObject, ContinuousPerforming {
       let target: Any
       required init(target: Any) {
         self.target = target
@@ -402,7 +406,7 @@ class SchedulerTests: XCTestCase {
       return RegularPlanTargetAlteringPlan()
     }
 
-    private class Performer: NSObject, NamedPlanPerforming, PlanPerforming {
+    private class Performer: NSObject, NamedPlanPerforming {
       let target: Any
       required init(target: Any) {
         self.target = target
@@ -444,6 +448,10 @@ class SchedulerTests: XCTestCase {
         self.target = target
       }
 
+      public func addPlan(_ plan: Plan) {
+        // No-op
+      }
+
       func addPlan(_ plan: NamedPlan, named name: String) {
         if let unwrappedTarget = self.target as? IncrementerTarget {
           unwrappedTarget.addCounter = unwrappedTarget.addCounter + 1
@@ -468,7 +476,7 @@ class SchedulerTests: XCTestCase {
       return ViewTargetAltering()
     }
 
-    private class Performer: NSObject, NamedPlanPerforming, PlanPerforming {
+    private class Performer: NSObject, NamedPlanPerforming {
       let target: Any
       required init(target: Any) {
         self.target = target

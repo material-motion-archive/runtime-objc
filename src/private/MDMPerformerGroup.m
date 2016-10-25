@@ -54,7 +54,7 @@
   id<MDMPerforming> performer = [self findOrCreatePerformerForPlan:plan isNew:&isNew];
   [self notifyPlanAdded:plan to:target isNew:isNew performer:performer];
   if ([performer respondsToSelector:@selector(addPlan:)]) {
-    [(id<MDMPlanPerforming>)performer addPlan:plan];
+    [(id<MDMPerforming>)performer addPlan:plan];
   }
 }
 

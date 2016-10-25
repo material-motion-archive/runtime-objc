@@ -34,6 +34,10 @@ class ForeverContinuous: NSObject, Plan {
       self.target = target
     }
 
+    public func addPlan(_ plan: Plan) {
+      // No-op
+    }
+
     func set(isActiveTokenGenerator: IsActiveTokenGenerating) {
       isActiveTokenGenerator.generate()
     }

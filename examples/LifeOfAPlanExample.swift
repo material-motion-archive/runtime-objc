@@ -86,9 +86,12 @@ class LifeOfAPlanViewController: UIViewController {
       let target: UIView
       required init(target: Any) {
         self.target = target as! UIView
-
         super.init()
+      }
 
+      let gestureRecognizer = UIPanGestureRecognizer(target: self,
+                                                     action: #selector(didPan(gestureRecognizer:)))
+      public func addPlan(_ plan: Plan) {
         // For this example our performer adds a gesture recognizer to the view. This has the
         // advantage of simplifying our view controller code; associate a Draggable plan with our
         // view and we're done.
@@ -99,10 +102,9 @@ class LifeOfAPlanViewController: UIViewController {
         // - What if we'd like to register the gesture recognizer to a different view?
         //
         // We explore answers to these questions in LifeOfAConfigurablePlan.
-
-        let gestureRecognizer = UIPanGestureRecognizer(target: self,
-                                                       action: #selector(didPan(gestureRecognizer:)))
-        self.target.addGestureRecognizer(gestureRecognizer)
+        if gestureRecognizer.view == nil {
+          self.target.addGestureRecognizer(gestureRecognizer)
+        }
       }
 
       // Extract translation values from the pan gesture recognizer and add them to the view's center

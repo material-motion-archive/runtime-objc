@@ -31,7 +31,7 @@ class Emit: NSObject, Plan {
     return Emit(plan: plan)
   }
 
-  private class Performer: NSObject, PlanPerforming, ComposablePerforming {
+  private class Performer: NSObject, ComposablePerforming {
     let target: Any
     required init(target: Any) {
       self.target = target

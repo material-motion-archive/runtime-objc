@@ -82,7 +82,7 @@ private class Tossable: NSObject, Plan {
     return Tossable(gestureRecognizer: gestureRecognizer)
   }
 
-  private class Performer: NSObject, PlanPerforming, ComposablePerforming {
+  private class Performer: NSObject, ComposablePerforming {
     let target: UIView
     required init(target: Any) {
       self.target = target as! UIView
@@ -144,7 +144,7 @@ private class Impulse: NSObject {
 // Removes all active UIDynamics behaviors associated with the target.
 private class Grabbed: NSObject {}
 
-private class UIDynamicsPerformer: NSObject, PlanPerforming {
+private class UIDynamicsPerformer: NSObject, Performing {
   let target: UIView
   let dynamicAnimator: UIDynamicAnimator
   required init(target: Any) {

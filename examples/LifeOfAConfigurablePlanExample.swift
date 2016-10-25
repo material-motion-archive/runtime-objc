@@ -84,12 +84,9 @@ class Draggable: NSObject, Plan {
     return copy
   }
 
-  // Our performer now conforms to PlanPerforming. This allows our performer to receive plan
+  // Our performer now conforms to Performing. This allows our performer to receive plan
   // instances as they are committed.
-  //
-  // Note that PlanPerforming also conforms to Performing; we don't need to conform to it
-  // explicitly.
-  private class Performer: NSObject, PlanPerforming {
+  private class Performer: NSObject, Performing {
     let target: UIView
     required init(target: Any) {
       self.target = target as! UIView

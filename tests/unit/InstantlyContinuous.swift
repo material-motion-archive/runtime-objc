@@ -35,6 +35,10 @@ class InstantlyContinuous: NSObject, Plan {
       self.target = target
     }
 
+    public func addPlan(_ plan: Plan) {
+      // No-op
+    }
+
     func set(isActiveTokenGenerator: IsActiveTokenGenerating) {
       let token = isActiveTokenGenerator.generate()!
       token.terminate()

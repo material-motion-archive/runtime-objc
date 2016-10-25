@@ -16,6 +16,10 @@
 
 #import <Foundation/Foundation.h>
 
+@class MDMTransaction;
+@protocol MDMPlan;
+@protocol MDMNamedPlan;
+
 /**
  A class conforming to MDMPerforming is expected to implement the plan of motion described by objects
  that conform to MDMPlan.
@@ -27,17 +31,6 @@ NS_SWIFT_NAME(Performing)
 
 /** The receiver is expected to execute its plan to the provided target. */
 - (nonnull instancetype)initWithTarget:(nonnull id)target;
-
-@end
-
-@class MDMTransaction;
-@protocol MDMPlan;
-@protocol MDMNamedPlan;
-
-/** A class conforming to this protocol will be provided with plan instances. */
-
-NS_SWIFT_NAME(PlanPerforming)
-@protocol MDMPlanPerforming <MDMPerforming>
 
 #pragma mark Adding plans to a performer
 
@@ -60,7 +53,7 @@ NS_SWIFT_NAME(NamedPlanPerforming)
 
 /**
  Provides the performer with a plan and an associated name.
- 
+
  @param plan The plan that required this type of performer.
  @param name The name by which the plan can be identified.
  */
@@ -70,7 +63,7 @@ NS_SWIFT_NAME(NamedPlanPerforming)
 
 /**
  Removes a named plan from a performer.
- 
+
  @param name The name by which the plan can be identified.
  */
 - (void)removePlanNamed:(nonnull NSString *)name
@@ -171,6 +164,26 @@ NS_SWIFT_NAME(ComposablePerforming)
 /** The performer is provided a plan emitter shortly after initialization. */
 - (void)setPlanEmitter:(nonnull id<MDMPlanEmitting>)planEmitter
     NS_SWIFT_NAME(setPlanEmitter(_:));
+
+@end
+
+/** A class conforming to this protocol will be provided with plan instances. */
+__deprecated_msg("Conform to Performing instead.")
+NS_SWIFT_NAME(PlanPerforming)
+@protocol MDMPlanPerforming<MDMPerforming>
+
+#pragma mark Adding plans to a performer
+
+/**
+ Provides the performer with a plan.
+
+ The performer may choose to store this plan or to simply extract necessary information and cache
+ it separately.
+
+ @param plan The plan that required this type of performer.
+ */
+- (void)addPlan:(nonnull id<MDMPlan>)plan
+    NS_SWIFT_NAME(addPlan(_:));
 
 @end
     // clang-format on

@@ -38,9 +38,9 @@
 // nil by default. Useful for view duplication.
 @property(nonatomic, nullable) id schedulerTarget;
 
-- (void)addPlan:(nonnull id<MDMPlan>)plan to:(nonnull id)target trace:(nonnull MDMTrace *)trace;
+- (void)addPlan:(nonnull id<MDMPlan>)plan to:(nonnull id)target;
 
-- (void)addPlan:(nonnull id<MDMNamedPlan>)plan named:(nonnull NSString *)name to:(nonnull id)target trace:(nonnull MDMTrace *)trace;
+- (void)addPlan:(nonnull id<MDMNamedPlan>)plan named:(nonnull NSString *)name to:(nonnull id)target;
 
 - (void)removePlanNamed:(nonnull NSString *)name from:(nonnull id)target;
 
@@ -48,7 +48,5 @@
             withPerformerInfo:(nonnull MDMPerformerInfo *)performerInfo;
 - (void)terminateIsActiveToken:(nonnull id<MDMIsActiveTokenable>)token
              withPerformerInfo:(nonnull MDMPerformerInfo *)performerInfo;
-
-- (void)executeLog:(nonnull MDMTransactionLog *)log trace:(nonnull MDMTrace *)trace __deprecated_msg("Use addPlan instead.");
 
 @end

@@ -288,49 +288,39 @@ class SchedulerTests: XCTestCase {
 
   func testNamedPlansReusePerformers() {
     let scheduler = Scheduler()
-    var numberOfCreatedPerformers = 0
-    expectation(forNotification: TraceNotificationName.performersCreated._rawValue as String, object: scheduler) { notification -> Bool in
-      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPerformersCreatedTracePayload
-      numberOfCreatedPerformers = numberOfCreatedPerformers + event.createdPerformers.count
-      return numberOfCreatedPerformers == 1
-    }
+    let tracer = StorageTracer()
+    scheduler.addTracer(tracer)
 
     scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
     scheduler.removePlan(named: "name_one", from: target)
 
-    waitForExpectations(timeout: 0.1)
+    XCTAssertEqual(tracer.createdPerformers.count, 1)
   }
 
   func testNamedPlansAreCommunicatedViaNSNotifications() {
     let scheduler = Scheduler()
-
-    expectation(forNotification: TraceNotificationName.plansCommitted._rawValue as String, object: scheduler) { notification -> Bool in
-      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPlansCommittedTracePayload
-      return event.committedAddPlans.count == 1 && event.committedRemovePlans.count == 1
-    }
+    let tracer = StorageTracer()
+    scheduler.addTracer(tracer)
 
     scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
 
-    waitForExpectations(timeout: 0.1)
+    XCTAssertEqual(tracer.addedPlans.count, 1)
   }
 
   func testNamedRemovePlansWithAddsAreNotCommunicatedViaNSNotifications() {
     let scheduler = Scheduler()
-
-    expectation(forNotification: TraceNotificationName.plansCommitted._rawValue as String, object: scheduler) { notification -> Bool in
-      let event = notification.userInfo![TraceNotificationPayloadKey] as! SchedulerPlansCommittedTracePayload
-      return event.committedAddPlans.count == 1 && event.committedRemovePlans.count == 1
-    }
+    let tracer = StorageTracer()
+    scheduler.addTracer(tracer)
 
     scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
     scheduler.removePlan(named: "name_one", from: target)
 
-    waitForExpectations(timeout: 0.1)
+    XCTAssertEqual(tracer.addedPlans.count, 1)
   }
 
   func testNamedTestsAreRemovedOnATracer() {
     let scheduler = Scheduler()
-    let tracer = NamedStorageTracer()
+    let tracer = StorageTracer()
     scheduler.addTracer(tracer)
 
     scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)

@@ -166,11 +166,7 @@ NS_SWIFT_NAME(PlanEmitting)
 NS_SWIFT_NAME(ComposablePerforming)
 @protocol MDMComposablePerforming <MDMPerforming>
 
-@optional
-
 #pragma mark Composable performing
-
-@optional // TODO: Make required after next release.
 
 /** The performer is provided a plan emitter shortly after initialization. */
 - (void)setPlanEmitter:(nonnull id<MDMPlanEmitting>)planEmitter

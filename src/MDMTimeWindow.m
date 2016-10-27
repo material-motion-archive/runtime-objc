@@ -14,9 +14,24 @@
  limitations under the License.
  */
 
-#import "MDMPerforming.h"
-#import "MDMPlan.h"
-#import "MDMScheduler.h"
 #import "MDMTimeWindow.h"
-#import "MDMTracing.h"
-#import "MDMTransaction.h"
+
+@implementation MDMTimeWindow
+
+- (instancetype)initWithInitialDirection:(MDMTimeWindowDirection)initialDirection
+                                duration:(NSTimeInterval)duration {
+  self = [super init];
+  if (self) {
+    _initialDirection = initialDirection;
+    _duration = duration;
+
+    _currentDirection = initialDirection;
+
+    if (_initialDirection == MDMTimeWindowDirectionBackward) {
+      _position = 1;
+    }
+  }
+  return self;
+}
+
+@end

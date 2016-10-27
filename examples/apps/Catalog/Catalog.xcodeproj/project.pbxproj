@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		66014FAE1DB80F0B0080E810 /* TimeWindowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66014FAD1DB80F0B0080E810 /* TimeWindowTests.swift */; };
 		661369711D5BE7CB00F6830F /* CompositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661369701D5BE7CB00F6830F /* CompositionTests.swift */; };
 		6624C6431D466D7C00DF3108 /* ContinuousPerformingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6624C6421D466D7C00DF3108 /* ContinuousPerformingTests.swift */; };
 		6625A5531D467EBD00FD10F7 /* TestSchedulerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6625A5521D467EBD00FD10F7 /* TestSchedulerDelegate.swift */; };
@@ -43,6 +44,7 @@
 		38D4C84E8232BC0806D71419 /* Pods-MaterialMotionRuntime-UnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaterialMotionRuntime-UnitTests.debug.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MaterialMotionRuntime-UnitTests/Pods-MaterialMotionRuntime-UnitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		41272F462040EB12DEA1F059 /* Pods-MaterialMotionRuntime-UnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaterialMotionRuntime-UnitTests.release.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MaterialMotionRuntime-UnitTests/Pods-MaterialMotionRuntime-UnitTests.release.xcconfig"; sourceTree = "<group>"; };
 		6554CEC6A4F8D7CC1752C457 /* Pods-MaterialMotionRuntime-Catalog.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaterialMotionRuntime-Catalog.debug.xcconfig"; path = "../../../Pods/Target Support Files/Pods-MaterialMotionRuntime-Catalog/Pods-MaterialMotionRuntime-Catalog.debug.xcconfig"; sourceTree = "<group>"; };
+		66014FAD1DB80F0B0080E810 /* TimeWindowTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeWindowTests.swift; sourceTree = "<group>"; };
 		661369701D5BE7CB00F6830F /* CompositionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositionTests.swift; sourceTree = "<group>"; };
 		6624C6421D466D7C00DF3108 /* ContinuousPerformingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinuousPerformingTests.swift; sourceTree = "<group>"; };
 		66251F111D360C65006EBC89 /* UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,6 +104,7 @@
 				66F0320E1D8336C70094B9C9 /* SchedulerTests.swift */,
 				661369701D5BE7CB00F6830F /* CompositionTests.swift */,
 				6624C6421D466D7C00DF3108 /* ContinuousPerformingTests.swift */,
+				66014FAD1DB80F0B0080E810 /* TimeWindowTests.swift */,
 				66F032131D8349440094B9C9 /* Helpers */,
 				66F032121D8349370094B9C9 /* Plans */,
 				6625A5511D467D1C00FD10F7 /* UnitTests-Bridging-Header.h */,
@@ -404,6 +407,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66014FAE1DB80F0B0080E810 /* TimeWindowTests.swift in Sources */,
 				6625A5531D467EBD00FD10F7 /* TestSchedulerDelegate.swift in Sources */,
 				668C9B001D91AA6600CB10EE /* ForeverContinuous.swift in Sources */,
 				66EF8FBE1DA1F67D003F063C /* StorageTracer.swift in Sources */,

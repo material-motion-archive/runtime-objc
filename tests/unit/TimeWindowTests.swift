@@ -14,9 +14,22 @@
  limitations under the License.
  */
 
-#import "MDMPerforming.h"
-#import "MDMPlan.h"
-#import "MDMScheduler.h"
-#import "MDMTimeWindow.h"
-#import "MDMTracing.h"
-#import "MDMTransaction.h"
+import XCTest
+import MaterialMotionRuntime
+
+class TimeWindowTests: XCTestCase {
+
+  func testForwardInitialValues() {
+    let window = TimeWindow(initialDirection: .forward, duration: 0.3)
+    XCTAssertEqual(window.currentDirection, .forward)
+    XCTAssertEqual(window.initialDirection, .forward)
+    XCTAssertEqual(window.position, 0)
+  }
+
+  func testBackwardInitialValues() {
+    let window = TimeWindow(initialDirection: .backward, duration: 0.3)
+    XCTAssertEqual(window.currentDirection, .backward)
+    XCTAssertEqual(window.initialDirection, .backward)
+    XCTAssertEqual(window.position, 1)
+  }
+}

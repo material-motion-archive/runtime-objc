@@ -14,10 +14,6 @@
  limitations under the License.
  */
 
-#import "MDMPerforming.h"
-#import "MDMPlan.h"
-#import "MDMScheduler.h"
-#import "MDMTimeWindow.h"
 #import "MDMTimeWindowSegment.h"
-#import "MDMTracing.h"
-#import "MDMTransaction.h"
+
+const CGFloat MDMTimeWindowSegmentEpsilon = 0.00001;

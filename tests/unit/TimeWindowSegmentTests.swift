@@ -14,10 +14,14 @@
  limitations under the License.
  */
 
-#import "MDMPerforming.h"
-#import "MDMPlan.h"
-#import "MDMScheduler.h"
-#import "MDMTimeWindow.h"
-#import "MDMTimeWindowSegment.h"
-#import "MDMTracing.h"
-#import "MDMTransaction.h"
+import XCTest
+import MaterialMotionRuntime
+
+class TimeWindowSegmentTests: XCTestCase {
+
+  func testCreation() {
+    let _ = TimeWindowSegment()
+    let _ = TimeWindowSegment(position: 0, length: 1)
+    let _ = TimeWindowSegmentEpsilon
+  }
+}

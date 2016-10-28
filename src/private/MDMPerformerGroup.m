@@ -60,11 +60,12 @@
 
 - (void)addPlan:(nonnull id<MDMNamedPlan>)plan named:(nonnull NSString *)name to:(nonnull id)target {
   // remove first
-  BOOL isNew = NO;
-  MDMPerformerInfo *performerInfo = [self findOrCreatePerformerInfoForNamedPlan:plan named:name isNew:&isNew];
-  [self removePlanNamed:name from:target withPerformerInfo:performerInfo];
+  MDMPerformerInfo *cachedPerformerInfo = self.performerPlanNameToPerformerInfo[name];
+  [self removePlanNamed:name from:target withPerformer:cachedPerformerInfo.performer];
 
   // then add
+  BOOL isNew = NO;
+  MDMPerformerInfo *performerInfo = [self findOrCreatePerformerInfoForNamedPlan:plan named:name isNew:&isNew];
   id<MDMPerforming> performer = performerInfo.performer;
   self.performerPlanNameToPerformerInfo[name] = performerInfo;
   [self notifyPlanAdded:plan to:target isNew:isNew performer:performer];
@@ -74,7 +75,8 @@
 }
 
 - (void)removePlanNamed:(nonnull NSString *)name from:(nonnull id)target {
-  [self removePlanNamed:name from:target withPerformerInfo:self.performerPlanNameToPerformerInfo[name]];
+  MDMPerformerInfo *cachedPerformerInfo = self.performerPlanNameToPerformerInfo[name];
+  [self removePlanNamed:name from:target withPerformer:cachedPerformerInfo.performer];
 }
 
 - (void)registerIsActiveToken:(id<MDMIsActiveTokenable>)token
@@ -99,9 +101,8 @@
 
 #pragma mark - Private
 
-- (void)removePlanNamed:(nonnull NSString *)name from:(nonnull id)target withPerformerInfo:(nullable MDMPerformerInfo *)performerInfo {
-  if (performerInfo != nil) {
-    id<MDMPerforming> performer = performerInfo.performer;
+- (void)removePlanNamed:(nonnull NSString *)name from:(nonnull id)target withPerformer:(nullable id<MDMPerforming>)performer {
+  if (performer != nil) {
     if ([performer respondsToSelector:@selector(removePlanNamed:)]) {
       [(id<MDMNamedPlanPerforming>)performer removePlanNamed:name];
     }

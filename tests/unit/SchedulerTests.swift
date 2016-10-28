@@ -197,7 +197,7 @@ class SchedulerTests: XCTestCase {
 
     scheduler.addPlan(firstViewTargetAlteringPlan, named: "common_name", to: target)
 
-    XCTAssertTrue(target.text! == "removePlanInvokedaddPlanInvoked")
+    XCTAssertTrue(target.text! == "addPlanInvoked")
   }
 
   func testAddAndRemoveTheSameNamedPlan() {
@@ -206,7 +206,7 @@ class SchedulerTests: XCTestCase {
     scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
     scheduler.removePlan(named: "name_one", from: target)
 
-    XCTAssertTrue(target.text! == "removePlanInvokedaddPlanInvokedremovePlanInvoked")
+    XCTAssertTrue(target.text! == "addPlanInvokedremovePlanInvoked")
   }
 
   func testRemoveNamedPlanThatIsntThere() {
@@ -215,7 +215,7 @@ class SchedulerTests: XCTestCase {
     scheduler.addPlan(firstViewTargetAlteringPlan, named: "common_name", to: target)
     scheduler.removePlan(named: "was_never_added_plan", from: target)
 
-    XCTAssertTrue(target.text! == "removePlanInvokedaddPlanInvoked")
+    XCTAssertTrue(target.text! == "addPlanInvoked")
   }
 
   func testNamedPlansOverwiteOneAnother() {
@@ -226,16 +226,17 @@ class SchedulerTests: XCTestCase {
     scheduler.addPlan(planB, named: "common_name", to: incrementerTarget)
 
     XCTAssertTrue(incrementerTarget.addCounter == 2)
-    XCTAssertTrue(incrementerTarget.removeCounter == 2)
+    XCTAssertTrue(incrementerTarget.removeCounter == 1)
   }
 
   func testNamedPlansMakeAddAndRemoveCallbacks() {
     let scheduler = Scheduler()
     let plan = ViewTargetAltering()
     scheduler.addPlan(plan, named: "one_name", to: target)
+    scheduler.removePlan(named: "one_name", from: target)
     scheduler.addPlan(plan, named: "two_name", to: target)
 
-    XCTAssertTrue(target.text! == "removePlanInvokedaddPlanInvokedremovePlanInvokedaddPlanInvoked")
+    XCTAssertTrue(target.text! == "addPlanInvokedremovePlanInvokedaddPlanInvoked")
   }
 
   func testAddingTheSameNamedPlanTwiceToTheSameTarget() {
@@ -245,7 +246,7 @@ class SchedulerTests: XCTestCase {
     scheduler.addPlan(plan, named: "one", to: incrementerTarget)
 
     XCTAssertTrue(incrementerTarget.addCounter == 2)
-    XCTAssertTrue(incrementerTarget.removeCounter == 2)
+    XCTAssertTrue(incrementerTarget.removeCounter == 1)
   }
 
   func testAddingTheSamePlanWithSimilarNamesToTheSameTarget() {
@@ -257,7 +258,7 @@ class SchedulerTests: XCTestCase {
     scheduler.addPlan(firstPlan, named: "ONE", to: incrementerTarget)
 
     XCTAssertTrue(incrementerTarget.addCounter == 4)
-    XCTAssertTrue(incrementerTarget.removeCounter == 4)
+    XCTAssertTrue(incrementerTarget.removeCounter == 0)
   }
 
   func testAddingTheSameNamedPlanToDifferentTargets() {
@@ -268,9 +269,9 @@ class SchedulerTests: XCTestCase {
     scheduler.addPlan(firstPlan, named: "one", to: secondIncrementerTarget)
 
     XCTAssertTrue(incrementerTarget.addCounter == 1)
-    XCTAssertTrue(incrementerTarget.removeCounter == 1)
+    XCTAssertTrue(incrementerTarget.removeCounter == 0)
     XCTAssertTrue(secondIncrementerTarget.addCounter == 1)
-    XCTAssertTrue(secondIncrementerTarget.removeCounter == 1)
+    XCTAssertTrue(secondIncrementerTarget.removeCounter == 0)
   }
 
   func testNamedPlanOnlyInvokesNamedCallbacks() {
@@ -301,17 +302,7 @@ class SchedulerTests: XCTestCase {
     XCTAssertEqual(tracer.createdPerformers.count, 1)
   }
 
-  func testNamedPlansAreCommunicatedViaNSNotifications() {
-    let scheduler = Scheduler()
-    let tracer = StorageTracer()
-    scheduler.addTracer(tracer)
-
-    scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
-
-    XCTAssertEqual(tracer.addedPlans.count, 1)
-  }
-
-  func testNamedRemovePlansWithAddsAreNotCommunicatedViaNSNotifications() {
+  func testNamedPlansAdditionsAreCommunicatedViaTracers() {
     let scheduler = Scheduler()
     let tracer = StorageTracer()
     scheduler.addTracer(tracer)
@@ -320,19 +311,8 @@ class SchedulerTests: XCTestCase {
     scheduler.removePlan(named: "name_one", from: target)
 
     XCTAssertEqual(tracer.addedPlans.count, 1)
-  }
-
-  func testNamedTestsAreRemovedOnATracer() {
-    let scheduler = Scheduler()
-    let tracer = StorageTracer()
-    scheduler.addTracer(tracer)
-
-    scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
-    scheduler.removePlan(named: "name_one", from: target)
-
-    XCTAssertTrue(tracer.removedPlanNames.count == 2)
+    XCTAssertEqual(tracer.removedPlanNames.count, 1)
     XCTAssertTrue(tracer.removedPlanNames[0] == "name_one")
-    XCTAssertTrue(tracer.removedPlanNames[1] == "name_one")
   }
 
   func testNamedPlansRespectTracers() {
@@ -349,7 +329,7 @@ class SchedulerTests: XCTestCase {
     XCTAssert(tracer.addedPlans[0] is NamedPlan)
     XCTAssert(tracer.addedPlans[1] is ChangeBooleanNamedPlan)
 
-    XCTAssert(target.text == "removePlanInvokedaddPlanInvoked")
+    XCTAssert(target.text == "addPlanInvoked")
     XCTAssert(state.boolean)
   }
 

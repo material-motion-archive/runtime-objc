@@ -37,29 +37,11 @@ typedef NS_ENUM(NSUInteger, MDMSchedulerActivityState) {
 
 @class MDMTransaction;
 
-/**
- An instance of MDMScheduler acts as the mediating agent between plans and performers.
+/** The Scheduling protocol defines the essential API for the Scheduler class. */
+NS_SWIFT_NAME(Scheduling)
+@protocol MDMScheduling <NSObject>
 
- Plans are objects that conform to the MDMPlan protocol.
- Performers are objects that conform to the MDMPerforming protocol.
-
- ## Usage
-
- Many MDMScheduler instances may be instantiated throughout the lifetime of an app.
- Generally-speaking, one scheduler is created per interaction. An interaction might be a transition,
- a one-off animation, or a complex multi-state interaction.
-
- Plans can be associated with targets by using addPlan:to:.
-
- The scheduler creates performer instances when plans are added to a scheduler. Performers are
- expected to fulfill the provided plans.
-
- ## Lifecycle
-
- When an instance of MDMScheduler is deallocated its performers will also be deallocated.
- */
-NS_SWIFT_NAME(Scheduler)
-@interface MDMScheduler : NSObject
+#pragma mark Adding plans
 
 /** Associate a plan with a given target. */
 - (void)addPlan:(nonnull NSObject<MDMPlan> *)plan to:(nonnull id)target
@@ -75,7 +57,7 @@ NS_SWIFT_NAME(Scheduler)
 - (void)addPlan:(nonnull id<MDMNamedPlan>)plan
           named:(nonnull NSString *)name
              to:(nonnull id)target
-NS_SWIFT_NAME(addPlan(_:named:to:));
+    NS_SWIFT_NAME(addPlan(_:named:to:));
 
 /**
  Removes any plan associated with the given name on the given target.
@@ -85,7 +67,7 @@ NS_SWIFT_NAME(addPlan(_:named:to:));
  */
 - (void)removePlanNamed:(nonnull NSString *)name
                    from:(nonnull id)target
-NS_SWIFT_NAME(removePlan(named:from:));
+    NS_SWIFT_NAME(removePlan(named:from:));
 
 #pragma mark Tracing
 
@@ -118,6 +100,32 @@ NS_SWIFT_NAME(removePlan(named:from:));
  An Performer conforming to MDMDelegatedPerforming is active if it has ongoing delegated performance.
  */
 @property(nonatomic, assign, readonly) MDMSchedulerActivityState activityState;
+
+@end
+
+/**
+ An instance of MDMScheduler acts as the mediating agent between plans and performers.
+
+ Plans are objects that conform to the MDMPlan protocol.
+ Performers are objects that conform to the MDMPerforming protocol.
+
+ ## Usage
+
+ Many MDMScheduler instances may be instantiated throughout the lifetime of an app.
+ Generally-speaking, one scheduler is created per interaction. An interaction might be a transition,
+ a one-off animation, or a complex multi-state interaction.
+
+ Plans can be associated with targets by using addPlan:to:.
+
+ The scheduler creates performer instances when plans are added to a scheduler. Performers are
+ expected to fulfill the provided plans.
+
+ ## Lifecycle
+
+ When an instance of MDMScheduler is deallocated its performers will also be deallocated.
+ */
+NS_SWIFT_NAME(Scheduler)
+@interface MDMScheduler : NSObject <MDMScheduling>
 
 #pragma mark Delegated events
 

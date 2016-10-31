@@ -18,6 +18,7 @@
 
 @protocol MDMPerforming;
 @protocol MDMPlan;
+@protocol MDMNamedPlan;
 
 /**
  A tracer object may implement a variety of hooks for the purposes of observing changes to the
@@ -30,6 +31,10 @@ NS_SWIFT_NAME(Tracing)
 /** Invoked after a plan has been added to the scheduler. */
 - (void)didAddPlan:(nonnull id<MDMPlan>)plan to:(nonnull id)target
     NS_SWIFT_NAME(didAddPlan(_:to:));
+
+/** Invoked after a named plan has been added to the scheduler. */
+- (void)didAddPlan:(nonnull id<MDMNamedPlan>)plan named:(nonnull NSString *)name to:(nonnull id)target
+    NS_SWIFT_NAME(didAddPlan(_:named:to:));
 
 /** Invoked when a named plan is removed from the scheduler. */
 - (void)didRemovePlanNamed:(nonnull NSString *)name from:(nonnull id)target

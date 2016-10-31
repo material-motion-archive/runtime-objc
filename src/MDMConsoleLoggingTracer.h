@@ -14,12 +14,15 @@
  limitations under the License.
  */
 
-#import "MDMConsoleLoggingTracer.h"
-#import "MDMPerforming.h"
-#import "MDMPlan.h"
-#import "MDMScheduler.h"
-#import "MDMTimeWindow.h"
-#import "MDMTimeWindowSegment.h"
+#import <Foundation/Foundation.h>
+
 #import "MDMTracing.h"
-#import "MDMTransaction.h"
-#import "MDMConsoleLoggingTracer.h"
+
+/**
+ An instance of a logging tracer added to a Scheduler instance will output all Tracing
+ invocation names and parameters to the console.
+ */
+NS_SWIFT_NAME(ConsoleLoggingTracer)
+@interface MDMConsoleLoggingTracer : NSObject <MDMTracing>
+
+@end

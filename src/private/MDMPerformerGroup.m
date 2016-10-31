@@ -52,9 +52,9 @@
 - (void)addPlan:(nonnull id<MDMPlan>)plan to:(nonnull id)target {
   BOOL isNew = NO;
   id<MDMPerforming> performer = [self findOrCreatePerformerForPlan:plan isNew:&isNew];
-  [self notifyPlanAdded:plan to:target isNew:isNew performer:performer];
-  if ([performer respondsToSelector:@selector(addPlan:)]) {
-    [(id<MDMPerforming>)performer addPlan:plan];
+  [self notifyPlanAdded:plan to:target performer:performer];
+  if (isNew) {
+    [self notifyPerformerCreation:performer target:target];
   }
 }
 
@@ -68,9 +68,9 @@
   MDMPerformerInfo *performerInfo = [self findOrCreatePerformerInfoForNamedPlan:plan named:name isNew:&isNew];
   id<MDMPerforming> performer = performerInfo.performer;
   self.performerPlanNameToPerformerInfo[name] = performerInfo;
-  [self notifyPlanAdded:plan to:target isNew:isNew performer:performer];
-  if ([performer respondsToSelector:@selector(addPlan:named:)]) {
-    [(id<MDMNamedPlanPerforming>)performer addPlan:plan named:name];
+  [self notifyNamedPlanAdded:plan named:name to:target performer:(id<MDMNamedPlanPerforming>)performer];
+  if (isNew) {
+    [self notifyPerformerCreation:performer target:target];
   }
 }
 
@@ -194,17 +194,32 @@
   }
 }
 
-- (void)notifyPlanAdded:(id<MDMPlan>)plan to:(id)target isNew:(BOOL)isNew performer:(id<MDMPerforming>)performer {
+- (void)notifyPlanAdded:(id<MDMPlan>)plan to:(id)target performer:(id<MDMPerforming>)performer {
   for (id<MDMTracing> tracer in self.scheduler.tracers) {
     if ([tracer respondsToSelector:@selector(didAddPlan:to:)]) {
       [tracer didAddPlan:plan to:target];
     }
   }
-  if (isNew) {
-    for (id<MDMTracing> tracer in self.scheduler.tracers) {
-      if ([tracer respondsToSelector:@selector(didCreatePerformer:for:)]) {
-        [tracer didCreatePerformer:performer for:self.target];
-      }
+  if ([performer respondsToSelector:@selector(addPlan:)]) {
+    [performer addPlan:plan];
+  }
+}
+
+- (void)notifyNamedPlanAdded:(id<MDMNamedPlan>)plan named:(NSString *)name to:(id)target performer:(id<MDMNamedPlanPerforming>)performer {
+  for (id<MDMTracing> tracer in self.scheduler.tracers) {
+    if ([tracer respondsToSelector:@selector(didAddPlan:named:to:)]) {
+      [tracer didAddPlan:plan named:name to:target];
+    }
+  }
+  if ([performer respondsToSelector:@selector(addPlan:named:)]) {
+    [performer addPlan:plan named:name];
+  }
+}
+
+- (void)notifyPerformerCreation:(id<MDMPerforming>)performer target:(id)target {
+  for (id<MDMTracing> tracer in self.scheduler.tracers) {
+    if ([tracer respondsToSelector:@selector(didCreatePerformer:for:)]) {
+      [tracer didCreatePerformer:performer for:self.target];
     }
   }
 }

@@ -310,7 +310,7 @@ class SchedulerTests: XCTestCase {
     scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
     scheduler.removePlan(named: "name_one", from: target)
 
-    XCTAssertEqual(tracer.addedPlans.count, 1)
+    XCTAssertEqual(tracer.addedNamedPlans.count, 1)
     XCTAssertEqual(tracer.removedPlanNames.count, 1)
     XCTAssertTrue(tracer.removedPlanNames[0] == "name_one")
   }
@@ -325,9 +325,7 @@ class SchedulerTests: XCTestCase {
     scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
     scheduler.addPlan(differentPlan, named: "name_two", to: state)
 
-    XCTAssertEqual(tracer.addedPlans.count, 2)
-    XCTAssert(tracer.addedPlans[0] is NamedPlan)
-    XCTAssert(tracer.addedPlans[1] is ChangeBooleanNamedPlan)
+    XCTAssertEqual(tracer.addedNamedPlans.count, 2)
 
     XCTAssert(target.text == "addPlanInvoked")
     XCTAssert(state.boolean)
@@ -441,42 +439,6 @@ class SchedulerTests: XCTestCase {
       func removePlan(named name: String) {
         if let unwrappedTarget = self.target as? IncrementerTarget {
           unwrappedTarget.removeCounter = unwrappedTarget.removeCounter + 1
-        }
-      }
-    }
-  }
-
-  private class ViewTargetAltering: NSObject, NamedPlan {
-
-    func performerClass() -> AnyClass {
-      return Performer.self
-    }
-
-    public func copy(with zone: NSZone? = nil) -> Any {
-      return ViewTargetAltering()
-    }
-
-    private class Performer: NSObject, NamedPlanPerforming {
-      let target: Any
-      required init(target: Any) {
-        self.target = target
-      }
-
-      func addPlan(_ plan: Plan) {
-        if let unwrappedTarget = self.target as? UITextView {
-          unwrappedTarget.text = unwrappedTarget.text + "addInvoked"
-        }
-      }
-
-      func addPlan(_ plan: NamedPlan, named name: String) {
-        if let unwrappedTarget = self.target as? UITextView {
-          unwrappedTarget.text = unwrappedTarget.text + "addPlanInvoked"
-        }
-      }
-
-      func removePlan(named name: String) {
-        if let unwrappedTarget = self.target as? UITextView {
-          unwrappedTarget.text = unwrappedTarget.text + "removePlanInvoked"
         }
       }
     }

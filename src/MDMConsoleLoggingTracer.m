@@ -15,11 +15,23 @@
  */
 
 #import "MDMConsoleLoggingTracer.h"
-#import "MDMPerforming.h"
-#import "MDMPlan.h"
-#import "MDMScheduler.h"
-#import "MDMTimeWindow.h"
-#import "MDMTimeWindowSegment.h"
-#import "MDMTracing.h"
-#import "MDMTransaction.h"
-#import "MDMConsoleLoggingTracer.h"
+
+@implementation MDMConsoleLoggingTracer
+
+- (void)didAddPlan:(id<MDMPlan>)plan to:(id)target {
+  NSLog(@"didAddPlan: %@ to: %@", plan, target);
+}
+
+- (void)didAddPlan:(id)plan named:(NSString *)name to:(id)target {
+  NSLog(@"didAddPlan: %@ named: %@ to: %@", plan, name, target);
+}
+
+- (void)didRemovePlanNamed:(NSString *)name from:(id)target {
+  NSLog(@"didRemovePlanNamed: %@ from: %@", name, target);
+}
+
+- (void)didCreatePerformer:(id<MDMPerforming>)performer for:(id)target {
+  NSLog(@"didCreatePerformer: %@ for: %@", performer, target);
+}
+
+@end

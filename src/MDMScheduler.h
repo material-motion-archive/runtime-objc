@@ -37,9 +37,9 @@ typedef NS_ENUM(NSUInteger, MDMSchedulerActivityState) {
 
 @class MDMTransaction;
 
-/** The Scheduling protocol defines the essential API for the Scheduler class. */
-NS_SWIFT_NAME(Scheduling)
-@protocol MDMScheduling <NSObject>
+/** The RuntimeFeatures protocol defines the expected functionality for a runtime object. */
+NS_SWIFT_NAME(RuntimeFeatures)
+@protocol MDMRuntimeFeatures <NSObject>
 
 #pragma mark Adding plans
 
@@ -125,7 +125,7 @@ NS_SWIFT_NAME(Scheduling)
  When an instance of MDMScheduler is deallocated its performers will also be deallocated.
  */
 NS_SWIFT_NAME(Scheduler)
-@interface MDMScheduler : NSObject <MDMScheduling>
+@interface MDMScheduler : NSObject <MDMRuntimeFeatures>
 
 #pragma mark Delegated events
 

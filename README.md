@@ -62,6 +62,7 @@ commands:
 1. [How to use composition to fulfill plans](#how-to-use-composition-to-fulfill-plans)
 1. [How to indicate continuous performance](#how-to-indicate-continuous-performance)
 1. [How to trace internal runtime events](#how-to-trace-internal-runtime-events)
+1. [How to log runtime events to the console](#how-to-log-runtime-events-to-the-console)
 
 ## Architecture
 
@@ -619,6 +620,22 @@ class <#Custom tracer#>: NSObject, Tracing {
 
   }
 }
+```
+
+## How to log runtime events to the console
+
+Code snippets:
+
+***In Objective-C:***
+
+```objc
+[runtime addTracer:[MDMConsoleLoggingTracer new]];
+```
+
+***In Swift:***
+
+```swift
+runtime.addTracer(ConsoleLoggingTracer())
 ```
 
 ## Contributing

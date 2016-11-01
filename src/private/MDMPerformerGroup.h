@@ -19,7 +19,6 @@
 @class MDMPerformerInfo;
 @class MDMRuntime;
 @class MDMTrace;
-@class MDMTransactionLog;
 @protocol MDMIsActiveTokenable;
 @protocol MDMPerformerGroupDelegate;
 @protocol MDMPlan;

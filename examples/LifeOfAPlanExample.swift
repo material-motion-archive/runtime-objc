@@ -68,7 +68,7 @@ class LifeOfAPlanViewController: UIViewController {
   // plan.
   //
   // copy(zone:) is required by the NSCopying protocol. It is required because plans are copied when
-  // they're added to a transaction.
+  // they're added to a runtime.
   private class Draggable: NSObject, Plan {
     func performerClass() -> AnyClass {
       return Performer.self

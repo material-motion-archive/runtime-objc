@@ -24,7 +24,6 @@
 #import "MDMPlanEmitter.h"
 #import "MDMRuntime.h"
 #import "MDMTracing.h"
-#import "MDMTransaction+Private.h"
 
 @interface MDMPerformerGroup ()
 @property(nonatomic, weak) MDMRuntime *runtime;

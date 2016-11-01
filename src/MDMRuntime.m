@@ -20,7 +20,6 @@
 #import "MDMPerformerGroupDelegate.h"
 #import "MDMScheduler.h"
 #import "MDMTracing.h"
-#import "MDMTransaction+Private.h"
 
 @interface MDMRuntime () <MDMPerformerGroupDelegate>
 

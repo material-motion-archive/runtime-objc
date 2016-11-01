@@ -48,7 +48,7 @@ NS_SWIFT_NAME(RuntimeFeatures)
 /**
  Associates a named plan with a given target.
 
- @param plan The plan to add to this transaction.
+ @param plan The plan to add.
  @param name String identifier for the plan.
  @param target The target on which the plan can operate.
  */

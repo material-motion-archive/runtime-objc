@@ -79,8 +79,8 @@ NS_SWIFT_NAME(NamedPlanPerforming)
  A performer that conforms to MDMContinuousPerforming is able to request and release is-active
  tokens.
 
- The scheduler uses these tokens to inform its active state. If any performer owns an is-active
- token then the scheduler is active. Otherwise, the scheduler is idle.
+ The runtime uses these tokens to inform its active state. If any performer owns an is-active
+ token then the runtime is active. Otherwise, the runtime is idle.
 
  The performer should store a strong reference to the token generator. Request a token just before
  some continuous work is about to begin, such as adding an animation or starting a gesture
@@ -117,7 +117,7 @@ NS_SWIFT_NAME(IsActiveTokenable)
 #pragma mark Terminating an is-active token
 
 /**
- Remove the token from the pool of active tokens in the scheduler.
+ Remove the token from the pool of active tokens in the runtime.
 
  Subsequent invocations of this method will result in an assertion.
  */
@@ -134,7 +134,7 @@ NS_SWIFT_NAME(IsActiveTokenGenerating)
 
  The receiver of this token is expected to eventually invoke terminate on the token.
 
- May fail to generate a token if the performer's scheduler has been deallocated.
+ May fail to generate a token if the performer's runtime has been deallocated.
  */
 - (nullable id<MDMIsActiveTokenable>)generate;
 
@@ -143,13 +143,13 @@ NS_SWIFT_NAME(IsActiveTokenGenerating)
 #pragma mark - Composition
 
 /**
- A plan emitter allows an object to emit new plans to a backing scheduler for the target to which
- the performer is associated.
+ A plan emitter allows an object to emit new plans to a backing runtime for the target to which the
+ performer is associated.
  */
 NS_SWIFT_NAME(PlanEmitting)
 @protocol MDMPlanEmitting <NSObject>
 
-/** Emit a new plan. The plan will immediately be added to the backing scheduler. */
+/** Emit a new plan. The plan will immediately be added to the backing runtime. */
 - (void)emitPlan:(nonnull NSObject<MDMPlan> *)plan
     NS_SWIFT_NAME(emitPlan(_:));
 
@@ -166,6 +166,8 @@ NS_SWIFT_NAME(ComposablePerforming)
     NS_SWIFT_NAME(setPlanEmitter(_:));
 
 @end
+
+// clang-format off
 
 /** A class conforming to this protocol will be provided with plan instances. */
 __deprecated_msg("Conform to Performing instead.")

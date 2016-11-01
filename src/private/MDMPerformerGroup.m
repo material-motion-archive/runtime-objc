@@ -22,12 +22,12 @@
 #import "MDMPerforming.h"
 #import "MDMPlan.h"
 #import "MDMPlanEmitter.h"
-#import "MDMScheduler.h"
+#import "MDMRuntime.h"
 #import "MDMTracing.h"
 #import "MDMTransaction+Private.h"
 
 @interface MDMPerformerGroup ()
-@property(nonatomic, weak) MDMScheduler *scheduler;
+@property(nonatomic, weak) MDMRuntime *runtime;
 @property(nonatomic, strong, readonly) NSMutableArray<MDMPerformerInfo *> *performerInfos;
 @property(nonatomic, strong, readonly) NSMutableDictionary *performerClassNameToPerformerInfo;
 @property(nonatomic, strong, readonly) NSMutableDictionary *performerPlanNameToPerformerInfo;
@@ -36,11 +36,11 @@
 
 @implementation MDMPerformerGroup
 
-- (instancetype)initWithTarget:(id)target scheduler:(MDMScheduler *)scheduler {
+- (instancetype)initWithTarget:(id)target runtime:(MDMRuntime *)runtime {
   self = [super init];
   if (self) {
     _target = target;
-    _scheduler = scheduler;
+    _runtime = runtime;
     _performerInfos = [NSMutableArray array];
     _performerClassNameToPerformerInfo = [NSMutableDictionary dictionary];
     _performerPlanNameToPerformerInfo = [NSMutableDictionary dictionary];
@@ -107,7 +107,7 @@
       [(id<MDMNamedPlanPerforming>)performer removePlanNamed:name];
     }
     [self.performerPlanNameToPerformerInfo removeObjectForKey:name];
-    for (id<MDMTracing> tracer in self.scheduler.tracers) {
+    for (id<MDMTracing> tracer in self.runtime.tracers) {
       if ([tracer respondsToSelector:@selector(didRemovePlanNamed:from:)]) {
         [tracer didRemovePlanNamed:name from:target];
       }
@@ -160,7 +160,7 @@
   if ([performer respondsToSelector:@selector(setPlanEmitter:)]) {
     id<MDMComposablePerforming> composablePerformer = (id<MDMComposablePerforming>)performer;
 
-    MDMPlanEmitter *emitter = [[MDMPlanEmitter alloc] initWithScheduler:self.scheduler target:self.target];
+    MDMPlanEmitter *emitter = [[MDMPlanEmitter alloc] initWithRuntime:self.runtime target:self.target];
     [composablePerformer setPlanEmitter:emitter];
   }
 
@@ -195,7 +195,7 @@
 }
 
 - (void)notifyPlanAdded:(id<MDMPlan>)plan to:(id)target performer:(id<MDMPerforming>)performer {
-  for (id<MDMTracing> tracer in self.scheduler.tracers) {
+  for (id<MDMTracing> tracer in self.runtime.tracers) {
     if ([tracer respondsToSelector:@selector(didAddPlan:to:)]) {
       [tracer didAddPlan:plan to:target];
     }
@@ -206,7 +206,7 @@
 }
 
 - (void)notifyNamedPlanAdded:(id<MDMNamedPlan>)plan named:(NSString *)name to:(id)target performer:(id<MDMNamedPlanPerforming>)performer {
-  for (id<MDMTracing> tracer in self.scheduler.tracers) {
+  for (id<MDMTracing> tracer in self.runtime.tracers) {
     if ([tracer respondsToSelector:@selector(didAddPlan:named:to:)]) {
       [tracer didAddPlan:plan named:name to:target];
     }
@@ -217,7 +217,7 @@
 }
 
 - (void)notifyPerformerCreation:(id<MDMPerforming>)performer target:(id)target {
-  for (id<MDMTracing> tracer in self.scheduler.tracers) {
+  for (id<MDMTracing> tracer in self.runtime.tracers) {
     if ([tracer respondsToSelector:@selector(didCreatePerformer:for:)]) {
       [tracer didCreatePerformer:performer for:self.target];
     }

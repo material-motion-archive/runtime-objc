@@ -17,7 +17,7 @@
 import XCTest
 import MaterialMotionRuntime
 
-class SchedulerTests: XCTestCase {
+class RuntimeTests: XCTestCase {
 
   var target:UITextView!
   private var incrementerTarget:IncrementerTarget!
@@ -31,32 +31,32 @@ class SchedulerTests: XCTestCase {
     target.text = ""
   }
 
-  // Verify that a plan committed to a scheduler is copied.
+  // Verify that a plan committed to a runtime is copied.
   func testPlansAreCopied() {
     let state = State()
     state.boolean = false
 
     let plan = ChangeBoolean(desiredBoolean: true)
 
-    let scheduler = Scheduler()
+    let runtime = Runtime()
     let tracer = StorageTracer()
-    scheduler.addTracer(tracer)
+    runtime.addTracer(tracer)
 
-    scheduler.addPlan(plan, to: state)
+    runtime.addPlan(plan, to: state)
 
     XCTAssertEqual(tracer.addedPlans.count, 1)
     XCTAssertNotEqual(tracer.addedPlans[0] as! ChangeBoolean, plan)
   }
 
-  // Verify that a plan committed to a scheduler immediately executes its add(plan:) logic.
+  // Verify that a plan committed to a runtime immediately executes its add(plan:) logic.
   func testAddPlanInvokedImmediately() {
     let state = State()
     state.boolean = false
 
     let plan = ChangeBoolean(desiredBoolean: true)
 
-    let scheduler = Scheduler()
-    scheduler.addPlan(plan, to: state)
+    let runtime = Runtime()
+    runtime.addPlan(plan, to: state)
 
     XCTAssertEqual(state.boolean, plan.desiredBoolean)
   }
@@ -135,12 +135,12 @@ class SchedulerTests: XCTestCase {
     let state = State()
     state.boolean = false
 
-    let scheduler = Scheduler()
+    let runtime = Runtime()
     let tracer = StorageTracer()
-    scheduler.addTracer(tracer)
+    runtime.addTracer(tracer)
 
-    scheduler.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
-    scheduler.addPlan(ChangeBoolean(desiredBoolean: false), to: state)
+    runtime.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
+    runtime.addPlan(ChangeBoolean(desiredBoolean: false), to: state)
 
     XCTAssertEqual(tracer.createdPerformers.count, 1)
   }
@@ -150,123 +150,123 @@ class SchedulerTests: XCTestCase {
     let state = State()
     state.boolean = false
 
-    let scheduler = Scheduler()
+    let runtime = Runtime()
     let tracer = StorageTracer()
-    scheduler.addTracer(tracer)
+    runtime.addTracer(tracer)
 
-    scheduler.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
-    scheduler.addPlan(InstantlyContinuous(), to: state)
+    runtime.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
+    runtime.addPlan(InstantlyContinuous(), to: state)
 
     XCTAssertEqual(tracer.createdPerformers.count, 2)
   }
 
-  // Verify that order of plans is respected in a scheduler.
+  // Verify that order of plans is respected in a runtime.
   func testTwoPlansOrderIsRespected() {
     let state = State()
     state.boolean = false
 
-    let scheduler = Scheduler()
+    let runtime = Runtime()
 
-    scheduler.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
-    scheduler.addPlan(ChangeBoolean(desiredBoolean: false), to: state)
+    runtime.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
+    runtime.addPlan(ChangeBoolean(desiredBoolean: false), to: state)
 
     XCTAssertEqual(state.boolean, false)
 
-    scheduler.addPlan(ChangeBoolean(desiredBoolean: false), to: state)
-    scheduler.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
+    runtime.addPlan(ChangeBoolean(desiredBoolean: false), to: state)
+    runtime.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
 
     XCTAssertEqual(state.boolean, true)
   }
 
-  // Verify that we're unable to request a delegated performance token after the scheduler has been
+  // Verify that we're unable to request a delegated performance token after the runtime has been
   // released.
   func testPostDeallocTokenGenerationIsIgnored() {
-    var scheduler: Scheduler? = Scheduler()
+    var runtime: Runtime? = Runtime()
 
     let plan = HijackedIsActiveTokenGenerator()
-    scheduler!.addPlan(plan, to: NSObject())
+    runtime!.addPlan(plan, to: NSObject())
 
-    // Force the scheduler to be deallocated.
-    scheduler = nil
+    // Force the runtime to be deallocated.
+    runtime = nil
 
     XCTAssertNil(plan.state.tokenGenerator!.generate())
   }
 
   func testAddingNamedPlan() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
 
-    scheduler.addPlan(firstViewTargetAlteringPlan, named: "common_name", to: target)
+    runtime.addPlan(firstViewTargetAlteringPlan, named: "common_name", to: target)
 
     XCTAssertTrue(target.text! == "addPlanInvoked")
   }
 
   func testAddAndRemoveTheSameNamedPlan() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
 
-    scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
-    scheduler.removePlan(named: "name_one", from: target)
+    runtime.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
+    runtime.removePlan(named: "name_one", from: target)
 
     XCTAssertTrue(target.text! == "addPlanInvokedremovePlanInvoked")
   }
 
   func testRemoveNamedPlanThatIsntThere() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
 
-    scheduler.addPlan(firstViewTargetAlteringPlan, named: "common_name", to: target)
-    scheduler.removePlan(named: "was_never_added_plan", from: target)
+    runtime.addPlan(firstViewTargetAlteringPlan, named: "common_name", to: target)
+    runtime.removePlan(named: "was_never_added_plan", from: target)
 
     XCTAssertTrue(target.text! == "addPlanInvoked")
   }
 
   func testNamedPlansOverwiteOneAnother() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
     let planA = IncrementerTargetPlan()
     let planB = IncrementerTargetPlan()
-    scheduler.addPlan(planA, named: "common_name", to: incrementerTarget)
-    scheduler.addPlan(planB, named: "common_name", to: incrementerTarget)
+    runtime.addPlan(planA, named: "common_name", to: incrementerTarget)
+    runtime.addPlan(planB, named: "common_name", to: incrementerTarget)
 
     XCTAssertTrue(incrementerTarget.addCounter == 2)
     XCTAssertTrue(incrementerTarget.removeCounter == 1)
   }
 
   func testNamedPlansMakeAddAndRemoveCallbacks() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
     let plan = ViewTargetAltering()
-    scheduler.addPlan(plan, named: "one_name", to: target)
-    scheduler.removePlan(named: "one_name", from: target)
-    scheduler.addPlan(plan, named: "two_name", to: target)
+    runtime.addPlan(plan, named: "one_name", to: target)
+    runtime.removePlan(named: "one_name", from: target)
+    runtime.addPlan(plan, named: "two_name", to: target)
 
     XCTAssertTrue(target.text! == "addPlanInvokedremovePlanInvokedaddPlanInvoked")
   }
 
   func testAddingTheSameNamedPlanTwiceToTheSameTarget() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
     let plan = IncrementerTargetPlan()
-    scheduler.addPlan(plan, named: "one", to: incrementerTarget)
-    scheduler.addPlan(plan, named: "one", to: incrementerTarget)
+    runtime.addPlan(plan, named: "one", to: incrementerTarget)
+    runtime.addPlan(plan, named: "one", to: incrementerTarget)
 
     XCTAssertTrue(incrementerTarget.addCounter == 2)
     XCTAssertTrue(incrementerTarget.removeCounter == 1)
   }
 
   func testAddingTheSamePlanWithSimilarNamesToTheSameTarget() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
     let firstPlan = IncrementerTargetPlan()
-    scheduler.addPlan(firstPlan, named: "one", to: incrementerTarget)
-    scheduler.addPlan(firstPlan, named: "One", to: incrementerTarget)
-    scheduler.addPlan(firstPlan, named: "1", to: incrementerTarget)
-    scheduler.addPlan(firstPlan, named: "ONE", to: incrementerTarget)
+    runtime.addPlan(firstPlan, named: "one", to: incrementerTarget)
+    runtime.addPlan(firstPlan, named: "One", to: incrementerTarget)
+    runtime.addPlan(firstPlan, named: "1", to: incrementerTarget)
+    runtime.addPlan(firstPlan, named: "ONE", to: incrementerTarget)
 
     XCTAssertTrue(incrementerTarget.addCounter == 4)
     XCTAssertTrue(incrementerTarget.removeCounter == 0)
   }
 
   func testAddingTheSameNamedPlanToDifferentTargets() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
     let firstPlan = IncrementerTargetPlan()
     let secondIncrementerTarget = IncrementerTarget()
-    scheduler.addPlan(firstPlan, named: "one", to: incrementerTarget)
-    scheduler.addPlan(firstPlan, named: "one", to: secondIncrementerTarget)
+    runtime.addPlan(firstPlan, named: "one", to: incrementerTarget)
+    runtime.addPlan(firstPlan, named: "one", to: secondIncrementerTarget)
 
     XCTAssertTrue(incrementerTarget.addCounter == 1)
     XCTAssertTrue(incrementerTarget.removeCounter == 0)
@@ -275,40 +275,40 @@ class SchedulerTests: XCTestCase {
   }
 
   func testNamedPlanOnlyInvokesNamedCallbacks() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
     let plan = ViewTargetAltering()
-    scheduler.addPlan(plan, named: "one_name", to: target)
+    runtime.addPlan(plan, named: "one_name", to: target)
 
     XCTAssertTrue(target.text!.range(of: "addInvoked") == nil)
   }
 
   func testPlanOnlyInvokesPlanCallbacks() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
     let plan = RegularPlanTargetAlteringPlan()
-    scheduler.addPlan(plan, to: target)
+    runtime.addPlan(plan, to: target)
 
     XCTAssertTrue(target.text!.range(of: "addPlanInvoked") == nil)
     XCTAssertTrue(target.text!.range(of: "removePlanInvoked") == nil)
   }
 
   func testNamedPlansReusePerformers() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
     let tracer = StorageTracer()
-    scheduler.addTracer(tracer)
+    runtime.addTracer(tracer)
 
-    scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
-    scheduler.removePlan(named: "name_one", from: target)
+    runtime.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
+    runtime.removePlan(named: "name_one", from: target)
 
     XCTAssertEqual(tracer.createdPerformers.count, 1)
   }
 
   func testNamedPlansAdditionsAreCommunicatedViaTracers() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
     let tracer = StorageTracer()
-    scheduler.addTracer(tracer)
+    runtime.addTracer(tracer)
 
-    scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
-    scheduler.removePlan(named: "name_one", from: target)
+    runtime.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
+    runtime.removePlan(named: "name_one", from: target)
 
     XCTAssertEqual(tracer.addedNamedPlans.count, 1)
     XCTAssertEqual(tracer.removedPlanNames.count, 1)
@@ -318,12 +318,12 @@ class SchedulerTests: XCTestCase {
   func testNamedPlansRespectTracers() {
     let differentPlan = ChangeBooleanNamedPlan(desiredBoolean:true)
     let state = State()
-    let scheduler = Scheduler()
+    let runtime = Runtime()
     let tracer = StorageTracer()
-    scheduler.addTracer(tracer)
+    runtime.addTracer(tracer)
 
-    scheduler.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
-    scheduler.addPlan(differentPlan, named: "name_two", to: state)
+    runtime.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
+    runtime.addPlan(differentPlan, named: "name_two", to: state)
 
     XCTAssertEqual(tracer.addedNamedPlans.count, 2)
 

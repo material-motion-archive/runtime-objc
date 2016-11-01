@@ -16,21 +16,21 @@
 
 #import "MDMPlanEmitter.h"
 
-#import "MDMScheduler.h"
+#import "MDMRuntime.h"
 
 @interface MDMPlanEmitter ()
 
-@property(nonatomic, weak) MDMScheduler *scheduler;
+@property(nonatomic, weak) MDMRuntime *runtime;
 @property(nonatomic, weak) id target;
 
 @end
 
 @implementation MDMPlanEmitter
 
-- (nonnull instancetype)initWithScheduler:(nonnull MDMScheduler *)scheduler target:(nonnull id)target {
+- (nonnull instancetype)initWithRuntime:(nonnull MDMRuntime *)runtime target:(nonnull id)target {
   self = [super init];
   if (self) {
-    self.scheduler = scheduler;
+    self.runtime = runtime;
     self.target = target;
   }
   return self;
@@ -39,10 +39,10 @@
 #pragma mark - MDMPlanEmitting
 
 - (void)emitPlan:(NSObject<MDMPlan> *)plan {
-  if (!self.scheduler || !self.target) {
+  if (!self.runtime || !self.target) {
     return;
   }
-  [self.scheduler addPlan:plan to:self.target];
+  [self.runtime addPlan:plan to:self.target];
 }
 
 @end

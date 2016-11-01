@@ -25,7 +25,7 @@ class ConsoleLoggingTracerTests: XCTestCase {
   var firstRegularPlan:InstantlyContinuous!
   var firstNamedPlan:ViewTargetAltering!
   var secondNamedPlan:ViewTargetAltering!
-  var scheduler:Scheduler!
+  var runtime:Runtime!
   var tracer:ConsoleLoggingTracer!
 
   override func setUp() {
@@ -47,7 +47,7 @@ class ConsoleLoggingTracerTests: XCTestCase {
     firstRegularPlan = InstantlyContinuous()
     firstNamedPlan = ViewTargetAltering()
     secondNamedPlan = ViewTargetAltering()
-    scheduler = Scheduler()
+    runtime = Runtime()
     tracer = ConsoleLoggingTracer()
   }
 
@@ -82,11 +82,11 @@ class ConsoleLoggingTracerTests: XCTestCase {
   }
 
   func testEmojiCharactersInTheTracers() {
-    scheduler.addTracer(tracer)
+    runtime.addTracer(tracer)
 
-    scheduler.addPlan(firstNamedPlan, named: "🐶", to: target)
-    scheduler.addPlan(secondNamedPlan, named: "🐱", to: target)
-    scheduler.removePlan(named: "🐱", from: target)
+    runtime.addPlan(firstNamedPlan, named: "🐶", to: target)
+    runtime.addPlan(secondNamedPlan, named: "🐱", to: target)
+    runtime.removePlan(named: "🐱", from: target)
 
     do {
       let text = try String(contentsOfFile: logPath, encoding: String.Encoding.utf8)
@@ -102,12 +102,12 @@ class ConsoleLoggingTracerTests: XCTestCase {
   }
 
   func testPlanOperationsRespectLoggingTracer() {
-    scheduler.addTracer(tracer)
+    runtime.addTracer(tracer)
 
-    scheduler.addPlan(firstRegularPlan, to: target)
-    scheduler.addPlan(firstNamedPlan, named: "name_one", to: target)
-    scheduler.addPlan(secondNamedPlan, named: "name_two", to: target)
-    scheduler.removePlan(named: "name_one", from: target)
+    runtime.addPlan(firstRegularPlan, to: target)
+    runtime.addPlan(firstNamedPlan, named: "name_one", to: target)
+    runtime.addPlan(secondNamedPlan, named: "name_two", to: target)
+    runtime.removePlan(named: "name_one", from: target)
 
     do {
       let text = try String(contentsOfFile: logPath, encoding: String.Encoding.utf8)

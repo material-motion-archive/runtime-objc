@@ -17,10 +17,10 @@
 import XCTest
 import MaterialMotionRuntime
 
-class TestSchedulerDelegate: NSObject, SchedulerDelegate {
+class TestRuntimeDelegate: NSObject, RuntimeDelegate {
   var activityStateDidChange = false
 
-  func schedulerActivityStateDidChange(_ scheduler: Scheduler) {
+  func runtimeActivityStateDidChange(_ runtime: Runtime) {
     self.activityStateDidChange = true
   }
 }

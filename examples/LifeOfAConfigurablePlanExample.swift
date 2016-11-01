@@ -23,7 +23,7 @@ import MaterialMotionRuntime
 // associated with the view controller's root view, allowing us to drag the square by touching
 // anywhere in the view controller.
 class LifeOfAConfigurablePlanViewController: UIViewController {
-  let scheduler = Scheduler()
+  let runtime = Runtime()
 
   func commonInit() {
     self.title = "Touch anywhere to drag the square"
@@ -45,7 +45,7 @@ class LifeOfAConfigurablePlanViewController: UIViewController {
     let panGestureRecognizer = UIPanGestureRecognizer()
     view.addGestureRecognizer(panGestureRecognizer)
 
-    scheduler.addPlan(Draggable(panGestureRecognizer: panGestureRecognizer), to: squareView)
+    runtime.addPlan(Draggable(panGestureRecognizer: panGestureRecognizer), to: squareView)
   }
 
   // MARK: Routing initializers

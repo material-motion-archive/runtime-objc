@@ -18,17 +18,17 @@ import UIKit
 import MaterialMotionRuntime
 
 // This example demonstrates the development a new plan/performer pair and the committment of the
-// plan to a scheduler. We create a "Draggable" plan that enables its associated view to be dragged.
+// plan to a runtime. We create a "Draggable" plan that enables its associated view to be dragged.
 class LifeOfAPlanViewController: UIViewController {
 
   func commonInit() {
     self.title = "Touch the square to drag it"
   }
 
-  // We create a single Scheduler for the lifetime of this view controller. How many schedulers you
+  // We create a single Runtime for the lifetime of this view controller. How many runtimes you
   // decide to create is a matter of preference, but generally speaking it's fair to create one
-  // scheduler per self-contained interaction or transition.
-  let scheduler = Scheduler()
+  // runtime per self-contained interaction or transition.
+  let runtime = Runtime()
 
   // MARK: Configuring views and interactions
 
@@ -42,7 +42,7 @@ class LifeOfAPlanViewController: UIViewController {
     view.addSubview(squareView)
 
     // Associate a Draggable plan with squareView.
-    scheduler.addPlan(Draggable(), to: squareView)
+    runtime.addPlan(Draggable(), to: squareView)
   }
 
   // MARK: Routing initializers

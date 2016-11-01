@@ -21,21 +21,21 @@ import MaterialMotionRuntime
 class CompositionTests: XCTestCase {
 
   func testComposedDelegationCausesActivityStateChange() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
 
-    let delegate = TestSchedulerDelegate()
-    scheduler.delegate = delegate
+    let delegate = TestRuntimeDelegate()
+    runtime.delegate = delegate
 
-    scheduler.addPlan(Emit(plan: InstantlyContinuous()), to: NSObject())
+    runtime.addPlan(Emit(plan: InstantlyContinuous()), to: NSObject())
 
     // The following steps are now expected to have occurred:
     //
-    // 1. The Emit plan was committed to the scheduler.
+    // 1. The Emit plan was committed to the runtime.
     // 2. The Emit plan's performer emitted the InstantlyContinuous plan.
-    // 3. The InstantlyContinuous plan changed the scheduler's activity state by immediately starting
+    // 3. The InstantlyContinuous plan changed the runtime's activity state by immediately starting
     //    and completing some delegated work.
 
     XCTAssertTrue(delegate.activityStateDidChange)
-    XCTAssertTrue(scheduler.activityState == .idle)
+    XCTAssertTrue(runtime.activityState == .idle)
   }
 }

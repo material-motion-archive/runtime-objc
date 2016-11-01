@@ -22,25 +22,25 @@
 
 /**
  A tracer object may implement a variety of hooks for the purposes of observing changes to the
- internal workings of a scheduler.
+ internal workings of a runtime.
  */
 NS_SWIFT_NAME(Tracing)
 @protocol MDMTracing <NSObject>
 @optional
 
-/** Invoked after a plan has been added to the scheduler. */
+/** Invoked after a plan has been added to the runtime. */
 - (void)didAddPlan:(nonnull id<MDMPlan>)plan to:(nonnull id)target
     NS_SWIFT_NAME(didAddPlan(_:to:));
 
-/** Invoked after a named plan has been added to the scheduler. */
+/** Invoked after a named plan has been added to the runtime. */
 - (void)didAddPlan:(nonnull id<MDMNamedPlan>)plan named:(nonnull NSString *)name to:(nonnull id)target
     NS_SWIFT_NAME(didAddPlan(_:named:to:));
 
-/** Invoked when a named plan is removed from the scheduler. */
+/** Invoked when a named plan is removed from the runtime. */
 - (void)didRemovePlanNamed:(nonnull NSString *)name from:(nonnull id)target
     NS_SWIFT_NAME(didRemovePlanNamed(_:from:));
 
-/** Invoked after a performer has been created by the scheduler. */
+/** Invoked after a performer has been created by the runtime. */
 - (void)didCreatePerformer:(nonnull id<MDMPerforming>)performer for:(nonnull id)target
     NS_SWIFT_NAME(didCreatePerformer(_:for:));
 

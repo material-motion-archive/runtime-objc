@@ -21,9 +21,9 @@
 // clang-format off
 /**
  The MDMTransaction class acts as a register of operations that may be committed to an instance of
- MDMScheduler.
+ MDMRuntime.
  */
-__deprecated_msg("Add plans directly to a scheduler instead.")
+__deprecated_msg("Add plans directly to a runtime instead.")
 NS_SWIFT_NAME(Transaction)
 @interface MDMTransaction : NSObject
 
@@ -33,7 +33,7 @@ NS_SWIFT_NAME(Transaction)
 - (void)addPlan:(nonnull id<MDMPlan>)plan
        toTarget:(nonnull id)target
 NS_SWIFT_NAME(add(plan:to:))
-__deprecated_msg("Add plans directly to a scheduler instead.");
+__deprecated_msg("Add plans directly to a runtime instead.");
 
 @end
     // clang-format on

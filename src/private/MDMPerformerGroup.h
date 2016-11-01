@@ -17,7 +17,7 @@
 #import <Foundation/Foundation.h>
 
 @class MDMPerformerInfo;
-@class MDMScheduler;
+@class MDMRuntime;
 @class MDMTrace;
 @class MDMTransactionLog;
 @protocol MDMIsActiveTokenable;
@@ -28,7 +28,7 @@
 /** An entity responsible for managing the performers associated with a given target. */
 @interface MDMPerformerGroup : NSObject
 
-- (nonnull instancetype)initWithTarget:(nonnull id)target scheduler:(nonnull MDMScheduler *)scheduler NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithTarget:(nonnull id)target runtime:(nonnull MDMRuntime *)runtime NS_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)init NS_UNAVAILABLE;
 
 @property(nonatomic, nonnull, readonly) id target;
@@ -36,7 +36,7 @@
 @property(nonatomic, nullable, weak) id<MDMPerformerGroupDelegate> delegate;
 
 // nil by default. Useful for view duplication.
-@property(nonatomic, nullable) id schedulerTarget;
+@property(nonatomic, nullable) id runtimeTarget;
 
 - (void)addPlan:(nonnull id<MDMPlan>)plan to:(nonnull id)target;
 

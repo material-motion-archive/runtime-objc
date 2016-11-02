@@ -80,18 +80,19 @@ class LifeOfAPlanViewController: UIViewController {
     // App code should only ever think in terms of Plan types, so we've made our Performer type a
     // private implementation detail.
     private class Performer: NSObject, Performing {
+      let gestureRecognizer: UIPanGestureRecognizer
 
       // Performers must implement the init(target:) initializer. The target is the object to which
       // the plan was associated and to which the performer should apply modifications.
       let target: UIView
       required init(target: Any) {
         self.target = target as! UIView
-        super.init()
-      }
+        gestureRecognizer = UIPanGestureRecognizer()
 
-      let gestureRecognizer = UIPanGestureRecognizer(target: self,
-                                                     action: #selector(didPan(gestureRecognizer:)))
-      public func addPlan(_ plan: Plan) {
+        super.init()
+
+        gestureRecognizer.addTarget(self, action: #selector(didPan(gestureRecognizer:)))
+
         // For this example our performer adds a gesture recognizer to the view. This has the
         // advantage of simplifying our view controller code; associate a Draggable plan with our
         // view and we're done.
@@ -102,9 +103,12 @@ class LifeOfAPlanViewController: UIViewController {
         // - What if we'd like to register the gesture recognizer to a different view?
         //
         // We explore answers to these questions in LifeOfAConfigurablePlan.
-        if gestureRecognizer.view == nil {
-          self.target.addGestureRecognizer(gestureRecognizer)
-        }
+        self.target.addGestureRecognizer(gestureRecognizer)
+      }
+
+      public func addPlan(_ plan: Plan) {
+        // We don't use the plan object in this example because everything is configured in the
+        // initializer.
       }
 
       // Extract translation values from the pan gesture recognizer and add them to the view's center

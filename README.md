@@ -11,7 +11,7 @@ This library does not do much on its own. What it does do, however, is enable th
 motion as discrete units of data that can be introspected, composed, and sent over a wire.
 
 This library encourages you to describe motion as data, or what we call *plans*. Plans are committed
-to a *scheduler*. A scheduler coordinates the creation of *performers*, objects responsible for
+to a *runtime*. A runtime coordinates the creation of *performers*, objects responsible for
 translating plans into concrete execution.
 
 ## Installation
@@ -55,25 +55,26 @@ commands:
 
 1. [Architecture](#architecture)
 1. [How to define a new plan and performer type](#how-to-create-a-new-plan-and-performer-type)
-1. [How to commit a plan to a scheduler](#how-to-commit-a-plan-to-a-scheduler)
-1. [How to commit a named plan to a scheduler](#how-to-commit-a-named-plan-to-a-scheduler)
+1. [How to commit a plan to a runtime](#how-to-commit-a-plan-to-a-runtime)
+1. [How to commit a named plan to a runtime](#how-to-commit-a-named-plan-to-a-runtime)
 1. [How to configure performers with plans](#how-to-configure-performers-with-plans)
 1. [How to configure performers with named plans](#how-to-configure-performers-with-named-plans)
 1. [How to use composition to fulfill plans](#how-to-use-composition-to-fulfill-plans)
 1. [How to indicate continuous performance](#how-to-indicate-continuous-performance)
-1. [How to trace internal scheduler events](#how-to-trace-internal-scheduler-events)
+1. [How to trace internal runtime events](#how-to-trace-internal-runtime-events)
+1. [How to log runtime events to the console](#how-to-log-runtime-events-to-the-console)
 
 ## Architecture
 
-The Material Motion Runtime consists of two groups of APIs: a scheduler/transaction object and a
+The Material Motion Runtime consists of two groups of APIs: a runtime/transaction object and a
 constellation of protocols loosely consisting of plan and performing types.
 
-### Scheduler
+### Runtime
 
-The [Scheduler](https://material-motion.github.io/material-motion-runtime-objc/Classes/MDMScheduler.html)
+The [Runtime](https://material-motion.github.io/material-motion-runtime-objc/Classes/MDMRuntime.html)
 object is a coordinating entity whose primary responsibility is to fulfill plans by creating
-performers. You can create many schedulers throughout the lifetime of your application. A good rule
-of thumb is to have one scheduler per interaction or transition.
+performers. You can create many runtimes throughout the lifetime of your application. A good rule
+of thumb is to have one runtime per interaction or transition.
 
 ### Plan + Performing types
 
@@ -219,9 +220,9 @@ class <#Plan#>: NSObject, Plan {
 }
 ```
 
-## How to commit a plan to a scheduler
+## How to commit a plan to a runtime
 
-### Step 1: Create and store a reference to a scheduler instance
+### Step 1: Create and store a reference to a runtime instance
 
 Code snippets:
 
@@ -229,12 +230,12 @@ Code snippets:
 
 ```objc
 @interface MyClass ()
-@property(nonatomic, strong) MDMScheduler* scheduler;
+@property(nonatomic, strong) MDMRuntime* runtime;
 @end
 
 - (instancetype)init... {
   ...
-  self.scheduler = [MDMScheduler new];
+  self.runtime = [MDMRuntime new];
   ...
 }
 ```
@@ -243,7 +244,7 @@ Code snippets:
 
 ```swift
 class MyClass {
-  let scheduler = Scheduler()
+  let runtime = Runtime()
 }
 ```
 
@@ -254,18 +255,18 @@ Code snippets:
 ***In Objective-C:***
 
 ```objc
-[scheduler addPlan:<#Plan instance#> to:<#View instance#>];
+[runtime addPlan:<#Plan instance#> to:<#View instance#>];
 ```
 
 ***In Swift:***
 
 ```swift
-scheduler.addPlan(<#Plan instance#>, to:<#View instance#>)
+runtime.addPlan(<#Plan instance#>, to:<#View instance#>)
 ```
 
-## How to commit a named plan to a scheduler
+## How to commit a named plan to a runtime
 
-### Step 1: Create and store a reference to a scheduler instance
+### Step 1: Create and store a reference to a runtime instance
 
 Code snippets:
 
@@ -273,12 +274,12 @@ Code snippets:
 
 ```objc
 @interface MyClass ()
-@property(nonatomic, strong) MDMScheduler* scheduler;
+@property(nonatomic, strong) MDMRuntime* runtime;
 @end
 
 - (instancetype)init... {
   ...
-  self.scheduler = [MDMScheduler new];
+  self.runtime = [MDMRuntime new];
   ...
 }
 ```
@@ -287,7 +288,7 @@ Code snippets:
 
 ```swift
 class MyClass {
-  let scheduler = Scheduler()
+  let runtime = Runtime()
 }
 ```
 
@@ -298,13 +299,13 @@ Code snippets:
 ***In Objective-C:***
 
 ```objc
-[scheduler addPlan:<#Plan instance#> named:<#name#> to:<#View instance#>];
+[runtime addPlan:<#Plan instance#> named:<#name#> to:<#View instance#>];
 ```
 
 ***In Swift:***
 
 ```swift
-scheduler.addPlan(<#Plan instance#>, named:<#name#>, to:<#View instance#>)
+runtime.addPlan(<#Plan instance#>, named:<#name#>, to:<#View instance#>)
 ```
 
 ## How to configure performers with plans
@@ -478,8 +479,8 @@ emitter.emitPlan<#T##Plan#>)
 Performers will often perform their actions over a period of time or while an interaction is
 active. These types of performers are called continuous performers.
 
-A continuous performer is able to affect the active state of the scheduler by generating is-active
-tokens. The scheduler is considered active so long as an is-active token exists and has not been
+A continuous performer is able to affect the active state of the runtime by generating is-active
+tokens. The runtime is considered active so long as an is-active token exists and has not been
 terminated. Continuous performers are expected to terminate a token when its corresponding work has
 completed.
 
@@ -562,9 +563,9 @@ Code snippets:
 token.terminate()
 ```
 
-## How to trace internal scheduler events
+## How to trace internal runtime events
 
-Tracing allows you to observe internal events occuring within a scheduler. This information may be
+Tracing allows you to observe internal events occuring within a runtime. This information may be
 used for the following purposes:
 
 - Debug logging.
@@ -619,6 +620,22 @@ class <#Custom tracer#>: NSObject, Tracing {
 
   }
 }
+```
+
+## How to log runtime events to the console
+
+Code snippets:
+
+***In Objective-C:***
+
+```objc
+[runtime addTracer:[MDMConsoleLoggingTracer new]];
+```
+
+***In Swift:***
+
+```swift
+runtime.addTracer(ConsoleLoggingTracer())
 ```
 
 ## Contributing

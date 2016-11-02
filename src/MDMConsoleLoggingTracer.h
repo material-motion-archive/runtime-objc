@@ -14,13 +14,15 @@
  limitations under the License.
  */
 
-import XCTest
-import MaterialMotionRuntime
+#import <Foundation/Foundation.h>
 
-class TestSchedulerDelegate: NSObject, SchedulerDelegate {
-  var activityStateDidChange = false
+#import "MDMTracing.h"
 
-  func schedulerActivityStateDidChange(_ scheduler: Scheduler) {
-    self.activityStateDidChange = true
-  }
-}
+/**
+ An instance of a logging tracer added to a Runtime instance will output all Tracing
+ invocation names and parameters to the console.
+ */
+NS_SWIFT_NAME(ConsoleLoggingTracer)
+@interface MDMConsoleLoggingTracer : NSObject <MDMTracing>
+
+@end

@@ -22,7 +22,7 @@ import MaterialMotionRuntime
 // tossable. The user can drag anywhere on the screen to grab the square. The square can then be
 // tossed in any direction and it will spring back to the center of the screen.
 class LifeOfAComposablePlanExampleController: UIViewController {
-  let scheduler = Scheduler()
+  let runtime = Runtime()
 
   func commonInit() {
     title = "Touch anywhere to toss the square"
@@ -45,7 +45,7 @@ class LifeOfAComposablePlanExampleController: UIViewController {
     // Notice that our view controller is only concerned with one plan: Tossable. This plan's
     // performer will coordinate the emission of plans in reaction to the gesture recognizer's
     // events.
-    scheduler.addPlan(Tossable(gestureRecognizer: pan), to: square)
+    runtime.addPlan(Tossable(gestureRecognizer: pan), to: square)
   }
 
   // MARK: Routing initializers
@@ -82,7 +82,7 @@ private class Tossable: NSObject, Plan {
     return Tossable(gestureRecognizer: gestureRecognizer)
   }
 
-  private class Performer: NSObject, PlanPerforming, ComposablePerforming {
+  private class Performer: NSObject, ComposablePerforming {
     let target: UIView
     required init(target: Any) {
       self.target = target as! UIView
@@ -144,7 +144,7 @@ private class Impulse: NSObject {
 // Removes all active UIDynamics behaviors associated with the target.
 private class Grabbed: NSObject {}
 
-private class UIDynamicsPerformer: NSObject, PlanPerforming {
+private class UIDynamicsPerformer: NSObject, Performing {
   let target: UIView
   let dynamicAnimator: UIDynamicAnimator
   required init(target: Any) {

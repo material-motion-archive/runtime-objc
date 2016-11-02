@@ -16,14 +16,14 @@
 
 #import "MDMPerforming.h"
 
-@class MDMScheduler;
+@class MDMRuntime;
 
 @interface MDMPlanEmitter : NSObject <MDMPlanEmitting>
 
-/** Initialize a newly allocated emitter with the provided scheduler and target. */
-- (nonnull instancetype)initWithScheduler:(nonnull MDMScheduler *)scheduler target:(nonnull id)target;
+/** Initialize a newly allocated emitter with the provided runtime and target. */
+- (nonnull instancetype)initWithRuntime:(nonnull MDMRuntime *)runtime target:(nonnull id)target;
 
-/** Use initWithScheduler:target: instead. */
+/** Use initWithRuntime:target: instead. */
 - (nonnull instancetype)init NS_UNAVAILABLE;
 
 @end

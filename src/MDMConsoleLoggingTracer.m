@@ -14,33 +14,24 @@
  limitations under the License.
  */
 
-#import "MDMTransactionEmitter.h"
+#import "MDMConsoleLoggingTracer.h"
 
-#import "MDMScheduler.h"
+@implementation MDMConsoleLoggingTracer
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-@interface MDMTransactionEmitter ()
-
-@property(nonatomic, weak) MDMScheduler *scheduler;
-
-@end
-
-@implementation MDMTransactionEmitter
-
-- (instancetype)initWithScheduler:(MDMScheduler *)scheduler {
-  self = [super init];
-  if (self) {
-    self.scheduler = scheduler;
-  }
-  return self;
+- (void)didAddPlan:(id<MDMPlan>)plan to:(id)target {
+  NSLog(@"didAddPlan: %@ to: %@", plan, target);
 }
 
-#pragma mark - MDMTransactionEmitting
+- (void)didAddPlan:(id)plan named:(NSString *)name to:(id)target {
+  NSLog(@"didAddPlan: %@ named: %@ to: %@", plan, name, target);
+}
 
-- (void)emitTransaction:(nonnull MDMTransaction *)transaction {
-  [self.scheduler commitTransaction:transaction];
+- (void)didRemovePlanNamed:(NSString *)name from:(id)target {
+  NSLog(@"didRemovePlanNamed: %@ from: %@", name, target);
+}
+
+- (void)didCreatePerformer:(id<MDMPerforming>)performer for:(id)target {
+  NSLog(@"didCreatePerformer: %@ for: %@", performer, target);
 }
 
 @end
-#pragma clang diagnostic pop

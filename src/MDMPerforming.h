@@ -16,6 +16,9 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol MDMPlan;
+@protocol MDMNamedPlan;
+
 /**
  A class conforming to MDMPerforming is expected to implement the plan of motion described by objects
  that conform to MDMPlan.
@@ -28,18 +31,9 @@ NS_SWIFT_NAME(Performing)
 /** The receiver is expected to execute its plan to the provided target. */
 - (nonnull instancetype)initWithTarget:(nonnull id)target;
 
-@end
-
-@class MDMTransaction;
-@protocol MDMPlan;
-@protocol MDMNamedPlan;
-
-/** A class conforming to this protocol will be provided with plan instances. */
-
-NS_SWIFT_NAME(PlanPerforming)
-@protocol MDMPlanPerforming <MDMPerforming>
-
 #pragma mark Adding plans to a performer
+
+@optional
 
 /**
  Provides the performer with a plan.
@@ -60,7 +54,7 @@ NS_SWIFT_NAME(NamedPlanPerforming)
 
 /**
  Provides the performer with a plan and an associated name.
- 
+
  @param plan The plan that required this type of performer.
  @param name The name by which the plan can be identified.
  */
@@ -70,7 +64,7 @@ NS_SWIFT_NAME(NamedPlanPerforming)
 
 /**
  Removes a named plan from a performer.
- 
+
  @param name The name by which the plan can be identified.
  */
 - (void)removePlanNamed:(nonnull NSString *)name
@@ -86,8 +80,8 @@ NS_SWIFT_NAME(NamedPlanPerforming)
  A performer that conforms to MDMContinuousPerforming is able to request and release is-active
  tokens.
 
- The scheduler uses these tokens to inform its active state. If any performer owns an is-active
- token then the scheduler is active. Otherwise, the scheduler is idle.
+ The runtime uses these tokens to inform its active state. If any performer owns an is-active
+ token then the runtime is active. Otherwise, the runtime is idle.
 
  The performer should store a strong reference to the token generator. Request a token just before
  some continuous work is about to begin, such as adding an animation or starting a gesture
@@ -124,7 +118,7 @@ NS_SWIFT_NAME(IsActiveTokenable)
 #pragma mark Terminating an is-active token
 
 /**
- Remove the token from the pool of active tokens in the scheduler.
+ Remove the token from the pool of active tokens in the runtime.
 
  Subsequent invocations of this method will result in an assertion.
  */
@@ -141,7 +135,7 @@ NS_SWIFT_NAME(IsActiveTokenGenerating)
 
  The receiver of this token is expected to eventually invoke terminate on the token.
 
- May fail to generate a token if the performer's scheduler has been deallocated.
+ May fail to generate a token if the performer's runtime has been deallocated.
  */
 - (nullable id<MDMIsActiveTokenable>)generate;
 
@@ -150,28 +144,15 @@ NS_SWIFT_NAME(IsActiveTokenGenerating)
 #pragma mark - Composition
 
 /**
- A plan emitter allows an object to emit new plans to a backing scheduler for the target to which
- the performer is associated.
+ A plan emitter allows an object to emit new plans to a backing runtime for the target to which the
+ performer is associated.
  */
 NS_SWIFT_NAME(PlanEmitting)
 @protocol MDMPlanEmitting <NSObject>
 
-/** Emit a new plan. The plan will immediately be added to the backing scheduler. */
+/** Emit a new plan. The plan will immediately be added to the backing runtime. */
 - (void)emitPlan:(nonnull NSObject<MDMPlan> *)plan
     NS_SWIFT_NAME(emitPlan(_:));
-
-@end
-
-// clang-format off
-/** A transaction emitter allows a performer to commit new plans to a scheduler. */
-__deprecated_msg("Use PlanEmitting instead.")
-NS_SWIFT_NAME(TransactionEmitting)
-@protocol MDMTransactionEmitting <NSObject>
-
-/** Emit a new transaction. The transaction will immediately be committed to the scheduler. */
-- (void)emitTransaction:(nonnull MDMTransaction*)transaction
-    NS_SWIFT_NAME(emit(transaction:))
-    __deprecated_msg("Use PlanEmitting instead.");
 
 @end
 
@@ -179,22 +160,33 @@ NS_SWIFT_NAME(TransactionEmitting)
 NS_SWIFT_NAME(ComposablePerforming)
 @protocol MDMComposablePerforming <MDMPerforming>
 
-@optional
-
 #pragma mark Composable performing
-
-@optional // TODO: Make required after next release.
 
 /** The performer is provided a plan emitter shortly after initialization. */
 - (void)setPlanEmitter:(nonnull id<MDMPlanEmitting>)planEmitter
     NS_SWIFT_NAME(setPlanEmitter(_:));
 
-@optional
+@end
 
-/** The performer will be provided with a method for initiating a new transaction. */
-- (void)setTransactionEmitter:(nonnull id<MDMTransactionEmitting>)transactionEmitter
-    NS_SWIFT_NAME(set(transactionEmitter:))
-__deprecated_msg("Use setPlanEmitter instead.");
+// clang-format off
+
+/** A class conforming to this protocol will be provided with plan instances. */
+__deprecated_msg("Conform to Performing instead. Deprecated in v4.0.0.")
+NS_SWIFT_NAME(PlanPerforming)
+@protocol MDMPlanPerforming <MDMPerforming>
+
+#pragma mark Adding plans to a performer
+
+/**
+ Provides the performer with a plan.
+
+ The performer may choose to store this plan or to simply extract necessary information and cache
+ it separately.
+
+ @param plan The plan that required this type of performer.
+ */
+- (void)addPlan:(nonnull id<MDMPlan>)plan
+    NS_SWIFT_NAME(addPlan(_:));
 
 @end
     // clang-format on

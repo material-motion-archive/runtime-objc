@@ -14,18 +14,13 @@
  limitations under the License.
  */
 
-#import "MDMTrace.h"
+import XCTest
+import MaterialMotionRuntime
 
-@implementation MDMTrace
+class TestRuntimeDelegate: NSObject, RuntimeDelegate {
+  var activityStateDidChange = false
 
-- (instancetype)init {
-  self = [super init];
-  if (self) {
-    _createdPerformers = [NSMutableSet set];
-    _committedAddPlans = [NSMutableArray array];
-    _committedRemovePlans = [NSMutableArray array];
+  func runtimeActivityStateDidChange(_ runtime: Runtime) {
+    self.activityStateDidChange = true
   }
-  return self;
 }
-
-@end

@@ -21,26 +21,26 @@ import MaterialMotionRuntime
 class ContinuousPerformingTests: XCTestCase {
 
   func testContinuousPerformerCausesActivityStateChange() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
 
-    let delegate = TestSchedulerDelegate()
-    scheduler.delegate = delegate
+    let delegate = TestRuntimeDelegate()
+    runtime.delegate = delegate
 
-    scheduler.addPlan(InstantlyContinuous(), to: NSObject())
+    runtime.addPlan(InstantlyContinuous(), to: NSObject())
 
     XCTAssertTrue(delegate.activityStateDidChange)
-    XCTAssertTrue(scheduler.activityState == .idle)
+    XCTAssertTrue(runtime.activityState == .idle)
   }
 
   func testForeverContinuousPerformerCausesActivityStateChange() {
-    let scheduler = Scheduler()
+    let runtime = Runtime()
 
-    let delegate = TestSchedulerDelegate()
-    scheduler.delegate = delegate
+    let delegate = TestRuntimeDelegate()
+    runtime.delegate = delegate
 
-    scheduler.addPlan(ForeverContinuous(), to: NSObject())
+    runtime.addPlan(ForeverContinuous(), to: NSObject())
 
     XCTAssertTrue(delegate.activityStateDidChange)
-    XCTAssertTrue(scheduler.activityState == .active)
+    XCTAssertTrue(runtime.activityState == .active)
   }
 }

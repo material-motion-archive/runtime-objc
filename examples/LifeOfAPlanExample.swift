@@ -18,17 +18,17 @@ import UIKit
 import MaterialMotionRuntime
 
 // This example demonstrates the development a new plan/performer pair and the committment of the
-// plan to a scheduler. We create a "Draggable" plan that enables its associated view to be dragged.
+// plan to a runtime. We create a "Draggable" plan that enables its associated view to be dragged.
 class LifeOfAPlanViewController: UIViewController {
 
   func commonInit() {
     self.title = "Touch the square to drag it"
   }
 
-  // We create a single Scheduler for the lifetime of this view controller. How many schedulers you
+  // We create a single Runtime for the lifetime of this view controller. How many runtimes you
   // decide to create is a matter of preference, but generally speaking it's fair to create one
-  // scheduler per self-contained interaction or transition.
-  let scheduler = Scheduler()
+  // runtime per self-contained interaction or transition.
+  let runtime = Runtime()
 
   // MARK: Configuring views and interactions
 
@@ -42,7 +42,7 @@ class LifeOfAPlanViewController: UIViewController {
     view.addSubview(squareView)
 
     // Associate a Draggable plan with squareView.
-    scheduler.addPlan(Draggable(), to: squareView)
+    runtime.addPlan(Draggable(), to: squareView)
   }
 
   // MARK: Routing initializers
@@ -68,7 +68,7 @@ class LifeOfAPlanViewController: UIViewController {
   // plan.
   //
   // copy(zone:) is required by the NSCopying protocol. It is required because plans are copied when
-  // they're added to a transaction.
+  // they're added to a runtime.
   private class Draggable: NSObject, Plan {
     func performerClass() -> AnyClass {
       return Performer.self
@@ -80,14 +80,18 @@ class LifeOfAPlanViewController: UIViewController {
     // App code should only ever think in terms of Plan types, so we've made our Performer type a
     // private implementation detail.
     private class Performer: NSObject, Performing {
+      let gestureRecognizer: UIPanGestureRecognizer
 
       // Performers must implement the init(target:) initializer. The target is the object to which
       // the plan was associated and to which the performer should apply modifications.
       let target: UIView
       required init(target: Any) {
         self.target = target as! UIView
+        gestureRecognizer = UIPanGestureRecognizer()
 
         super.init()
+
+        gestureRecognizer.addTarget(self, action: #selector(didPan(gestureRecognizer:)))
 
         // For this example our performer adds a gesture recognizer to the view. This has the
         // advantage of simplifying our view controller code; associate a Draggable plan with our
@@ -99,10 +103,12 @@ class LifeOfAPlanViewController: UIViewController {
         // - What if we'd like to register the gesture recognizer to a different view?
         //
         // We explore answers to these questions in LifeOfAConfigurablePlan.
-
-        let gestureRecognizer = UIPanGestureRecognizer(target: self,
-                                                       action: #selector(didPan(gestureRecognizer:)))
         self.target.addGestureRecognizer(gestureRecognizer)
+      }
+
+      public func addPlan(_ plan: Plan) {
+        // We don't use the plan object in this example because everything is configured in the
+        // initializer.
       }
 
       // Extract translation values from the pan gesture recognizer and add them to the view's center

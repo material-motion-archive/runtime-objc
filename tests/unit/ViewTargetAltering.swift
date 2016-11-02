@@ -16,32 +16,38 @@
 
 import MaterialMotionRuntime
 
-/**
- A plan that immediately starts and completes some delegated work the first time a plan is
- added to a target.
- */
-class InstantlyContinuous: NSObject, Plan {
+class ViewTargetAltering: NSObject, NamedPlan {
+
   func performerClass() -> AnyClass {
     return Performer.self
   }
 
   public func copy(with zone: NSZone? = nil) -> Any {
-    return InstantlyContinuous()
+    return ViewTargetAltering()
   }
 
-  private class Performer: NSObject, ContinuousPerforming {
+  private class Performer: NSObject, NamedPlanPerforming {
     let target: Any
     required init(target: Any) {
       self.target = target
     }
 
-    public func addPlan(_ plan: Plan) {
-      // No-op
+    func addPlan(_ plan: Plan) {
+      if let unwrappedTarget = self.target as? UITextView {
+        unwrappedTarget.text = unwrappedTarget.text + "addInvoked"
+      }
     }
 
-    func set(isActiveTokenGenerator: IsActiveTokenGenerating) {
-      let token = isActiveTokenGenerator.generate()!
-      token.terminate()
+    func addPlan(_ plan: NamedPlan, named name: String) {
+      if let unwrappedTarget = self.target as? UITextView {
+        unwrappedTarget.text = unwrappedTarget.text + "addPlanInvoked"
+      }
+    }
+
+    func removePlan(named name: String) {
+      if let unwrappedTarget = self.target as? UITextView {
+        unwrappedTarget.text = unwrappedTarget.text + "removePlanInvoked"
+      }
     }
   }
 }

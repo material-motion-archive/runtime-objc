@@ -18,10 +18,20 @@ import MaterialMotionRuntime
 
 class StorageTracer: NSObject, Tracing {
   var addedPlans: [Plan] = []
+  var addedNamedPlans: [NamedPlan] = []
   var createdPerformers: [Performing] = []
+  var removedPlanNames: [String] = []
 
   func didAddPlan(_ plan: Plan, to target: Any) {
     addedPlans.append(plan)
+  }
+
+  func didAddPlan(_ plan: NamedPlan, named name: String, to target: Any) {
+    addedNamedPlans.append(plan)
+  }
+
+  func didRemovePlanNamed(_ name: String, from target: Any) {
+    removedPlanNames.append(name)
   }
 
   func didCreatePerformer(_ performer: Performing, for target: Any) {

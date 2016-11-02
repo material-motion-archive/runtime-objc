@@ -1,7 +1,7 @@
 module: MaterialMotionRuntime
-module_version: 4.0.0
+module_version: 5.0.0
 umbrella_header: src/MaterialMotionRuntime.h
 objc: true
 sdk: iphonesimulator
 github_url: https://github.com/material-motion/material-motion-runtime-objc
-github_file_prefix: https://github.com/material-motion/material-motion-runtime-objc/tree/v4.0.0
+github_file_prefix: https://github.com/material-motion/material-motion-runtime-objc/tree/v5.0.0

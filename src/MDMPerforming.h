@@ -33,6 +33,8 @@ NS_SWIFT_NAME(Performing)
 
 #pragma mark Adding plans to a performer
 
+@optional
+
 /**
  Provides the performer with a plan.
 
@@ -169,9 +171,9 @@ NS_SWIFT_NAME(ComposablePerforming)
 // clang-format off
 
 /** A class conforming to this protocol will be provided with plan instances. */
-__deprecated_msg("Conform to Performing instead.")
+__deprecated_msg("Conform to Performing instead. Deprecated in v4.0.0.")
 NS_SWIFT_NAME(PlanPerforming)
-@protocol MDMPlanPerforming<MDMPerforming>
+@protocol MDMPlanPerforming <MDMPerforming>
 
 #pragma mark Adding plans to a performer
 

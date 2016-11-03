@@ -194,24 +194,24 @@
 }
 
 - (void)notifyPlanAdded:(id<MDMPlan>)plan to:(id)target performer:(id<MDMPerforming>)performer {
+  if ([performer respondsToSelector:@selector(addPlan:)]) {
+    [performer addPlan:plan];
+  }
   for (id<MDMTracing> tracer in self.runtime.tracers) {
     if ([tracer respondsToSelector:@selector(didAddPlan:to:)]) {
       [tracer didAddPlan:plan to:target];
     }
   }
-  if ([performer respondsToSelector:@selector(addPlan:)]) {
-    [performer addPlan:plan];
-  }
 }
 
 - (void)notifyNamedPlanAdded:(id<MDMNamedPlan>)plan named:(NSString *)name to:(id)target performer:(id<MDMNamedPlanPerforming>)performer {
+  if ([performer respondsToSelector:@selector(addPlan:named:)]) {
+    [performer addPlan:plan named:name];
+  }
   for (id<MDMTracing> tracer in self.runtime.tracers) {
     if ([tracer respondsToSelector:@selector(didAddPlan:named:to:)]) {
       [tracer didAddPlan:plan named:name to:target];
     }
-  }
-  if ([performer respondsToSelector:@selector(addPlan:named:)]) {
-    [performer addPlan:plan named:name];
   }
 }
 

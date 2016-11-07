@@ -51,10 +51,10 @@
 - (void)addPlan:(nonnull id<MDMPlan>)plan to:(nonnull id)target {
   BOOL isNew = NO;
   id<MDMPerforming> performer = [self findOrCreatePerformerForPlan:plan isNew:&isNew];
-  [self notifyPlanAdded:plan to:target performer:performer];
   if (isNew) {
     [self notifyPerformerCreation:performer target:target];
   }
+  [self notifyPlanAdded:plan to:target performer:performer];
 }
 
 - (void)addPlan:(nonnull id<MDMNamedPlan>)plan named:(nonnull NSString *)name to:(nonnull id)target {
@@ -67,10 +67,10 @@
   MDMPerformerInfo *performerInfo = [self findOrCreatePerformerInfoForNamedPlan:plan named:name isNew:&isNew];
   id<MDMPerforming> performer = performerInfo.performer;
   self.performerPlanNameToPerformerInfo[name] = performerInfo;
-  [self notifyNamedPlanAdded:plan named:name to:target performer:(id<MDMNamedPlanPerforming>)performer];
   if (isNew) {
     [self notifyPerformerCreation:performer target:target];
   }
+  [self notifyNamedPlanAdded:plan named:name to:target performer:(id<MDMNamedPlanPerforming>)performer];
 }
 
 - (void)removePlanNamed:(nonnull NSString *)name from:(nonnull id)target {

@@ -17,6 +17,8 @@
 		66876C6B1D25ED610054CED4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66876C6A1D25ED610054CED4 /* Assets.xcassets */; };
 		66876C6E1D25ED610054CED4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66876C6C1D25ED610054CED4 /* LaunchScreen.storyboard */; };
 		668C9B001D91AA6600CB10EE /* ForeverContinuous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668C9AFF1D91AA6600CB10EE /* ForeverContinuous.swift */; };
+		669256F21DD6134C00F659E6 /* TimelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669256F11DD6134C00F659E6 /* TimelineTests.swift */; };
+		669256F51DD6138D00F659E6 /* StorageTimelineObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669256F31DD6138A00F659E6 /* StorageTimelineObserver.swift */; };
 		669F4A301D85F60A00B0C45C /* LifeOfAPlanExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669F4A2F1D85F60A00B0C45C /* LifeOfAPlanExample.swift */; };
 		669F4A321D86013A00B0C45C /* LifeOfAConfigurablePlanExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669F4A311D86013A00B0C45C /* LifeOfAConfigurablePlanExample.swift */; };
 		669F4A341D86073A00B0C45C /* TableOfContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669F4A331D86073A00B0C45C /* TableOfContents.swift */; };
@@ -60,6 +62,8 @@
 		66876C6D1D25ED610054CED4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		66876C6F1D25ED610054CED4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		668C9AFF1D91AA6600CB10EE /* ForeverContinuous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForeverContinuous.swift; sourceTree = "<group>"; };
+		669256F11DD6134C00F659E6 /* TimelineTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineTests.swift; sourceTree = "<group>"; };
+		669256F31DD6138A00F659E6 /* StorageTimelineObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageTimelineObserver.swift; sourceTree = "<group>"; };
 		669F4A2F1D85F60A00B0C45C /* LifeOfAPlanExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeOfAPlanExample.swift; sourceTree = "<group>"; };
 		669F4A311D86013A00B0C45C /* LifeOfAConfigurablePlanExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeOfAConfigurablePlanExample.swift; sourceTree = "<group>"; };
 		669F4A331D86073A00B0C45C /* TableOfContents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableOfContents.swift; path = ../../TableOfContents.swift; sourceTree = "<group>"; };
@@ -105,6 +109,7 @@
 			children = (
 				416436E11DC6D148009D242F /* ConsoleLoggingTracerTests.swift */,
 				66F0320E1D8336C70094B9C9 /* RuntimeTests.swift */,
+				669256F11DD6134C00F659E6 /* TimelineTests.swift */,
 				661369701D5BE7CB00F6830F /* CompositionTests.swift */,
 				6624C6421D466D7C00DF3108 /* ContinuousPerformingTests.swift */,
 				66F032131D8349440094B9C9 /* Helpers */,
@@ -185,6 +190,7 @@
 			children = (
 				6625A5521D467EBD00FD10F7 /* TestRuntimeDelegate.swift */,
 				66EF8FBD1DA1F67D003F063C /* StorageTracer.swift */,
+				669256F31DD6138A00F659E6 /* StorageTimelineObserver.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -410,11 +416,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				669256F51DD6138D00F659E6 /* StorageTimelineObserver.swift in Sources */,
 				6625A5531D467EBD00FD10F7 /* TestRuntimeDelegate.swift in Sources */,
 				668C9B001D91AA6600CB10EE /* ForeverContinuous.swift in Sources */,
 				416436E41DC6D236009D242F /* ViewTargetAltering.swift in Sources */,
 				66EF8FBE1DA1F67D003F063C /* StorageTracer.swift in Sources */,
 				416436E21DC6D148009D242F /* ConsoleLoggingTracerTests.swift in Sources */,
+				669256F21DD6134C00F659E6 /* TimelineTests.swift in Sources */,
 				66F0320F1D8336C70094B9C9 /* RuntimeTests.swift in Sources */,
 				661369711D5BE7CB00F6830F /* CompositionTests.swift in Sources */,
 				6624C6431D466D7C00DF3108 /* ContinuousPerformingTests.swift in Sources */,

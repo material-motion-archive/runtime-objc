@@ -565,7 +565,7 @@ token.terminate()
 
 ## How to trace internal runtime events
 
-Tracing allows you to observe internal events occuring within a runtime. This information may be
+Tracing allows you to observe internal events occurring within a runtime. This information may be
 used for the following purposes:
 
 - Debug logging.

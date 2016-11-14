@@ -16,22 +16,63 @@
 
 #import "MDMConsoleLoggingTracer.h"
 
+#import <objc/runtime.h>
+
+static NSString *debugDescriptionOfPlanProperties(NSObject<MDMPlan> *plan) {
+  NSMutableArray *propertyDescriptions = [NSMutableArray array];
+  unsigned int numberOfProperties = 0;
+  objc_property_t *properties = class_copyPropertyList([plan class], &numberOfProperties);
+  for (unsigned int ix = 0; ix < numberOfProperties; ix++) {
+    objc_property_t property = properties[ix];
+    const char *propName = property_getName(property);
+    if (propName) {
+      NSString *propertyName = [NSString stringWithCString:propName
+                                                  encoding:[NSString defaultCStringEncoding]];
+      const char *attributes = property_getAttributes(property);
+      NSString *propertyType = [NSString stringWithCString:attributes
+                                                  encoding:[NSString defaultCStringEncoding]];
+      NSArray *propertyTypeComponents = [propertyType componentsSeparatedByString:@"\""];
+      if ([propertyTypeComponents count] > 1) {
+        propertyType = propertyTypeComponents[1];
+      } else {
+        propertyType = @"@";
+      }
+
+      [propertyDescriptions addObject:[NSString stringWithFormat:
+                                                    @"  let %@: %@ = %@",
+                                                    propertyName,
+                                                    propertyType,
+                                                    [plan valueForKey:propertyName]]];
+    }
+  }
+  free(properties);
+
+  return [propertyDescriptions componentsJoinedByString:@"\n"];
+}
+
 @implementation MDMConsoleLoggingTracer
 
-- (void)didAddPlan:(id<MDMPlan>)plan to:(id)target {
-  NSLog(@"didAddPlan: %@ to: %@", plan, target);
+- (void)didAddPlan:(NSObject<MDMPlan> *)plan to:(id)target {
+  NSLog(@"didAddPlan to target: %@\nPlan: %@\n%@\n\n",
+        target,
+        NSStringFromClass([plan class]),
+        debugDescriptionOfPlanProperties(plan));
 }
 
 - (void)didAddPlan:(id)plan named:(NSString *)name to:(id)target {
-  NSLog(@"didAddPlan: %@ named: %@ to: %@", plan, name, target);
+  NSLog(@"didAddPlan named %@ to target: %@\nPlan: %@\n%@\n\n",
+        name,
+        target,
+        NSStringFromClass([plan class]),
+        debugDescriptionOfPlanProperties(plan));
 }
 
 - (void)didRemovePlanNamed:(NSString *)name from:(id)target {
-  NSLog(@"didRemovePlanNamed: %@ from: %@", name, target);
+  NSLog(@"didRemovePlan named %@ from target: %@\n\n", name, target);
 }
 
 - (void)didCreatePerformer:(id<MDMPerforming>)performer for:(id)target {
-  NSLog(@"didCreatePerformer: %@ for: %@", performer, target);
+  NSLog(@"didCreatePerformer: %@ for: %@\n\n", performer, target);
 }
 
 @end

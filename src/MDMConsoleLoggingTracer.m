@@ -71,8 +71,8 @@ static NSString *debugDescriptionOfPlanProperties(NSObject<MDMPlan> *plan) {
   NSLog(@"didRemovePlan named %@ from target: %@\n\n", name, target);
 }
 
-- (void)didCreatePerformer:(id<MDMPerforming>)performer for:(id)target {
-  NSLog(@"didCreatePerformer: %@ for: %@\n\n", performer, target);
+- (void)didCreatePerformer:(NSObject<MDMPerforming> *)performer for:(id)target {
+  NSLog(@"didCreatePerformer: %@ for: %@\n\n", NSStringFromClass([performer class]), target);
 }
 
 @end

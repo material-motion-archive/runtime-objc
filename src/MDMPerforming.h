@@ -96,8 +96,7 @@ NS_SWIFT_NAME(ContinuousPerforming)
 /**
  Invoked on the performer immediately after initialization.
 
- If the performer also conforms to MDMPlanPerforming then the token generator will be set before any
- add(plan:) invocations occur.
+ The token generator will be set before any add(plan:) invocations occur.
  */
 - (void)setIsActiveTokenGenerator:(nonnull id<MDMIsActiveTokenGenerating>)isActiveTokenGenerator
     NS_SWIFT_NAME(set(isActiveTokenGenerator:));
@@ -167,26 +166,3 @@ NS_SWIFT_NAME(ComposablePerforming)
     NS_SWIFT_NAME(setPlanEmitter(_:));
 
 @end
-
-// clang-format off
-
-/** A class conforming to this protocol will be provided with plan instances. */
-__deprecated_msg("Conform to Performing instead. Deprecated in v4.0.0.")
-NS_SWIFT_NAME(PlanPerforming)
-@protocol MDMPlanPerforming <MDMPerforming>
-
-#pragma mark Adding plans to a performer
-
-/**
- Provides the performer with a plan.
-
- The performer may choose to store this plan or to simply extract necessary information and cache
- it separately.
-
- @param plan The plan that required this type of performer.
- */
-- (void)addPlan:(nonnull id<MDMPlan>)plan
-    NS_SWIFT_NAME(addPlan(_:));
-
-@end
-    // clang-format on

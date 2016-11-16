@@ -1,6 +1,6 @@
 PODS:
   - CatalogByConvention (1.0.1)
-  - MaterialMotionRuntime (5.0.0)
+  - MaterialMotionRuntime (6.0.0)
 
 DEPENDENCIES:
   - CatalogByConvention
@@ -12,7 +12,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   CatalogByConvention: 0e471a53b232b83be30141379b3ff0ad3365c3ec
-  MaterialMotionRuntime: 620695e40aaf12f728342cef0b784b1d3eaa1125
+  MaterialMotionRuntime: 89cb395df1ce02134fc67a16b42dc4492b6c514c
 
 PODFILE CHECKSUM: 9e94138f00d1278bbeace599bb54e71380faeee2
 

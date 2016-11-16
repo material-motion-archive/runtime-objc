@@ -8,6 +8,8 @@
 
 ## New features
 
+### Timeline
+
 Timeline and TimelineScrubber provide an API for controlling time-based animations using arbitrary
 inputs.
 
@@ -20,6 +22,25 @@ timeline.scrubber = TimelineScrubber()
 
 // Changing the scrubber's timeOffset is expected to propagate to all associated animations.
 timeline.scrubber?.timeOffset = 0.3
+```
+
+### ConsoleLoggingTracer
+
+Plan values are now dumped to the console. Example output:
+
+```
+didAddPlan to target: <CALayer: 0x60800022ce80>
+Plan: MDMTween
+  let keyPath: NSString = transform.rotation.z
+  let duration: @ = 0.15
+  let delay: @ = 0
+  let values: NSArray = (
+    0,
+    "3.141592653589793"
+)
+  let keyPositions: NSArray = (null)
+  let timingFunctions: NSArray = (null)
+  let timeline: MDMTimeline = <MDMTimeline: 0x600000223240>
 ```
 
 ## Source changes

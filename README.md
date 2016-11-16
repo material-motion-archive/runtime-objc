@@ -57,7 +57,7 @@ commands:
 1. [How to define a new plan and performer type](#how-to-create-a-new-plan-and-performer-type)
 1. [How to commit a plan to a runtime](#how-to-commit-a-plan-to-a-runtime)
 1. [How to commit a named plan to a runtime](#how-to-commit-a-named-plan-to-a-runtime)
-1. [How to configure performers with plans](#how-to-configure-performers-with-plans)
+1. [How to handle multiple plan types in Swift](#how-to-handle-multiple-plan-types-in-swift)
 1. [How to configure performers with named plans](#how-to-configure-performers-with-named-plans)
 1. [How to use composition to fulfill plans](#how-to-use-composition-to-fulfill-plans)
 1. [How to indicate continuous performance](#how-to-indicate-continuous-performance)
@@ -133,7 +133,7 @@ class <#Plan#>: NSObject {
 
 Performers are responsible for fulfilling plans. Fulfillment is possible in a variety of ways:
 
-- [PlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPlanPerforming.html): [How to configure performers with plans](#how-to-configure-performers-with-plans)
+- [Performing](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPerforming.html): [How to configure performers with plans](#how-to-configure-performers-with-plans)
 - [NamedPlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMNamedPlanPerforming.html): [How to configure performers with named plans](#how-to-configure-performers-with-named-plans)
 - [ContinuousPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMContinuousPerforming.html): [How to indicate continuous performance](#how-to-indicate-continuous-performance)
 - [ComposablePerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMComposablePerforming.html): [How to use composition to fulfill plans](#how-to-use-composition-to-fulfill-plans)
@@ -165,6 +165,12 @@ Code snippets:
   return self;
 }
 
+- (void)addPlan:(id<MDMPlan>)plan {
+  <#Plan#>* <#casted plan instance#> = plan;
+
+  // Do something with the plan.
+}
+
 @end
 ```
 
@@ -176,6 +182,12 @@ class <#Performer#>: NSObject, Performing {
   required init(target: Any) {
     self.target = target as! UIView
     super.init()
+  }
+
+  func addPlan(_ plan: Plan) {
+    let <#casted plan instance#> = plan as! <#Plan#>
+
+    // Do something with the plan.
   }
 }
 ```
@@ -309,46 +321,7 @@ Code snippets:
 runtime.addPlan(<#Plan instance#>, named:<#name#>, to:<#View instance#>)
 ```
 
-## How to configure performers with plans
-
-Configuring performers with plans starts by making your performer conform to
-[PlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPlanPerforming.html).
-
-PlanPerforming requires that you implement the `addPlan:` method. This method will only be invoked
-with plans that require use of this performer.
-
-Code snippets:
-
-***In Objective-C:***
-
-```objc
-@interface <#Performer#> (PlanPerforming) <MDMPlanPerforming>
-@end
-
-@implementation <#Performer#> (PlanPerforming)
-
-- (void)addPlan:(id<MDMPlan>)plan {
-  <#Plan#>* <#casted plan instance#> = plan;
-
-  // Do something with the plan.
-}
-
-@end
-```
-
-***In Swift:***
-
-```swift
-extension <#Performer#>: PlanPerforming {
-  func addPlan(_ plan: Plan) {
-    let <#casted plan instance#> = plan as! <#Plan#>
-
-    // Do something with the plan.
-  }
-}
-```
-
-***Handling multiple plan types in Swift:***
+## How to handle multiple plan types in Swift
 
 Make use of Swift's typed switch/casing to handle multiple plan types.
 
@@ -398,7 +371,7 @@ Code snippets:
 ***In Swift:***
 
 ```swift
-extension <#Performer#>: PlanPerforming {
+extension <#Performer#>: NamedPlanPerforming {
   func addPlan(_ plan: NamedPlan, named name: String) {
     let <#casted plan instance#> = plan as! <#Plan#>
 

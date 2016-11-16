@@ -25,40 +25,6 @@ class LifeOfAPlanViewController: UIViewController {
     self.title = "Touch the square to drag it"
   }
 
-  // We create a single Runtime for the lifetime of this view controller. How many runtimes you
-  // decide to create is a matter of preference, but generally speaking it's fair to create one
-  // runtime per self-contained interaction or transition.
-  let runtime = Runtime()
-
-  // MARK: Configuring views and interactions
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
-
-    view.backgroundColor = .white
-
-    let squareView = UIView(frame: CGRect(x: 100, y: 200, width: 100, height: 100))
-    squareView.backgroundColor = .red
-    view.addSubview(squareView)
-
-    // Associate a Draggable plan with squareView.
-    runtime.addPlan(Draggable(), to: squareView)
-  }
-
-  // MARK: Routing initializers
-
-  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-    super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-
-    self.commonInit()
-  }
-
-  required init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
-
-    self.commonInit()
-  }
-
   // Let's define a new object, Draggable, that is a type of Plan. Plans must implement two methods:
   //
   // - performerClass(), and
@@ -127,6 +93,40 @@ class LifeOfAPlanViewController: UIViewController {
         }
       }
     }
+  }
+
+  // MARK: Configuring views and interactions
+
+  // We create a single Runtime for the lifetime of this view controller. How many runtimes you
+  // decide to create is a matter of preference, but generally speaking it's fair to create one
+  // runtime per self-contained interaction or transition.
+  let runtime = Runtime()
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+
+    view.backgroundColor = .white
+
+    let squareView = UIView(frame: CGRect(x: 100, y: 200, width: 100, height: 100))
+    squareView.backgroundColor = .red
+    view.addSubview(squareView)
+
+    // Associate a Draggable plan with squareView.
+    runtime.addPlan(Draggable(), to: squareView)
+  }
+
+  // MARK: Routing initializers
+
+  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+
+    self.commonInit()
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    super.init(coder: aDecoder)
+
+    self.commonInit()
   }
 }
 

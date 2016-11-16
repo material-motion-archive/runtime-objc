@@ -16,7 +16,6 @@
 
 #import "MDMPlan.h"
 
-@protocol MDMTimelinePlan;
 @protocol MDMTimelineObserving;
 
 /** A scrubber can be attached to a timeline in order to control the timeline's timeOffset. */

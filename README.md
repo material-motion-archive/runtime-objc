@@ -63,6 +63,7 @@ commands:
 1. [How to indicate continuous performance](#how-to-indicate-continuous-performance)
 1. [How to trace internal runtime events](#how-to-trace-internal-runtime-events)
 1. [How to log runtime events to the console](#how-to-log-runtime-events-to-the-console)
+1. [How to observe timeline events](#how-to-observe-timeline-events)
 
 ## Architecture
 
@@ -636,6 +637,66 @@ Code snippets:
 
 ```swift
 runtime.addTracer(ConsoleLoggingTracer())
+```
+
+## How to observe timeline events
+
+### Step 1: Conform to the TimelineObserving protocol
+
+Code snippets:
+
+***In Objective-C:***
+
+```objc
+@interface <#SomeClass#> () <MDMTimelineObserving>
+@end
+
+@implementation <#SomeClass#>
+
+- (void)timeline:(MDMTimeline *)timeline didAttachScrubber:(MDMTimelineScrubber *)scrubber {
+
+}
+
+- (void)timeline:(MDMTimeline *)timeline didDetachScrubber:(MDMTimelineScrubber *)scrubber {
+
+}
+
+- (void)timeline:(MDMTimeline *)timeline scrubberDidScrub:(NSTimeInterval)timeOffset {
+
+}
+
+@end
+```
+
+***In Swift:***
+
+```swift
+extension <#SomeClass#>: TimelineObserving {
+  func timeline(_ timeline: Timeline, didAttach scrubber: TimelineScrubber) {
+  }
+
+  func timeline(_ timeline: Timeline, didDetach scrubber: TimelineScrubber) {
+  }
+
+  func timeline(_ timeline: Timeline, scrubberDidScrub timeOffset: TimeInterval) {
+  }
+}
+```
+
+### Step 2: Add your observer to a timeline
+
+Code snippets:
+
+***In Objective-C:***
+
+```objc
+[timeline addTimelineObserver:<#(nonnull id<MDMTimelineObserving>)#>];
+```
+
+***In Swift:***
+
+```swift
+timeline.addObserver(<#T##observer: TimelineObserving##TimelineObserving#>)
 ```
 
 ## Contributing

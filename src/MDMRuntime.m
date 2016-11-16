@@ -18,7 +18,6 @@
 
 #import "MDMPerformerGroup.h"
 #import "MDMPerformerGroupDelegate.h"
-#import "MDMScheduler.h"
 #import "MDMTracing.h"
 
 @interface MDMRuntime () <MDMPerformerGroupDelegate>
@@ -71,12 +70,6 @@
     if ([self.delegate respondsToSelector:@selector(runtimeActivityStateDidChange:)]) {
       [self.delegate runtimeActivityStateDidChange:self];
     }
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    if ([self.delegate respondsToSelector:@selector(schedulerActivityStateDidChange:)]) {
-      [(id<MDMSchedulerDelegate>)self.delegate schedulerActivityStateDidChange:(MDMScheduler *)self];
-    }
-#pragma clang diagnostic pop
   }
 }
 

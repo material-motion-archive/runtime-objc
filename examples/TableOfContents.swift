@@ -33,3 +33,9 @@ extension LifeOfAComposablePlanExampleController {
     return ["3. Life of a composable plan"]
   }
 }
+
+extension TimelineObservationExampleViewController {
+  class func catalogBreadcrumbs() -> [String] {
+    return ["4. Timeline observation"]
+  }
+}

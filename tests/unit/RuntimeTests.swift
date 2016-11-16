@@ -331,6 +331,18 @@ class RuntimeTests: XCTestCase {
     XCTAssert(state.boolean)
   }
 
+  func testPerformerCallbacksAreInvokedBeforeTracers() {
+    let trackingPlan = TrackingPlan()
+    let runtime = Runtime()
+    let tracer = TrackingTracer()
+    runtime.addTracer(tracer)
+
+    runtime.addPlan(trackingPlan, named: "name_one", to: tracer)
+    runtime.removePlan(named: "name_one", from: tracer)
+
+    XCTAssertTrue(tracer.events == ["addPlan", "didAddPlanNamed", "removePlan", "didRemovePlanNamed"])
+  }
+
   // A plan that enables hijacking of the delegated performance token blocks.
   private class HijackedIsActiveTokenGenerator: NSObject, Plan {
     // We must store the generator in an intermediary "state" object that we can share across plan
@@ -405,6 +417,48 @@ class RuntimeTests: XCTestCase {
       func removePlan(named name: String) {
         if let unwrappedTarget = self.target as? UITextView {
           unwrappedTarget.text = unwrappedTarget.text + "removePlanInvoked"
+        }
+      }
+    }
+  }
+
+  private class TrackingTracer: NSObject, Tracing {
+    var events: [String] = [];
+
+    func didAddPlan(_ plan: NamedPlan, named name: String, to target: Any) {
+      events.append("didAddPlanNamed")
+    }
+
+    func didRemovePlanNamed(_ name: String, from target: Any) {
+      events.append("didRemovePlanNamed")
+    }
+  }
+
+  private class TrackingPlan: NSObject, NamedPlan {
+
+    func performerClass() -> AnyClass {
+      return Performer.self
+    }
+
+    public func copy(with zone: NSZone? = nil) -> Any {
+      return TrackingPlan()
+    }
+
+    private class Performer: NSObject, NamedPlanPerforming {
+      let target: Any
+      required init(target: Any) {
+        self.target = target
+      }
+
+      func addPlan(_ plan: NamedPlan, named name: String) {
+        if let unwrappedTracer = self.target as? TrackingTracer {
+          unwrappedTracer.events.append("addPlan")
+        }
+      }
+
+      func removePlan(named name: String) {
+        if let unwrappedTracer = self.target as? TrackingTracer {
+          unwrappedTracer.events.append("removePlan")
         }
       }
     }

@@ -1,7 +1,7 @@
 # Material Motion Runtime for Apple Devices
 
-[![Build Status](https://travis-ci.org/material-motion/material-motion-runtime-objc.svg?branch=develop)](https://travis-ci.org/material-motion/material-motion-runtime-objc)
-[![codecov](https://codecov.io/gh/material-motion/material-motion-runtime-objc/branch/develop/graph/badge.svg)](https://codecov.io/gh/material-motion/material-motion-runtime-objc)
+[![Build Status](https://travis-ci.org/material-motion/runtime-objc.svg?branch=develop)](https://travis-ci.org/material-motion/material-motion-runtime-objc)
+[![codecov](https://codecov.io/gh/material-motion/runtime-objc/branch/develop/graph/badge.svg)](https://codecov.io/gh/material-motion/material-motion-runtime-objc)
 
 The Material Motion Runtime is a tool for describing motion declaratively.
 
@@ -57,12 +57,13 @@ commands:
 1. [How to define a new plan and performer type](#how-to-create-a-new-plan-and-performer-type)
 1. [How to commit a plan to a runtime](#how-to-commit-a-plan-to-a-runtime)
 1. [How to commit a named plan to a runtime](#how-to-commit-a-named-plan-to-a-runtime)
-1. [How to configure performers with plans](#how-to-configure-performers-with-plans)
+1. [How to handle multiple plan types in Swift](#how-to-handle-multiple-plan-types-in-swift)
 1. [How to configure performers with named plans](#how-to-configure-performers-with-named-plans)
 1. [How to use composition to fulfill plans](#how-to-use-composition-to-fulfill-plans)
 1. [How to indicate continuous performance](#how-to-indicate-continuous-performance)
 1. [How to trace internal runtime events](#how-to-trace-internal-runtime-events)
 1. [How to log runtime events to the console](#how-to-log-runtime-events-to-the-console)
+1. [How to observe timeline events](#how-to-observe-timeline-events)
 
 ## Architecture
 
@@ -132,7 +133,7 @@ class <#Plan#>: NSObject {
 
 Performers are responsible for fulfilling plans. Fulfillment is possible in a variety of ways:
 
-- [PlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPlanPerforming.html): [How to configure performers with plans](#how-to-configure-performers-with-plans)
+- [Performing](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPerforming.html): [How to configure performers with plans](#how-to-configure-performers-with-plans)
 - [NamedPlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMNamedPlanPerforming.html): [How to configure performers with named plans](#how-to-configure-performers-with-named-plans)
 - [ContinuousPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMContinuousPerforming.html): [How to indicate continuous performance](#how-to-indicate-continuous-performance)
 - [ComposablePerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMComposablePerforming.html): [How to use composition to fulfill plans](#how-to-use-composition-to-fulfill-plans)
@@ -164,6 +165,12 @@ Code snippets:
   return self;
 }
 
+- (void)addPlan:(id<MDMPlan>)plan {
+  <#Plan#>* <#casted plan instance#> = plan;
+
+  // Do something with the plan.
+}
+
 @end
 ```
 
@@ -175,6 +182,12 @@ class <#Performer#>: NSObject, Performing {
   required init(target: Any) {
     self.target = target as! UIView
     super.init()
+  }
+
+  func addPlan(_ plan: Plan) {
+    let <#casted plan instance#> = plan as! <#Plan#>
+
+    // Do something with the plan.
   }
 }
 ```
@@ -308,46 +321,7 @@ Code snippets:
 runtime.addPlan(<#Plan instance#>, named:<#name#>, to:<#View instance#>)
 ```
 
-## How to configure performers with plans
-
-Configuring performers with plans starts by making your performer conform to
-[PlanPerforming](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPlanPerforming.html).
-
-PlanPerforming requires that you implement the `addPlan:` method. This method will only be invoked
-with plans that require use of this performer.
-
-Code snippets:
-
-***In Objective-C:***
-
-```objc
-@interface <#Performer#> (PlanPerforming) <MDMPlanPerforming>
-@end
-
-@implementation <#Performer#> (PlanPerforming)
-
-- (void)addPlan:(id<MDMPlan>)plan {
-  <#Plan#>* <#casted plan instance#> = plan;
-
-  // Do something with the plan.
-}
-
-@end
-```
-
-***In Swift:***
-
-```swift
-extension <#Performer#>: PlanPerforming {
-  func addPlan(_ plan: Plan) {
-    let <#casted plan instance#> = plan as! <#Plan#>
-
-    // Do something with the plan.
-  }
-}
-```
-
-***Handling multiple plan types in Swift:***
+## How to handle multiple plan types in Swift
 
 Make use of Swift's typed switch/casing to handle multiple plan types.
 
@@ -397,7 +371,7 @@ Code snippets:
 ***In Swift:***
 
 ```swift
-extension <#Performer#>: PlanPerforming {
+extension <#Performer#>: NamedPlanPerforming {
   func addPlan(_ plan: NamedPlan, named name: String) {
     let <#casted plan instance#> = plan as! <#Plan#>
 
@@ -565,7 +539,7 @@ token.terminate()
 
 ## How to trace internal runtime events
 
-Tracing allows you to observe internal events occuring within a runtime. This information may be
+Tracing allows you to observe internal events occurring within a runtime. This information may be
 used for the following purposes:
 
 - Debug logging.
@@ -636,6 +610,66 @@ Code snippets:
 
 ```swift
 runtime.addTracer(ConsoleLoggingTracer())
+```
+
+## How to observe timeline events
+
+### Step 1: Conform to the TimelineObserving protocol
+
+Code snippets:
+
+***In Objective-C:***
+
+```objc
+@interface <#SomeClass#> () <MDMTimelineObserving>
+@end
+
+@implementation <#SomeClass#>
+
+- (void)timeline:(MDMTimeline *)timeline didAttachScrubber:(MDMTimelineScrubber *)scrubber {
+
+}
+
+- (void)timeline:(MDMTimeline *)timeline didDetachScrubber:(MDMTimelineScrubber *)scrubber {
+
+}
+
+- (void)timeline:(MDMTimeline *)timeline scrubberDidScrub:(NSTimeInterval)timeOffset {
+
+}
+
+@end
+```
+
+***In Swift:***
+
+```swift
+extension <#SomeClass#>: TimelineObserving {
+  func timeline(_ timeline: Timeline, didAttach scrubber: TimelineScrubber) {
+  }
+
+  func timeline(_ timeline: Timeline, didDetach scrubber: TimelineScrubber) {
+  }
+
+  func timeline(_ timeline: Timeline, scrubberDidScrub timeOffset: TimeInterval) {
+  }
+}
+```
+
+### Step 2: Add your observer to a timeline
+
+Code snippets:
+
+***In Objective-C:***
+
+```objc
+[timeline addTimelineObserver:<#(nonnull id<MDMTimelineObserving>)#>];
+```
+
+***In Swift:***
+
+```swift
+timeline.addObserver(<#T##observer: TimelineObserving##TimelineObserving#>)
 ```
 
 ## Contributing

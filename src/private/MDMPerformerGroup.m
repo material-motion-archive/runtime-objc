@@ -51,10 +51,10 @@
 - (void)addPlan:(nonnull id<MDMPlan>)plan to:(nonnull id)target {
   BOOL isNew = NO;
   id<MDMPerforming> performer = [self findOrCreatePerformerForPlan:plan isNew:&isNew];
-  [self notifyPlanAdded:plan to:target performer:performer];
   if (isNew) {
     [self notifyPerformerCreation:performer target:target];
   }
+  [self notifyPlanAdded:plan to:target performer:performer];
 }
 
 - (void)addPlan:(nonnull id<MDMNamedPlan>)plan named:(nonnull NSString *)name to:(nonnull id)target {
@@ -67,10 +67,10 @@
   MDMPerformerInfo *performerInfo = [self findOrCreatePerformerInfoForNamedPlan:plan named:name isNew:&isNew];
   id<MDMPerforming> performer = performerInfo.performer;
   self.performerPlanNameToPerformerInfo[name] = performerInfo;
-  [self notifyNamedPlanAdded:plan named:name to:target performer:(id<MDMNamedPlanPerforming>)performer];
   if (isNew) {
     [self notifyPerformerCreation:performer target:target];
   }
+  [self notifyNamedPlanAdded:plan named:name to:target performer:(id<MDMNamedPlanPerforming>)performer];
 }
 
 - (void)removePlanNamed:(nonnull NSString *)name from:(nonnull id)target {
@@ -194,24 +194,24 @@
 }
 
 - (void)notifyPlanAdded:(id<MDMPlan>)plan to:(id)target performer:(id<MDMPerforming>)performer {
+  if ([performer respondsToSelector:@selector(addPlan:)]) {
+    [performer addPlan:plan];
+  }
   for (id<MDMTracing> tracer in self.runtime.tracers) {
     if ([tracer respondsToSelector:@selector(didAddPlan:to:)]) {
       [tracer didAddPlan:plan to:target];
     }
   }
-  if ([performer respondsToSelector:@selector(addPlan:)]) {
-    [performer addPlan:plan];
-  }
 }
 
 - (void)notifyNamedPlanAdded:(id<MDMNamedPlan>)plan named:(NSString *)name to:(id)target performer:(id<MDMNamedPlanPerforming>)performer {
+  if ([performer respondsToSelector:@selector(addPlan:named:)]) {
+    [performer addPlan:plan named:name];
+  }
   for (id<MDMTracing> tracer in self.runtime.tracers) {
     if ([tracer respondsToSelector:@selector(didAddPlan:named:to:)]) {
       [tracer didAddPlan:plan named:name to:target];
     }
-  }
-  if ([performer respondsToSelector:@selector(addPlan:named:)]) {
-    [performer addPlan:plan named:name];
   }
 }
 

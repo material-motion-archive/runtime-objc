@@ -53,6 +53,7 @@
 #pragma mark - Public
 
 - (void)begin {
+  NSAssert(_beginTime == nil, @"Begin was already invoked on this timeline.");
   _beginTime = @(CACurrentMediaTime());
 }
 

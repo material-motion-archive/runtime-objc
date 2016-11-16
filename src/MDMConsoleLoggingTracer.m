@@ -39,7 +39,7 @@ static NSString *debugDescriptionOfPlanProperties(NSObject<MDMPlan> *plan) {
       }
 
       [propertyDescriptions addObject:[NSString stringWithFormat:
-                                                    @"  let %@: %@ = %@",
+                                                    @"  %@: %@ = %@",
                                                     propertyName,
                                                     propertyType,
                                                     [plan valueForKey:propertyName]]];

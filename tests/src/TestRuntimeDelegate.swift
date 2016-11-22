@@ -17,10 +17,10 @@
 import Foundation
 import MaterialMotionRuntime
 
-class TestRuntimeDelegate: NSObject, RuntimeDelegate {
-  var activityStateDidChange = false
+public class TestRuntimeDelegate: NSObject, RuntimeDelegate {
+  public var activityStateDidChange = false
 
-  func runtimeActivityStateDidChange(_ runtime: Runtime) {
+  public func runtimeActivityStateDidChange(_ runtime: Runtime) {
     self.activityStateDidChange = true
   }
 }

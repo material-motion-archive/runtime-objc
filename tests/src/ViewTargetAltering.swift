@@ -18,9 +18,9 @@ import Foundation
 import MaterialMotionRuntime
 import UIKit
 
-class ViewTargetAltering: NSObject, NamedPlan {
+public class ViewTargetAltering: NSObject, NamedPlan {
 
-  func performerClass() -> AnyClass {
+  public func performerClass() -> AnyClass {
     return Performer.self
   }
 

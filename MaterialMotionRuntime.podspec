@@ -8,9 +8,16 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/material-motion/material-motion-runtime-objc.git", :tag => "v" + s.version.to_s }
   s.platform     = :ios, "8.0"
   s.requires_arc = true
+  s.default_subspec = "lib"
 
-  s.public_header_files = "src/*.h"
-  s.private_header_files = "src/private/*.h"
-  s.source_files = "src/*.{h,m}", "src/private/*.{h,m}"
-  s.header_mappings_dir = "src"
+  s.subspec "lib" do |ss|
+    ss.public_header_files = "src/*.h"
+    ss.private_header_files = "src/private/*.h"
+    ss.source_files = "src/*.{h,m}", "src/private/*.{h,m}"
+  end
+
+  s.subspec "tests" do |ss|
+    ss.source_files = "tests/src/*.{swift}", "tests/src/private/*.{swift}"
+    ss.dependency "MaterialMotionRuntime/lib"
+  end
 end

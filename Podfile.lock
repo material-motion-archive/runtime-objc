@@ -1,19 +1,24 @@
 PODS:
-  - CatalogByConvention (1.0.1)
-  - MaterialMotionRuntime (6.0.1)
+  - CatalogByConvention (2.0.0)
+  - MaterialMotionRuntime (6.0.1):
+    - MaterialMotionRuntime/lib (= 6.0.1)
+  - MaterialMotionRuntime/lib (6.0.1)
+  - MaterialMotionRuntime/tests (6.0.1):
+    - MaterialMotionRuntime/lib
 
 DEPENDENCIES:
   - CatalogByConvention
   - MaterialMotionRuntime (from `./`)
+  - MaterialMotionRuntime/tests (from `./`)
 
 EXTERNAL SOURCES:
   MaterialMotionRuntime:
     :path: "./"
 
 SPEC CHECKSUMS:
-  CatalogByConvention: 0e471a53b232b83be30141379b3ff0ad3365c3ec
-  MaterialMotionRuntime: 1c99a092ffc82d0cfd4e69cc353bd0f69314920d
+  CatalogByConvention: be55c2263132e4f9f59299ac8a528ee8715b3275
+  MaterialMotionRuntime: f94e696899e039f6c65637fe9b1c023849aa1a83
 
-PODFILE CHECKSUM: 9e94138f00d1278bbeace599bb54e71380faeee2
+PODFILE CHECKSUM: f8a8cfdfa3b68a36eaf5e9366d680e63721fde87
 
 COCOAPODS: 1.1.1

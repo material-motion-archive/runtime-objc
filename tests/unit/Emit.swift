@@ -18,13 +18,13 @@ import Foundation
 import MaterialMotionRuntime
 
 /** A plan that emits an arbitrary plan. */
-class Emit: NSObject, Plan {
-  var plan: Plan
-  init(plan: Plan) {
+public class Emit: NSObject, Plan {
+  public var plan: Plan
+  public init(plan: Plan) {
     self.plan = plan
   }
 
-  func performerClass() -> AnyClass {
+  public func performerClass() -> AnyClass {
     return Performer.self
   }
 

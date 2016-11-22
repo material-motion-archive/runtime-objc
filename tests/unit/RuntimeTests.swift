@@ -108,7 +108,7 @@ class RuntimeTests: XCTestCase {
     runtime.addTracer(tracer)
 
     runtime.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
-    runtime.addPlan(InstantlyContinuous(), to: state)
+    runtime.addPlan(InstantlyInactive(), to: state)
 
     XCTAssertEqual(tracer.createdPerformers.count, 2)
   }

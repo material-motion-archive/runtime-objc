@@ -17,16 +17,14 @@
 import Foundation
 import MaterialMotionRuntime
 
-/**
- A plan that immediately starts some delegated work the first time a plan is added to a target.
- */
-class ForeverContinuous: NSObject, Plan {
-  func performerClass() -> AnyClass {
+/** A plan that will cause a runtime to be active forever. */
+public class ForeverActive: NSObject, Plan {
+  public func performerClass() -> AnyClass {
     return Performer.self
   }
 
   public func copy(with zone: NSZone? = nil) -> Any {
-    return ForeverContinuous()
+    return ForeverActive()
   }
 
   private class Performer: NSObject, ContinuousPerforming {

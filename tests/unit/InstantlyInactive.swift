@@ -17,17 +17,14 @@
 import Foundation
 import MaterialMotionRuntime
 
-/**
- A plan that immediately starts and completes some delegated work the first time a plan is
- added to a target.
- */
-class InstantlyContinuous: NSObject, Plan {
-  func performerClass() -> AnyClass {
+/** A plan that causes an is-active token to be immediately generated and terminated. */
+public class InstantlyInactive: NSObject, Plan {
+  public func performerClass() -> AnyClass {
     return Performer.self
   }
 
   public func copy(with zone: NSZone? = nil) -> Any {
-    return InstantlyContinuous()
+    return InstantlyInactive()
   }
 
   private class Performer: NSObject, ContinuousPerforming {
@@ -41,8 +38,7 @@ class InstantlyContinuous: NSObject, Plan {
     }
 
     func set(isActiveTokenGenerator: IsActiveTokenGenerating) {
-      let token = isActiveTokenGenerator.generate()!
-      token.terminate()
+      isActiveTokenGenerator.generate()?.terminate()
     }
   }
 }

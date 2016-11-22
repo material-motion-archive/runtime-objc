@@ -27,19 +27,19 @@ class ContinuousPerformingTests: XCTestCase {
     let delegate = TestRuntimeDelegate()
     runtime.delegate = delegate
 
-    runtime.addPlan(InstantlyContinuous(), to: NSObject())
+    runtime.addPlan(InstantlyInactive(), to: NSObject())
 
     XCTAssertTrue(delegate.activityStateDidChange)
     XCTAssertTrue(runtime.activityState == .idle)
   }
 
-  func testForeverContinuousPerformerCausesActivityStateChange() {
+  func testForeverActivePerformerCausesActivityStateChange() {
     let runtime = Runtime()
 
     let delegate = TestRuntimeDelegate()
     runtime.delegate = delegate
 
-    runtime.addPlan(ForeverContinuous(), to: NSObject())
+    runtime.addPlan(ForeverActive(), to: NSObject())
 
     XCTAssertTrue(delegate.activityStateDidChange)
     XCTAssertTrue(runtime.activityState == .active)

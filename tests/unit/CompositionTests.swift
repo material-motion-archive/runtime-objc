@@ -27,13 +27,13 @@ class CompositionTests: XCTestCase {
     let delegate = TestRuntimeDelegate()
     runtime.delegate = delegate
 
-    runtime.addPlan(Emit(plan: InstantlyContinuous()), to: NSObject())
+    runtime.addPlan(Emit(plan: InstantlyInactive()), to: NSObject())
 
     // The following steps are now expected to have occurred:
     //
     // 1. The Emit plan was committed to the runtime.
-    // 2. The Emit plan's performer emitted the InstantlyContinuous plan.
-    // 3. The InstantlyContinuous plan changed the runtime's activity state by immediately starting
+    // 2. The Emit plan's performer emitted the InstantlyInactive plan.
+    // 3. The InstantlyInactive plan changed the runtime's activity state by immediately starting
     //    and completing some delegated work.
 
     XCTAssertTrue(delegate.activityStateDidChange)

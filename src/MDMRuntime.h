@@ -139,8 +139,6 @@ NS_SWIFT_NAME(Runtime)
 NS_SWIFT_NAME(RuntimeDelegate)
 @protocol MDMRuntimeDelegate <NSObject>
 
-@optional  // TODO: Make required after v5 release.
-
 /** Informs the receiver that the runtime's current activity state has changed. */
 - (void)runtimeActivityStateDidChange:(nonnull MDMRuntime *)runtime;
 

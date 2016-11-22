@@ -1,3 +1,6 @@
+# release-candidate
+
+ TODO: Enumerate changes.
 # 6.0.0
 
 ## Breaking changes

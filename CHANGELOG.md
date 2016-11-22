@@ -1,3 +1,20 @@
+# 6.0.1
+
+This is a bazel compatibility release.
+
+## Source changes
+
+* [Resolve strict warnings from bazel builds.](https://github.com/material-motion/runtime-objc/commit/f64ba28bca0b9aefe9ce13eb0de238fa58b401eb) (Jeff Verkoeyen)
+* [Remove deprecated Scheduler APIs.](https://github.com/material-motion/runtime-objc/commit/747657b24cbca9f831bc53ba5ca0556d80b1bb1b) (Jeff Verkoeyen)
+
+## Non-source changes
+
+* [Automatic changelog preparation for release.](https://github.com/material-motion/runtime-objc/commit/2cba66d4400f7bc3717a2222dffa58f05aefca18) (Jeff Verkoeyen)
+* [Add CocoaDocs coverage.](https://github.com/material-motion/runtime-objc/commit/e947a4e780748ce415e4572173f596a7b7e3d0ab) (Jeff Verkoeyen)
+* [Fix link to CocoaPods.](https://github.com/material-motion/runtime-objc/commit/7e4d969d1baf359802b50c5b5ea2d1b96d3c5f9a) (Jeff Verkoeyen)
+* [Add CocoaPods badges to README.md.](https://github.com/material-motion/runtime-objc/commit/02bf445872315e4a647e37b1a0dfb7bf38d4163c) (Jeff Verkoeyen)
+* [Update .travis.yml simulator version to 10.1.](https://github.com/material-motion/runtime-objc/commit/cf34302de5fdf61fbe34a6b512635e1a9bad48fd) (Jeff Verkoeyen)
+
 # 6.0.0
 
 ## Breaking changes

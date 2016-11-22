@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/material-motion/runtime-objc.svg?branch=develop)](https://travis-ci.org/material-motion/material-motion-runtime-objc)
 [![codecov](https://codecov.io/gh/material-motion/runtime-objc/branch/develop/graph/badge.svg)](https://codecov.io/gh/material-motion/material-motion-runtime-objc)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/MaterialMotionRuntime.svg)](https://cocoapods.org/pods/MaterialMotionRuntime)
+[![Platform](https://img.shields.io/cocoapods/p/MaterialMotionRuntime.svg)](http://cocoadocs.org/docsets/MaterialMotionRuntime)
+[![Docs](https://img.shields.io/cocoapods/metrics/doc-percent/MaterialMotionRuntime.svg)](http://cocoadocs.org/docsets/MaterialMotionRuntime)
 
 The Material Motion Runtime is a tool for describing motion declaratively.
 

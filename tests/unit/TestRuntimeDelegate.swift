@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import XCTest
+import Foundation
 import MaterialMotionRuntime
 
 class TestRuntimeDelegate: NSObject, RuntimeDelegate {

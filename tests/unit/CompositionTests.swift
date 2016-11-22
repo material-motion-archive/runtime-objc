@@ -15,6 +15,7 @@
  */
 
 import XCTest
+import Foundation
 import MaterialMotionRuntime
 
 // Tests related to the composition of plans.

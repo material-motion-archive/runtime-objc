@@ -14,6 +14,7 @@
  limitations under the License.
  */
 
+import Foundation
 import MaterialMotionRuntime
 
 /** A plan that emits an arbitrary plan. */

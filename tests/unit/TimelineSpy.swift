@@ -17,29 +17,34 @@
 import Foundation
 import MaterialMotionRuntime
 
-enum TimelineObserverEvent {
+/** A captured TimelineObserving event. */
+public enum TimelineSpyEvent {
   case didAttach
   case didDetach
   case didScrub(timeOffset: TimeInterval)
 }
 
-class StorageTimelineObserver: NSObject, TimelineObserving {
-  var events: [TimelineObserverEvent] = []
+/**
+ A timeline spy listens to TimelineObserving events and stores them in an accessible events
+ property for use in unit testing.
+ */
+public class TimelineSpy: NSObject, TimelineObserving {
+  public var events: [TimelineSpyEvent] = []
 
-  func timeline(_ timeline: Timeline, didAttach scrubber: TimelineScrubber) {
+  public func timeline(_ timeline: Timeline, didAttach scrubber: TimelineScrubber) {
     events.append(.didAttach)
   }
 
-  func timeline(_ timeline: Timeline, didDetach scrubber: TimelineScrubber) {
+  public func timeline(_ timeline: Timeline, didDetach scrubber: TimelineScrubber) {
     events.append(.didDetach)
   }
 
-  func timeline(_ timeline: Timeline, scrubberDidScrub timeOffset: TimeInterval) {
+  public func timeline(_ timeline: Timeline, scrubberDidScrub timeOffset: TimeInterval) {
     events.append(.didScrub(timeOffset: timeOffset))
   }
 }
 
-func ==(lhs: TimelineObserverEvent, rhs: TimelineObserverEvent) -> Bool {
+public func ==(lhs: TimelineSpyEvent, rhs: TimelineSpyEvent) -> Bool {
   switch (lhs, rhs) {
   case (.didAttach, .didAttach): return true
   case (.didDetach, .didDetach): return true
@@ -49,7 +54,7 @@ func ==(lhs: TimelineObserverEvent, rhs: TimelineObserverEvent) -> Bool {
   }
 }
 
-func ==(lhs: [TimelineObserverEvent], rhs: [TimelineObserverEvent]) -> Bool {
+public func ==(lhs: [TimelineSpyEvent], rhs: [TimelineSpyEvent]) -> Bool {
   if lhs.count != rhs.count {
     return false
   }

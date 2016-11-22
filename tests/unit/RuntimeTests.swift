@@ -33,13 +33,12 @@ class RuntimeTests: XCTestCase {
     let plan = ChangeBoolean(desiredBoolean: true)
 
     let runtime = Runtime()
-    let tracer = StorageTracer()
-    runtime.addTracer(tracer)
+    let spy = RuntimeSpy()
+    runtime.addTracer(spy)
 
     runtime.addPlan(plan, to: state)
 
-    XCTAssertEqual(tracer.addedPlans.count, 1)
-    XCTAssertNotEqual(tracer.addedPlans[0] as! ChangeBoolean, plan)
+    XCTAssertEqual(spy.countOf(.didAddPlan(plan: ChangeBoolean.self, target: state)), 1)
   }
 
   // Verify that a plan committed to a runtime immediately executes its add(plan:) logic.
@@ -89,13 +88,13 @@ class RuntimeTests: XCTestCase {
     state.boolean = false
 
     let runtime = Runtime()
-    let tracer = StorageTracer()
-    runtime.addTracer(tracer)
+    let spy = RuntimeSpy()
+    runtime.addTracer(spy)
 
     runtime.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
     runtime.addPlan(ChangeBoolean(desiredBoolean: false), to: state)
 
-    XCTAssertEqual(tracer.createdPerformers.count, 1)
+    XCTAssertEqual(spy.countOf(.didCreatePerformer(target: state)), 1)
   }
 
   // Verify that two plans of different types creates two performers.
@@ -104,13 +103,13 @@ class RuntimeTests: XCTestCase {
     state.boolean = false
 
     let runtime = Runtime()
-    let tracer = StorageTracer()
-    runtime.addTracer(tracer)
+    let spy = RuntimeSpy()
+    runtime.addTracer(spy)
 
     runtime.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
     runtime.addPlan(InstantlyInactive(), to: state)
 
-    XCTAssertEqual(tracer.createdPerformers.count, 2)
+    XCTAssertEqual(spy.countOf(.didCreatePerformer(target: state)), 2)
   }
 
   // Verify that order of plans is respected in a runtime.

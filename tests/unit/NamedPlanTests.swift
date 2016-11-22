@@ -133,54 +133,65 @@ class NamedPlanTests: XCTestCase {
 
   func testNamedPlansReusePerformers() {
     let runtime = Runtime()
-    let tracer = StorageTracer()
-    runtime.addTracer(tracer)
+    let spy = RuntimeSpy()
+    runtime.addTracer(spy)
 
     runtime.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
     runtime.removePlan(named: "name_one", from: target)
 
-    XCTAssertEqual(tracer.createdPerformers.count, 1)
+    XCTAssertEqual(spy.countOf(.didCreatePerformer(target: target)), 1)
   }
 
   func testNamedPlansAdditionsAreCommunicatedViaTracers() {
     let runtime = Runtime()
-    let tracer = StorageTracer()
-    runtime.addTracer(tracer)
+    let spy = RuntimeSpy()
+    runtime.addTracer(spy)
 
     runtime.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
     runtime.removePlan(named: "name_one", from: target)
 
-    XCTAssertEqual(tracer.addedNamedPlans.count, 1)
-    XCTAssertEqual(tracer.removedPlanNames.count, 1)
-    XCTAssertTrue(tracer.removedPlanNames[0] == "name_one")
+    XCTAssertEqual(spy.countOf(.didAddPlanNamed(plan: ViewTargetAltering.self,
+                                                name: "name_one",
+                                                target: target)), 1)
+    XCTAssertEqual(spy.countOf(.didRemovePlanNamed(name: "name_one", target: target)), 1)
   }
 
   func testNamedPlansRespectTracers() {
     let differentPlan = ChangeBooleanNamedPlan(desiredBoolean:true)
     let state = State()
     let runtime = Runtime()
-    let tracer = StorageTracer()
-    runtime.addTracer(tracer)
+    let spy = RuntimeSpy()
+    runtime.addTracer(spy)
 
     runtime.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
     runtime.addPlan(differentPlan, named: "name_two", to: state)
 
-    XCTAssertEqual(tracer.addedNamedPlans.count, 2)
+    XCTAssertEqual(spy.countOf(.didAddPlanNamed(plan: ViewTargetAltering.self,
+                                                name: "name_one",
+                                                target: target)), 1)
+    XCTAssertEqual(spy.countOf(.didAddPlanNamed(plan: ChangeBooleanNamedPlan.self,
+                                                name: "name_two",
+                                                target: state)), 1)
 
     XCTAssert(target.text == "addPlanInvoked")
     XCTAssert(state.boolean)
   }
 
   func testPerformerCallbacksAreInvokedBeforeTracers() {
-    let trackingPlan = TrackingPlan()
+    let trackingPlan = RegularPlanTargetAlteringPlan()
+    let state = State()
     let runtime = Runtime()
-    let tracer = TrackingTracer()
-    runtime.addTracer(tracer)
+    let spy = RuntimeSpy()
+    runtime.addTracer(spy)
 
-    runtime.addPlan(trackingPlan, named: "name_one", to: tracer)
-    runtime.removePlan(named: "name_one", from: tracer)
+    runtime.addPlan(trackingPlan, named: "name_one", to: state)
+    runtime.removePlan(named: "name_one", from: state)
 
-    XCTAssertTrue(tracer.events == ["addPlan", "didAddPlanNamed", "removePlan", "didRemovePlanNamed"])
+    XCTAssert(spy.isEqual(to: [
+      .didCreatePerformer(target: state),
+      .didAddPlanNamed(plan: RegularPlanTargetAlteringPlan.self, name: "name_one", target: state),
+      .didRemovePlanNamed(name: "name_one", target: state),
+    ]))
   }
 
   private class IncrementerTarget: NSObject {
@@ -188,7 +199,7 @@ class NamedPlanTests: XCTestCase {
     var removeCounter = 0
   }
 
-  private class RegularPlanTargetAlteringPlan: NSObject, Plan {
+  private class RegularPlanTargetAlteringPlan: NSObject, NamedPlan {
 
     func performerClass() -> AnyClass {
       return Performer.self
@@ -219,48 +230,6 @@ class NamedPlanTests: XCTestCase {
       func removePlan(named name: String) {
         if let unwrappedTarget = self.target as? UITextView {
           unwrappedTarget.text = unwrappedTarget.text + "removePlanInvoked"
-        }
-      }
-    }
-  }
-
-  private class TrackingTracer: NSObject, Tracing {
-    var events: [String] = [];
-
-    func didAddPlan(_ plan: NamedPlan, named name: String, to target: Any) {
-      events.append("didAddPlanNamed")
-    }
-
-    func didRemovePlanNamed(_ name: String, from target: Any) {
-      events.append("didRemovePlanNamed")
-    }
-  }
-
-  private class TrackingPlan: NSObject, NamedPlan {
-
-    func performerClass() -> AnyClass {
-      return Performer.self
-    }
-
-    public func copy(with zone: NSZone? = nil) -> Any {
-      return TrackingPlan()
-    }
-
-    private class Performer: NSObject, NamedPlanPerforming {
-      let target: Any
-      required init(target: Any) {
-        self.target = target
-      }
-
-      func addPlan(_ plan: NamedPlan, named name: String) {
-        if let unwrappedTracer = self.target as? TrackingTracer {
-          unwrappedTracer.events.append("addPlan")
-        }
-      }
-
-      func removePlan(named name: String) {
-        if let unwrappedTracer = self.target as? TrackingTracer {
-          unwrappedTracer.events.append("removePlan")
         }
       }
     }

@@ -14,7 +14,9 @@
  limitations under the License.
  */
 
+import Foundation
 import MaterialMotionRuntime
+import UIKit
 
 class ViewTargetAltering: NSObject, NamedPlan {
 

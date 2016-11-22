@@ -15,6 +15,7 @@
  */
 
 import XCTest
+import Foundation
 import MaterialMotionRuntime
 
 class RuntimeTests: XCTestCase {

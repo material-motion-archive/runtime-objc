@@ -16,6 +16,8 @@
 
 #import "MDMTimeline.h"
 
+#import <QuartzCore/QuartzCore.h>
+
 @interface MDMTimeline ()
 - (void)scrubberDidScrub:(NSTimeInterval)timeOffset;
 @end

@@ -16,9 +16,9 @@
 
 #import "MDMRuntime.h"
 
-#import "MDMPerformerGroup.h"
-#import "MDMPerformerGroupDelegate.h"
 #import "MDMTracing.h"
+#import "private/MDMPerformerGroup.h"
+#import "private/MDMPerformerGroupDelegate.h"
 
 @interface MDMRuntime () <MDMPerformerGroupDelegate>
 

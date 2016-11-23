@@ -90,6 +90,12 @@
   [[self performerGroupForTarget:target] addPlan:copiedPlan to:target];
 }
 
+- (void)addPlans:(nonnull NSArray<NSObject<MDMPlan> *> *)plans to:(nonnull id)target {
+  for (NSObject<MDMPlan> *plan in plans) {
+    [self addPlan:plan to:target];
+  }
+}
+
 - (void)addPlan:(NSObject<MDMNamedPlan> *)plan named:(NSString *)name to:(id)target {
   NSParameterAssert(name.length > 0);
   id<MDMNamedPlan> copiedPlan = [plan copy];

@@ -45,6 +45,10 @@ NS_SWIFT_NAME(RuntimeFeatures)
 - (void)addPlan:(nonnull NSObject<MDMPlan> *)plan to:(nonnull id)target
     NS_SWIFT_NAME(addPlan(_:to:));
 
+/** Associate plans with a given target. */
+- (void)addPlans:(nonnull NSArray<NSObject<MDMPlan> *> *)plans to:(nonnull id)target
+    NS_SWIFT_NAME(addPlans(_:to:));
+
 /**
  Associates a named plan with a given target.
 

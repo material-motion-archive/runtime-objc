@@ -91,8 +91,8 @@ class RuntimeTests: XCTestCase {
     let spy = RuntimeSpy()
     runtime.addTracer(spy)
 
-    runtime.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
-    runtime.addPlan(ChangeBoolean(desiredBoolean: false), to: state)
+    runtime.addPlans([ChangeBoolean(desiredBoolean: true),
+                      ChangeBoolean(desiredBoolean: false)], to: state)
 
     XCTAssertEqual(spy.countOf(.didCreatePerformer(target: state)), 1)
   }
@@ -106,8 +106,8 @@ class RuntimeTests: XCTestCase {
     let spy = RuntimeSpy()
     runtime.addTracer(spy)
 
-    runtime.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
-    runtime.addPlan(InstantlyInactive(), to: state)
+    runtime.addPlans([ChangeBoolean(desiredBoolean: true),
+                      InstantlyInactive()], to: state)
 
     XCTAssertEqual(spy.countOf(.didCreatePerformer(target: state)), 2)
   }
@@ -119,13 +119,13 @@ class RuntimeTests: XCTestCase {
 
     let runtime = Runtime()
 
-    runtime.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
-    runtime.addPlan(ChangeBoolean(desiredBoolean: false), to: state)
+    runtime.addPlans([ChangeBoolean(desiredBoolean: true),
+                      ChangeBoolean(desiredBoolean: false)], to: state)
 
     XCTAssertEqual(state.boolean, false)
 
-    runtime.addPlan(ChangeBoolean(desiredBoolean: false), to: state)
-    runtime.addPlan(ChangeBoolean(desiredBoolean: true), to: state)
+    runtime.addPlans([ChangeBoolean(desiredBoolean: false),
+                      ChangeBoolean(desiredBoolean: true)], to: state)
 
     XCTAssertEqual(state.boolean, true)
   }

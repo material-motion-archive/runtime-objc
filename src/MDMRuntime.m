@@ -73,12 +73,6 @@
   }
 }
 
-#pragma mark - CALayerDelegate
-
-- (id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event {
-  return nil;  // Will generate a default animation.
-}
-
 #pragma mark - Public
 
 - (MDMRuntimeActivityState)activityState {

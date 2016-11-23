@@ -22,9 +22,6 @@
   self = [super init];
   if (self) {
     _isActiveTokens = [NSMutableSet set];
-
-    // TODO: Remove upon deletion of deprecation delegation APIs.
-    _delegatedPerformanceTokens = [NSMutableSet set];
   }
   return self;
 }

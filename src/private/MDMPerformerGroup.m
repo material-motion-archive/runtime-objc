@@ -184,7 +184,7 @@
 }
 
 - (void)didTerminateTokenForPerformerInfo:(MDMPerformerInfo *)performerInfo {
-  if (performerInfo.isActiveTokens.count == 0 && performerInfo.delegatedPerformanceTokens.count == 0) {
+  if (performerInfo.isActiveTokens.count == 0) {
     [self.activePerformers removeObject:performerInfo.performer];
 
     if (self.activePerformers.count == 0) {

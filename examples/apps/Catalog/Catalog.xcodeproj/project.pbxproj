@@ -42,7 +42,6 @@
 		661CD8081DE4E97200841D14 /* NamedPlanTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamedPlanTests.swift; sourceTree = "<group>"; };
 		6624C6421D466D7C00DF3108 /* ContinuousPerformingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinuousPerformingTests.swift; sourceTree = "<group>"; };
 		66251F111D360C65006EBC89 /* UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6625A5511D467D1C00FD10F7 /* UnitTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UnitTests-Bridging-Header.h"; path = "UnitTests/UnitTests-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		66876C5B1D25ED610054CED4 /* Catalog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Catalog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66876C5F1D25ED610054CED4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		66876C611D25ED610054CED4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -120,7 +119,6 @@
 				669256F11DD6134C00F659E6 /* TimelineTests.swift */,
 				661369701D5BE7CB00F6830F /* CompositionTests.swift */,
 				6624C6421D466D7C00DF3108 /* ContinuousPerformingTests.swift */,
-				6625A5511D467D1C00FD10F7 /* UnitTests-Bridging-Header.h */,
 			);
 			path = unit;
 			sourceTree = "<group>";
@@ -438,7 +436,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.google.UnitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "UnitTests/UnitTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -455,7 +452,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.google.UnitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "UnitTests/UnitTests-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

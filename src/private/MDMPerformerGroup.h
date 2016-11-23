@@ -31,8 +31,6 @@
 
 @property(nonatomic, nonnull, readonly) id target;
 
-@property(nonatomic, nullable, weak) id<MDMPerformerGroupDelegate> delegate;
-
 // nil by default. Useful for view duplication.
 @property(nonatomic, nullable) id runtimeTarget;
 

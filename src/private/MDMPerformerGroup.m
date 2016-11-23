@@ -17,19 +17,17 @@
 #import "MDMPerformerGroup.h"
 
 #import "MDMIsActiveTokenGenerator.h"
-#import "MDMPerformerGroupDelegate.h"
 #import "MDMPerforming.h"
 #import "MDMPlan.h"
 #import "MDMPlanEmitter.h"
-#import "MDMRuntime.h"
+#import "MDMRuntime+Private.h"
 #import "MDMTracing.h"
 
-@interface MDMPerformerGroup () <MDMIsActiveTokenGeneratorDelegate>
+@interface MDMPerformerGroup ()
 @property(nonatomic, weak) MDMRuntime *runtime;
 @property(nonatomic, strong, readonly) NSMutableArray<id<MDMPerforming>> *performers;
 @property(nonatomic, strong, readonly) NSMutableDictionary *performerClassNameToPerformer;
 @property(nonatomic, strong, readonly) NSMutableDictionary *performerPlanNameToPerformer;
-@property(nonatomic, strong, readonly) NSMutableSet<id<MDMIsActiveTokenable>> *isActiveTokens;
 @end
 
 @implementation MDMPerformerGroup
@@ -42,7 +40,6 @@
     _performers = [NSMutableArray array];
     _performerClassNameToPerformer = [NSMutableDictionary dictionary];
     _performerPlanNameToPerformer = [NSMutableDictionary dictionary];
-    _isActiveTokens = [NSMutableSet set];
   }
   return self;
 }
@@ -88,29 +85,6 @@
 - (void)removePlanNamed:(nonnull NSString *)name from:(nonnull id)target {
   id<MDMNamedPlanPerforming> performer = self.performerPlanNameToPerformer[name];
   [self removePlanNamed:name from:target withPerformer:performer];
-}
-
-#pragma mark - MDMIsActiveTokenGeneratorDelegate
-
-- (void)registerIsActiveToken:(nonnull id<MDMIsActiveTokenable>)token {
-  BOOL wasInactive = self.isActiveTokens.count == 0;
-
-  [self.isActiveTokens addObject:token];
-
-  if (wasInactive) {
-    [self.delegate performerGroup:self activeStateDidChange:YES];
-  }
-}
-
-- (void)terminateIsActiveToken:(nonnull id<MDMIsActiveTokenable>)token {
-  NSAssert([self.isActiveTokens containsObject:token],
-           @"Token is not active. May have already been terminated by a previous invocation.");
-
-  [self.isActiveTokens removeObject:token];
-
-  if (self.isActiveTokens.count == 0) {
-    [self.delegate performerGroup:self activeStateDidChange:NO];
-  }
 }
 
 #pragma mark - Private
@@ -171,7 +145,7 @@
   if ([performer respondsToSelector:@selector(setIsActiveTokenGenerator:)]) {
     id<MDMContinuousPerforming> continuousPerformer = (id<MDMContinuousPerforming>)performer;
 
-    MDMIsActiveTokenGenerator *generator = [[MDMIsActiveTokenGenerator alloc] initWithDelegate:self];
+    MDMIsActiveTokenGenerator *generator = [[MDMIsActiveTokenGenerator alloc] initWithDelegate:self.runtime];
     [continuousPerformer setIsActiveTokenGenerator:generator];
   }
 }

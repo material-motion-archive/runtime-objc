@@ -14,12 +14,8 @@
  limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "MDMIsActiveTokenGenerator.h"
+#import "MDMRuntime.h"
 
-@protocol MDMPerformerGroupDelegate <NSObject>
-
-@required
-
-- (void)performerGroup:(MDMPerformerGroup *)performerGroup activeStateDidChange:(BOOL)isActive;
-
+@interface MDMRuntime () <MDMIsActiveTokenGeneratorDelegate>
 @end

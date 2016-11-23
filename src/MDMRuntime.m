@@ -15,15 +15,16 @@
  */
 
 #import "MDMRuntime.h"
+#import "MDMRuntime+Private.h"
 
 #import "MDMTracing.h"
+#import "private/MDMIsActiveTokenGenerator.h"
 #import "private/MDMPerformerGroup.h"
-#import "private/MDMPerformerGroupDelegate.h"
 
-@interface MDMRuntime () <MDMPerformerGroupDelegate>
+@interface MDMRuntime () <MDMIsActiveTokenGeneratorDelegate>
 
 @property(nonatomic, strong) NSMapTable *targetToPerformerGroup;
-@property(nonatomic, strong) NSMutableSet *activePerformerGroups;
+@property(nonatomic, strong, readonly) NSMutableSet<id<MDMIsActiveTokenable>> *isActiveTokens;
 
 @end
 
@@ -36,7 +37,7 @@
   if (self) {
     _tracers = [NSMutableOrderedSet orderedSet];
     _targetToPerformerGroup = [NSMapTable weakToStrongObjectsMapTable];
-    _activePerformerGroups = [NSMutableSet set];
+    _isActiveTokens = [NSMutableSet set];
   }
   return self;
 }
@@ -47,26 +48,33 @@
   MDMPerformerGroup *performerGroup = [_targetToPerformerGroup objectForKey:target];
   if (!performerGroup) {
     performerGroup = [[MDMPerformerGroup alloc] initWithTarget:target runtime:self];
-    performerGroup.delegate = self;
     [self.targetToPerformerGroup setObject:performerGroup forKey:target];
   }
 
   return performerGroup;
 }
 
-#pragma mark MDMPerformerGroupDelegate
+#pragma mark - MDMIsActiveTokenGeneratorDelegate
 
-- (void)performerGroup:(MDMPerformerGroup *)performerGroup activeStateDidChange:(BOOL)isActive {
-  BOOL runtimeWasActive = [self activityState] == MDMRuntimeActivityStateActive;
+- (void)registerIsActiveToken:(nonnull id<MDMIsActiveTokenable>)token {
+  BOOL wasInactive = self.isActiveTokens.count == 0;
 
-  if (isActive) {
-    [self.activePerformerGroups addObject:performerGroup];
-  } else {
-    [self.activePerformerGroups removeObject:performerGroup];
+  [self.isActiveTokens addObject:token];
+
+  if (wasInactive) {
+    if ([self.delegate respondsToSelector:@selector(runtimeActivityStateDidChange:)]) {
+      [self.delegate runtimeActivityStateDidChange:self];
+    }
   }
+}
 
-  BOOL runtimeIsActive = [self activityState] == MDMRuntimeActivityStateActive;
-  if (runtimeWasActive != runtimeIsActive) {
+- (void)terminateIsActiveToken:(nonnull id<MDMIsActiveTokenable>)token {
+  NSAssert([self.isActiveTokens containsObject:token],
+           @"Token is not active. May have already been terminated by a previous invocation.");
+
+  [self.isActiveTokens removeObject:token];
+
+  if (self.isActiveTokens.count == 0) {
     if ([self.delegate respondsToSelector:@selector(runtimeActivityStateDidChange:)]) {
       [self.delegate runtimeActivityStateDidChange:self];
     }
@@ -76,7 +84,7 @@
 #pragma mark - Public
 
 - (MDMRuntimeActivityState)activityState {
-  return (self.activePerformerGroups.count > 0) ? MDMRuntimeActivityStateActive : MDMRuntimeActivityStateIdle;
+  return (self.isActiveTokens.count > 0) ? MDMRuntimeActivityStateActive : MDMRuntimeActivityStateIdle;
 }
 
 - (void)addPlan:(NSObject<MDMPlan> *)plan to:(id)target {

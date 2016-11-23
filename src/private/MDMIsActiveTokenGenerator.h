@@ -19,13 +19,21 @@
 @class MDMPerformerInfo;
 @class MDMPerformerGroup;
 
+@protocol MDMIsActiveTokenGeneratorDelegate;
+
 @interface MDMIsActiveTokenGenerator : NSObject <MDMIsActiveTokenGenerating>
 
-- (nonnull instancetype)initWithPerformerGroup:(nonnull MDMPerformerGroup *)performerGroup
-                                 performerInfo:(nonnull MDMPerformerInfo *)performerInfo
+- (nonnull instancetype)initWithDelegate:(nonnull id<MDMIsActiveTokenGeneratorDelegate>)delegate
     NS_DESIGNATED_INITIALIZER;
 
 + (nonnull instancetype) new NS_UNAVAILABLE;
 - (nonnull instancetype)init NS_UNAVAILABLE;
+
+@end
+
+@protocol MDMIsActiveTokenGeneratorDelegate <NSObject>
+
+- (void)registerIsActiveToken:(nonnull id<MDMIsActiveTokenable>)token;
+- (void)terminateIsActiveToken:(nonnull id<MDMIsActiveTokenable>)token;
 
 @end

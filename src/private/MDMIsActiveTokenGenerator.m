@@ -16,25 +16,19 @@
 
 #import "MDMIsActiveTokenGenerator.h"
 
-#import "MDMPerformerGroup.h"
-#import "MDMPerformerInfo.h"
-
 @interface MDMIsActiveTokenGenerator ()
-@property(nonatomic, weak) MDMPerformerGroup *performerGroup;
-@property(nonatomic, weak) MDMPerformerInfo *performerInfo;
+@property(nonatomic, weak) id<MDMIsActiveTokenGeneratorDelegate> delegate;
 @end
 
 @interface MDMIsActiveToken : NSObject <MDMIsActiveTokenable>
 
-- (nonnull instancetype)initWithPerformerGroup:(nonnull MDMPerformerGroup *)performerGroup
-                                 performerInfo:(nonnull MDMPerformerInfo *)performerInfo
+- (nonnull instancetype)initWithDelegate:(nonnull id<MDMIsActiveTokenGeneratorDelegate>)delegate
     NS_DESIGNATED_INITIALIZER;
 
 - (nonnull instancetype)init NS_UNAVAILABLE;
 + (nonnull instancetype) new NS_UNAVAILABLE;
 
-@property(nonatomic, weak) MDMPerformerGroup *performerGroup;
-@property(nonatomic, weak) MDMPerformerInfo *performerInfo;
+@property(nonatomic, weak) id<MDMIsActiveTokenGeneratorDelegate> delegate;
 @property(nonatomic, assign, getter=isTerminated) BOOL terminated;
 
 @end
@@ -47,14 +41,12 @@
   }
 }
 
-- (instancetype)initWithPerformerGroup:(nonnull MDMPerformerGroup *)performerGroup
-                         performerInfo:(nonnull MDMPerformerInfo *)performerInfo {
+- (instancetype)initWithDelegate:(id<MDMIsActiveTokenGeneratorDelegate>)delegate {
   self = [super init];
   if (self) {
-    _performerGroup = performerGroup;
-    _performerInfo = performerInfo;
+    _delegate = delegate;
 
-    [self.performerGroup registerIsActiveToken:self withPerformerInfo:self.performerInfo];
+    [self.delegate registerIsActiveToken:self];
   }
   return self;
 }
@@ -63,29 +55,26 @@
   NSAssert(!self.terminated, @"Is-active already terminated.");
   self.terminated = true;
 
-  [self.performerGroup terminateIsActiveToken:self withPerformerInfo:self.performerInfo];
+  [self.delegate terminateIsActiveToken:self];
 }
 
 @end
 
 @implementation MDMIsActiveTokenGenerator
 
-- (nonnull instancetype)initWithPerformerGroup:(nonnull MDMPerformerGroup *)performerGroup
-                                 performerInfo:(nonnull MDMPerformerInfo *)performerInfo {
+- (instancetype)initWithDelegate:(id<MDMIsActiveTokenGeneratorDelegate>)delegate {
   self = [super init];
   if (self) {
-    _performerGroup = performerGroup;
-    _performerInfo = performerInfo;
+    _delegate = delegate;
   }
   return self;
 }
 
 - (id<MDMIsActiveTokenable>)generate {
-  if (!self.performerInfo.performer) {
+  if (!self.delegate) {
     return nil;
   }
-  return [[MDMIsActiveToken alloc] initWithPerformerGroup:self.performerGroup
-                                            performerInfo:self.performerInfo];
+  return [[MDMIsActiveToken alloc] initWithDelegate:self.delegate];
 }
 
 @end

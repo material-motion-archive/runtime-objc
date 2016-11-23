@@ -42,9 +42,4 @@
 
 - (void)removePlanNamed:(nonnull NSString *)name from:(nonnull id)target;
 
-- (void)registerIsActiveToken:(nonnull id<MDMIsActiveTokenable>)token
-            withPerformerInfo:(nonnull MDMPerformerInfo *)performerInfo;
-- (void)terminateIsActiveToken:(nonnull id<MDMIsActiveTokenable>)token
-             withPerformerInfo:(nonnull MDMPerformerInfo *)performerInfo;
-
 @end

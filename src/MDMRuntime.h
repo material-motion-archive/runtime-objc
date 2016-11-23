@@ -123,7 +123,7 @@ NS_SWIFT_NAME(RuntimeFeatures)
  When an instance of a runtime is deallocated its performers will also be deallocated.
  */
 NS_SWIFT_NAME(Runtime)
-@interface MDMRuntime : NSObject <MDMRuntimeFeatures>
+@interface MDMRuntime : NSObject <MDMRuntimeFeatures, CALayerDelegate>
 
 #pragma mark Delegated events
 

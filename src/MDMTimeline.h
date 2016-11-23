@@ -22,6 +22,12 @@
 NS_SWIFT_NAME(TimelineScrubber)
 @interface MDMTimelineScrubber : NSObject
 
+/** Unavailable. Use timeline.attachScrubberWithTimeOffset instead. */
+- (nonnull instancetype)init NS_UNAVAILABLE;
+
+/** Unavailable. Use timeline.attachScrubberWithTimeOffset instead. */
++ (nonnull instancetype) new NS_UNAVAILABLE;
+
 /** The desired time offset. */
 @property(nonatomic, assign) NSTimeInterval timeOffset;
 
@@ -38,14 +44,28 @@ NS_SWIFT_NAME(Timeline)
 @property(nonatomic, strong, nullable, readonly) NSNumber *beginTime;
 
 /**
- Assign a scrubber to a timeline in order to control its current time offset.
+ Attaches a scrubber to the timeline if one wasn't already attached.
 
- Assigning a non-nil scrubber will invoke timeline:didAttachScrubber: on all observers.
+ Sends a didAttachScrubber event to all observers if a scrubber was attached.
 
- Assigning nil when there was already an associated scrubber will invoke
- scrubberDidDetachFromTimeline: on all observers.
+ If a scrubber was already attached then the existing scrubber's timeOffset will be modified
+ instead.
  */
-@property(nonatomic, strong, nullable) MDMTimelineScrubber *scrubber;
+- (void)attachScrubberWithTimeOffset:(NSTimeInterval)timeOffset;
+
+/**
+ Detaches a scrubber from the timeline if one was already attached.
+
+ Sends a didDetachScrubber event to all observers.
+ */
+- (void)detachScrubber;
+
+/**
+ Returns the scrubber if one is attached.
+
+ Modifications to the scrubber's timeOffset will generate scrubberDidScrub events on all observers.
+ */
+@property(nonatomic, strong, nullable, readonly) MDMTimelineScrubber *scrubber;
 
 /** Add a timeline observer to the timeline. */
 - (void)addTimelineObserver:(nonnull id<MDMTimelineObserving>)observer;

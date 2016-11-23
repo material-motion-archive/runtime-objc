@@ -26,8 +26,8 @@ class TimelineTests: XCTestCase {
     let spy = TimelineSpy()
     timeline.addObserver(spy)
 
-    timeline.scrubber = TimelineScrubber()
-    timeline.scrubber = nil
+    timeline.attachScrubber(withTimeOffset: 0)
+    timeline.detachScrubber()
 
     XCTAssert(spy.events == [.didAttach, .didDetach])
   }
@@ -38,34 +38,47 @@ class TimelineTests: XCTestCase {
     let spy = TimelineSpy()
     timeline.addObserver(spy)
 
-    timeline.scrubber = TimelineScrubber()
+    timeline.attachScrubber(withTimeOffset: 0)
     timeline.removeObserver(spy)
-    timeline.scrubber = nil
+    timeline.detachScrubber()
 
     XCTAssert(spy.events == [.didAttach])
   }
 
-  func testScrubberReAttachementSendsNoEvents() {
+  func testScrubberReAttachementSendsScrubEvent() {
     let timeline = Timeline()
 
     let spy = TimelineSpy()
     timeline.addObserver(spy)
 
-    let scrubber = TimelineScrubber()
-    timeline.scrubber = scrubber
-    timeline.scrubber = scrubber
+    timeline.attachScrubber(withTimeOffset: 0)
+    timeline.attachScrubber(withTimeOffset: 0.5)
 
-    XCTAssert(spy.events == [.didAttach])
+    XCTAssert(spy.events == [.didAttach, .didScrub(timeOffset: 0.5)])
   }
 
-  func testScrubberNewAttachementSendsDetachEvent() {
+  func testScrubberDetachAndReAttachementSendsScrubEvent() {
     let timeline = Timeline()
 
     let spy = TimelineSpy()
     timeline.addObserver(spy)
 
-    timeline.scrubber = TimelineScrubber()
-    timeline.scrubber = TimelineScrubber()
+    timeline.attachScrubber(withTimeOffset: 0)
+    timeline.detachScrubber()
+    timeline.attachScrubber(withTimeOffset: 0.5)
+
+    XCTAssert(spy.events == [.didAttach, .didDetach, .didAttach, .didScrub(timeOffset: 0.5)])
+  }
+
+  func testScrubberDetachAndReAttachementSameValueSendsNoScrubEvent() {
+    let timeline = Timeline()
+
+    let spy = TimelineSpy()
+    timeline.addObserver(spy)
+
+    timeline.attachScrubber(withTimeOffset: 0)
+    timeline.detachScrubber()
+    timeline.attachScrubber(withTimeOffset: 0)
 
     XCTAssert(spy.events == [.didAttach, .didDetach, .didAttach])
   }
@@ -73,8 +86,8 @@ class TimelineTests: XCTestCase {
   func testAttachedScrubberChangesSendsEvents() {
     let timeline = Timeline()
 
-    let scrubber = TimelineScrubber()
-    timeline.scrubber = scrubber
+    timeline.attachScrubber(withTimeOffset: 0)
+    let scrubber = timeline.scrubber!
 
     let spy = TimelineSpy()
     timeline.addObserver(spy)
@@ -91,8 +104,8 @@ class TimelineTests: XCTestCase {
   func testAttachedScrubberRepeatedChangeSendsNoEvents() {
     let timeline = Timeline()
 
-    let scrubber = TimelineScrubber()
-    timeline.scrubber = scrubber
+    timeline.attachScrubber(withTimeOffset: 0)
+    let scrubber = timeline.scrubber!
 
     let spy = TimelineSpy()
     timeline.addObserver(spy)
@@ -110,9 +123,9 @@ class TimelineTests: XCTestCase {
   func testDetachedScrubberSendsNoEvents() {
     let timeline = Timeline()
 
-    let scrubber = TimelineScrubber()
-    timeline.scrubber = scrubber
-    timeline.scrubber = nil
+    timeline.attachScrubber(withTimeOffset: 0)
+    let scrubber = timeline.scrubber!
+    timeline.detachScrubber()
 
     let spy = TimelineSpy()
     timeline.addObserver(spy)

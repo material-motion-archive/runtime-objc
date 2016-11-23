@@ -28,6 +28,14 @@
 
 @implementation MDMTimelineScrubber
 
+- (instancetype)initWithTimeline:(MDMTimeline *)timeline {
+  self = [super init];
+  if (self) {
+    _timeline = timeline;
+  }
+  return self;
+}
+
 - (void)setTimeOffset:(NSTimeInterval)timeOffset {
   if (_timeOffset == timeOffset) {
     return;
@@ -41,12 +49,16 @@
 @end
 
 @implementation MDMTimeline {
+  MDMTimelineScrubber *_scrubber;
   NSHashTable *_observers;
+  BOOL _isScrubberAttached;
 }
 
 - (instancetype)init {
   self = [super init];
   if (self) {
+    _scrubber = [[MDMTimelineScrubber alloc] initWithTimeline:self];
+
     _observers = [NSHashTable weakObjectsHashTable];
   }
   return self;
@@ -59,27 +71,30 @@
   _beginTime = @(CACurrentMediaTime());
 }
 
-- (void)setScrubber:(MDMTimelineScrubber *)scrubber {
-  if (_scrubber == scrubber) {
-    return;
-  }
-  if (_scrubber) {
-    _scrubber.timeline = nil;
-
-    for (id<MDMTimelineObserving> observer in _observers) {
-      [observer timeline:self didDetachScrubber:_scrubber];
-    }
-  }
-
-  _scrubber = scrubber;
-
-  _scrubber.timeline = self;
-
-  if (_scrubber) {
+- (void)attachScrubberWithTimeOffset:(NSTimeInterval)timeOffset {
+  if (!_isScrubberAttached) {
     for (id<MDMTimelineObserving> observer in _observers) {
       [observer timeline:self didAttachScrubber:_scrubber];
     }
+    _isScrubberAttached = true;
   }
+
+  _scrubber.timeOffset = timeOffset;
+}
+
+- (void)detachScrubber {
+  if (!_isScrubberAttached) {
+    return;
+  }
+  _isScrubberAttached = false;
+
+  for (id<MDMTimelineObserving> observer in _observers) {
+    [observer timeline:self didDetachScrubber:_scrubber];
+  }
+}
+
+- (MDMTimelineScrubber *)scrubber {
+  return _isScrubberAttached ? _scrubber : nil;
 }
 
 - (void)addTimelineObserver:(id<MDMTimelineObserving>)observer {
@@ -91,6 +106,9 @@
 }
 
 - (void)scrubberDidScrub:(NSTimeInterval)timeOffset {
+  if (!_isScrubberAttached) {
+    return;
+  }
   for (id<MDMTimelineObserving> observer in _observers) {
     [observer timeline:self scrubberDidScrub:timeOffset];
   }

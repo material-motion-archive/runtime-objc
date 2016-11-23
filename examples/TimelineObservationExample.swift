@@ -63,11 +63,9 @@ class TimelineObservationExampleViewController: UIViewController, TimelineObserv
   func toggleDidChange(_ toggle: UISwitch) {
     slider.isEnabled = toggle.isOn
     if toggle.isOn {
-      let scrubber = TimelineScrubber()
-      scrubber.timeOffset = TimeInterval(slider.value)
-      timeline.scrubber = scrubber
+      timeline.attachScrubber(withTimeOffset: TimeInterval(slider.value))
     } else {
-      timeline.scrubber = nil
+      timeline.detachScrubber()
     }
   }
 

@@ -194,9 +194,7 @@
 }
 
 - (void)notifyPlanAdded:(id<MDMPlan>)plan to:(id)target performer:(id<MDMPerforming>)performer {
-  if ([performer respondsToSelector:@selector(addPlan:)]) {
-    [performer addPlan:plan];
-  }
+  [performer addPlan:plan];
   for (id<MDMTracing> tracer in self.runtime.tracers) {
     if ([tracer respondsToSelector:@selector(didAddPlan:to:)]) {
       [tracer didAddPlan:plan to:target];

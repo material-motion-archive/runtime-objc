@@ -33,8 +33,6 @@ NS_SWIFT_NAME(Performing)
 
 #pragma mark Adding plans to a performer
 
-@optional
-
 /**
  Provides the performer with a plan.
 

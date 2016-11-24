@@ -25,7 +25,6 @@
 
 @interface MDMPerformerGroup ()
 @property(nonatomic, weak) MDMMotionRuntime *runtime;
-@property(nonatomic, strong, readonly) NSMutableArray<id<MDMPerforming>> *performers;
 @property(nonatomic, strong, readonly) NSMutableDictionary *performerClassNameToPerformer;
 @property(nonatomic, strong, readonly) NSMutableDictionary *performerPlanNameToPerformer;
 @end
@@ -37,7 +36,6 @@
   if (self) {
     _target = target;
     _runtime = runtime;
-    _performers = [NSMutableArray array];
     _performerClassNameToPerformer = [NSMutableDictionary dictionary];
     _performerPlanNameToPerformer = [NSMutableDictionary dictionary];
   }
@@ -125,7 +123,6 @@
     return performer;
   }
   performer = [[performerClass alloc] initWithTarget:self.target];
-  [self.performers addObject:performer];
   self.performerClassNameToPerformer[performerClassName] = performer;
   [self setUpFeaturesForPerformer:performer];
   *isNew = YES;

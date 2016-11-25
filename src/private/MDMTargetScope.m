@@ -29,7 +29,9 @@
 @property(nonatomic, strong, readonly) NSMutableDictionary *performerPlanNameToPerformer;
 @end
 
-@implementation MDMTargetScope
+@implementation MDMTargetScope {
+  id _target;
+}
 
 - (instancetype)initWithTarget:(id)target runtime:(MDMMotionRuntime *)runtime {
   self = [super init];
@@ -122,7 +124,7 @@
     *isNew = NO;
     return performer;
   }
-  performer = [[performerClass alloc] initWithTarget:self.target];
+  performer = [[performerClass alloc] initWithTarget:_target];
   self.performerClassNameToPerformer[performerClassName] = performer;
   [self setUpFeaturesForPerformer:performer];
   *isNew = YES;
@@ -134,7 +136,7 @@
   if ([performer respondsToSelector:@selector(setPlanEmitter:)]) {
     id<MDMComposablePerforming> composablePerformer = (id<MDMComposablePerforming>)performer;
 
-    MDMPlanEmitter *emitter = [[MDMPlanEmitter alloc] initWithRuntime:self.runtime target:self.target];
+    MDMPlanEmitter *emitter = [[MDMPlanEmitter alloc] initWithRuntime:self.runtime target:_target];
     [composablePerformer setPlanEmitter:emitter];
   }
 
@@ -150,7 +152,7 @@
 - (void)notifyPerformerCreation:(id<MDMPerforming>)performer target:(id)target {
   for (id<MDMTracing> tracer in self.runtime.tracers) {
     if ([tracer respondsToSelector:@selector(didCreatePerformer:for:)]) {
-      [tracer didCreatePerformer:performer for:self.target];
+      [tracer didCreatePerformer:performer for:_target];
     }
   }
 }

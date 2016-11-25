@@ -27,17 +27,12 @@
 @interface MDMTargetScope : NSObject
 
 - (nonnull instancetype)initWithTarget:(nonnull id)target runtime:(nonnull MDMMotionRuntime *)runtime NS_DESIGNATED_INITIALIZER;
+
 - (nonnull instancetype)init NS_UNAVAILABLE;
-
-@property(nonatomic, nonnull, readonly) id target;
-
-// nil by default. Useful for view duplication.
-@property(nonatomic, nullable) id runtimeTarget;
 
 - (void)addPlan:(nonnull id<MDMPlan>)plan to:(nonnull id)target;
 
 - (void)addPlan:(nonnull id<MDMNamedPlan>)plan named:(nonnull NSString *)name to:(nonnull id)target;
-
 - (void)removePlanNamed:(nonnull NSString *)name from:(nonnull id)target;
 
 @end

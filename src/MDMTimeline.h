@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-#import "MDMPlan.h"
+#import <Foundation/Foundation.h>
 
 @protocol MDMTimelineObserving;
 

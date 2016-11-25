@@ -18,26 +18,22 @@
 
 #import "MDMIsActiveTokenGenerator.h"
 #import "MDMMotionRuntime+Private.h"
-#import "MDMPerforming.h"
 #import "MDMPlan.h"
 #import "MDMPlanEmitter.h"
 #import "MDMTracing.h"
 
-@interface MDMTargetScope ()
-@property(nonatomic, weak) MDMMotionRuntime *runtime;
-@property(nonatomic, strong, readonly) NSMutableDictionary *performerClassNameToPerformer;
-@property(nonatomic, strong, readonly) NSMutableDictionary *performerPlanNameToPerformer;
-@end
-
 @implementation MDMTargetScope {
   id _target;
+  __weak MDMMotionRuntime *_runtime;
+  NSMutableDictionary<NSString *, id<MDMPerforming>> *_performerClassNameToPerformer;
+  NSMutableDictionary<NSString *, id<MDMPerforming>> *_performerPlanNameToPerformer;
   NSMutableOrderedSet<id<MDMTracing>> *_tracers;
   MDMPlanEmitter *_planEmitter;
 }
 
 - (instancetype)initWithTarget:(id)target
                        tracers:(NSMutableOrderedSet<id<MDMTracing>> *)tracers
-                   planEmitter:(nonnull MDMPlanEmitter *)planEmitter
+                   planEmitter:(MDMPlanEmitter *)planEmitter
                        runtime:(MDMMotionRuntime *)runtime {
   self = [super init];
   if (self) {
@@ -51,7 +47,7 @@
   return self;
 }
 
-- (void)addPlan:(nonnull id<MDMPlan>)plan to:(nonnull id)target {
+- (void)addPlan:(NSObject<MDMPlan> *)plan to:(id)target {
   BOOL isNew = NO;
   id<MDMPerforming> performer = [self findOrCreatePerformerForPlan:plan isNew:&isNew];
 
@@ -68,13 +64,13 @@
   }
 }
 
-- (void)addPlan:(nonnull id<MDMNamedPlan>)plan named:(nonnull NSString *)name to:(nonnull id)target {
-  id<MDMNamedPlanPerforming> performer = self.performerPlanNameToPerformer[name];
+- (void)addPlan:(NSObject<MDMNamedPlan> *)plan named:(NSString *)name to:(id)target {
+  id<MDMNamedPlanPerforming> performer = (id<MDMNamedPlanPerforming>)_performerPlanNameToPerformer[name];
   [self removePlanNamed:name from:target withPerformer:performer];
 
   BOOL isNew = NO;
   performer = [self findOrCreatePerformerForNamedPlan:plan named:name isNew:&isNew];
-  self.performerPlanNameToPerformer[name] = performer;
+  _performerPlanNameToPerformer[name] = performer;
   if (isNew) {
     [self notifyPerformerCreation:performer target:target];
   }
@@ -89,19 +85,19 @@
   }
 }
 
-- (void)removePlanNamed:(nonnull NSString *)name from:(nonnull id)target {
-  id<MDMNamedPlanPerforming> performer = self.performerPlanNameToPerformer[name];
+- (void)removePlanNamed:(NSString *)name from:(id)target {
+  id<MDMNamedPlanPerforming> performer = (id<MDMNamedPlanPerforming>)_performerPlanNameToPerformer[name];
   [self removePlanNamed:name from:target withPerformer:performer];
 }
 
 #pragma mark - Private
 
-- (void)removePlanNamed:(nonnull NSString *)name from:(nonnull id)target withPerformer:(nullable id<MDMPerforming>)performer {
+- (void)removePlanNamed:(NSString *)name from:(id)target withPerformer:(id<MDMPerforming>)performer {
   if (performer != nil) {
     if ([performer respondsToSelector:@selector(removePlanNamed:)]) {
       [(id<MDMNamedPlanPerforming>)performer removePlanNamed:name];
     }
-    [self.performerPlanNameToPerformer removeObjectForKey:name];
+    [_performerPlanNameToPerformer removeObjectForKey:name];
     for (id<MDMTracing> tracer in _tracers) {
       if ([tracer respondsToSelector:@selector(didRemovePlanNamed:from:)]) {
         [tracer didRemovePlanNamed:name from:target];
@@ -113,26 +109,26 @@
 - (id<MDMNamedPlanPerforming>)findOrCreatePerformerForNamedPlan:(id<MDMNamedPlan>)plan
                                                           named:(NSString *)name
                                                           isNew:(BOOL *)isNew {
-  id<MDMNamedPlanPerforming> performer = self.performerPlanNameToPerformer[name];
+  id<MDMNamedPlanPerforming> performer = (id<MDMNamedPlanPerforming>)_performerPlanNameToPerformer[name];
   if (performer) {
     *isNew = NO;
     return performer;
   }
   performer = (id<MDMNamedPlanPerforming>)[self findOrCreatePerformerForPlan:plan isNew:isNew];
-  self.performerPlanNameToPerformer[name] = performer;
+  _performerPlanNameToPerformer[name] = performer;
   return performer;
 }
 
 - (id<MDMPerforming>)findOrCreatePerformerForPlan:(id<MDMPlan>)plan isNew:(BOOL *)isNew {
   Class performerClass = [plan performerClass];
   id performerClassName = NSStringFromClass(performerClass);
-  id<MDMPerforming> performer = self.performerClassNameToPerformer[performerClassName];
+  id<MDMPerforming> performer = _performerClassNameToPerformer[performerClassName];
   if (performer) {
     *isNew = NO;
     return performer;
   }
   performer = [[performerClass alloc] initWithTarget:_target];
-  self.performerClassNameToPerformer[performerClassName] = performer;
+  _performerClassNameToPerformer[performerClassName] = performer;
   [self setUpFeaturesForPerformer:performer];
   *isNew = YES;
   return performer;
@@ -149,7 +145,7 @@
   if ([performer respondsToSelector:@selector(setIsActiveTokenGenerator:)]) {
     id<MDMContinuousPerforming> continuousPerformer = (id<MDMContinuousPerforming>)performer;
 
-    MDMIsActiveTokenGenerator *generator = [[MDMIsActiveTokenGenerator alloc] initWithDelegate:self.runtime];
+    MDMIsActiveTokenGenerator *generator = [[MDMIsActiveTokenGenerator alloc] initWithDelegate:_runtime];
     [continuousPerformer setIsActiveTokenGenerator:generator];
   }
 }

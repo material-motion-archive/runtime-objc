@@ -23,7 +23,7 @@
 /** Initialize a newly allocated emitter with the provided runtime and target. */
 - (nonnull instancetype)initWithRuntime:(nonnull MDMMotionRuntime *)runtime target:(nonnull id)target;
 
-/** Use initWithRuntime:target: instead. */
 - (nonnull instancetype)init NS_UNAVAILABLE;
++ (nonnull instancetype) new NS_UNAVAILABLE;
 
 @end

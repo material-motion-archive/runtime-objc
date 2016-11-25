@@ -25,8 +25,8 @@
 
 - (nonnull instancetype)initWithDelegate:(nonnull id<MDMIsActiveTokenGeneratorDelegate>)delegate NS_DESIGNATED_INITIALIZER;
 
-+ (nonnull instancetype) new NS_UNAVAILABLE;
 - (nonnull instancetype)init NS_UNAVAILABLE;
++ (nonnull instancetype) new NS_UNAVAILABLE;
 
 @end
 

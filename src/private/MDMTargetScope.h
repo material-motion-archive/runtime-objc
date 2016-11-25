@@ -34,6 +34,7 @@
                                runtime:(nonnull MDMMotionRuntime *)runtime NS_DESIGNATED_INITIALIZER;
 
 - (nonnull instancetype)init NS_UNAVAILABLE;
++ (nonnull instancetype) new NS_UNAVAILABLE;
 
 - (void)addPlan:(nonnull id<MDMPlan>)plan to:(nonnull id)target;
 

@@ -14,8 +14,8 @@ This library does not do much on its own. What it does do, however, is enable th
 motion as discrete units of data that can be introspected, composed, and sent over a wire.
 
 This library encourages you to describe motion as data, or what we call *plans*. Plans are committed
-to a *runtime*. A runtime coordinates the creation of *performers*, objects responsible for
-translating plans into concrete execution.
+to a *motion runtime*, or runtime for short. A runtime coordinates the creation of *performers*,
+objects responsible for translating plans into concrete execution.
 
 ## Installation
 
@@ -49,8 +49,8 @@ You will now have access to all of the APIs.
 Check out a local copy of the repo to access the Catalog application by running the following
 commands:
 
-    git clone https://github.com/material-motion/material-motion-runtime-objc.git
-    cd material-motion-runtime-objc
+    git clone https://github.com/material-motion/runtime-objc.git
+    cd runtime-objc
     pod install
     open MaterialMotionRuntime.xcworkspace
 
@@ -73,25 +73,22 @@ commands:
 The Material Motion Runtime consists of two groups of APIs: a runtime/transaction object and a
 constellation of protocols loosely consisting of plan and performing types.
 
-### Runtime
+### MotionRuntime
 
-The [Runtime](https://material-motion.github.io/material-motion-runtime-objc/Classes/MDMRuntime.html)
-object is a coordinating entity whose primary responsibility is to fulfill plans by creating
-performers. You can create many runtimes throughout the lifetime of your application. A good rule
-of thumb is to have one runtime per interaction or transition.
+The MotionRuntime object is a coordinating entity whose primary responsibility is to fulfill plans
+by creating performers. You can create many runtimes throughout the lifetime of your application. A
+good rule of thumb is to have one runtime per interaction or transition.
 
 ### Plan + Performing types
 
-The [Plan](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPlan.html)
-and [Performing](https://material-motion.github.io/material-motion-runtime-objc/Protocols/MDMPerforming.html)
-protocol each define the minimal characteristics required for an object to be considered either a
-plan or a performer, respectively, by the Material Motion Runtime.
+The Plan and Performing protocol each define the minimal characteristics required for an object to
+be considered either a plan or a performer, respectively, by the runtime.
 
 Plans and performers have a symbiotic relationship. A plan is executed by the performer it defines.
 Performer behavior is configured by the provided plan instances.
 
 Learn more about the Material Motion Runtime by reading the
-[Starmap](https://material-motion.gitbooks.io/material-motion-starmap/content/specifications/runtime/).
+[Starmap](https://material-motion.github.io/material-motion/starmap/specifications/runtime/).
 
 ## How to create a new plan and performer type
 
@@ -246,12 +243,12 @@ Code snippets:
 
 ```objc
 @interface MyClass ()
-@property(nonatomic, strong) MDMRuntime* runtime;
+@property(nonatomic, strong) MDMMotionRuntime* runtime;
 @end
 
 - (instancetype)init... {
   ...
-  self.runtime = [MDMRuntime new];
+  self.runtime = [MDMMotionRuntime new];
   ...
 }
 ```
@@ -260,7 +257,7 @@ Code snippets:
 
 ```swift
 class MyClass {
-  let runtime = Runtime()
+  let runtime = MotionRuntime()
 }
 ```
 
@@ -290,12 +287,12 @@ Code snippets:
 
 ```objc
 @interface MyClass ()
-@property(nonatomic, strong) MDMRuntime* runtime;
+@property(nonatomic, strong) MDMMotionRuntime* runtime;
 @end
 
 - (instancetype)init... {
   ...
-  self.runtime = [MDMRuntime new];
+  self.runtime = [MDMMotionRuntime new];
   ...
 }
 ```
@@ -304,7 +301,7 @@ Code snippets:
 
 ```swift
 class MyClass {
-  let runtime = Runtime()
+  let runtime = MotionRuntime()
 }
 ```
 
@@ -679,11 +676,11 @@ timeline.addObserver(<#T##observer: TimelineObserving##TimelineObserving#>)
 
 We welcome contributions!
 
-Check out our [upcoming milestones](https://github.com/material-motion/material-motion-runtime-objc/milestones).
+Check out our [upcoming milestones](https://github.com/material-motion/runtime-objc/milestones).
 
-Learn more about [our team](https://material-motion.gitbooks.io/material-motion-team/content/),
-[our community](https://material-motion.gitbooks.io/material-motion-team/content/community/), and
-our [contributor essentials](https://material-motion.gitbooks.io/material-motion-team/content/essentials/).
+Learn more about [our team](https://material-motion.github.io/material-motion/team/),
+[our community](https://material-motion.github.io/material-motion/team/community/), and
+our [contributor essentials](https://material-motion.github.io/material-motion/team/essentials/).
 
 ## License
 

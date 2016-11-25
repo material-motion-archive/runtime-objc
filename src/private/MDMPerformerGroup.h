@@ -17,7 +17,7 @@
 #import <Foundation/Foundation.h>
 
 @class MDMPerformerInfo;
-@class MDMRuntime;
+@class MDMMotionRuntime;
 @protocol MDMIsActiveTokenable;
 @protocol MDMPerformerGroupDelegate;
 @protocol MDMPlan;
@@ -26,7 +26,7 @@
 /** An entity responsible for managing the performers associated with a given target. */
 @interface MDMPerformerGroup : NSObject
 
-- (nonnull instancetype)initWithTarget:(nonnull id)target runtime:(nonnull MDMRuntime *)runtime NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithTarget:(nonnull id)target runtime:(nonnull MDMMotionRuntime *)runtime NS_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)init NS_UNAVAILABLE;
 
 @property(nonatomic, nonnull, readonly) id target;

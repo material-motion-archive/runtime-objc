@@ -19,7 +19,7 @@
 /**
  A class conforming to MDMPlan is expected to describe a plan of motion for a target.
 
- Plans are translated into performers by an instance of MDMRuntime.
+ Plans are translated into performers by an instance of MDMMotionRuntime.
  */
 NS_SWIFT_NAME(Plan)
 @protocol MDMPlan <NSObject, NSCopying>
@@ -29,7 +29,7 @@ NS_SWIFT_NAME(Plan)
 /**
  Asks the receiver to return a class conforming to MDMPerformer.
 
- The returned class will be instantiated by an instance of MDMRuntime. The instantiated performer is
+ The returned class will be instantiated by an instance of MDMMotionRuntime. The instantiated performer is
  expected to execute the plan.
  */
 - (nonnull Class)performerClass;

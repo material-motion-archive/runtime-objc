@@ -14,21 +14,21 @@
  limitations under the License.
  */
 
-#import "MDMRuntime.h"
-#import "MDMRuntime+Private.h"
+#import "MDMMotionRuntime.h"
+#import "MDMMotionRuntime+Private.h"
 
 #import "MDMTracing.h"
 #import "private/MDMIsActiveTokenGenerator.h"
 #import "private/MDMPerformerGroup.h"
 
-@interface MDMRuntime () <MDMIsActiveTokenGeneratorDelegate>
+@interface MDMMotionRuntime () <MDMIsActiveTokenGeneratorDelegate>
 
 @property(nonatomic, strong) NSMapTable *targetToPerformerGroup;
 @property(nonatomic, strong, readonly) NSMutableSet<id<MDMIsActiveTokenable>> *isActiveTokens;
 
 @end
 
-@implementation MDMRuntime {
+@implementation MDMMotionRuntime {
   NSMutableOrderedSet *_tracers;
 }
 
@@ -62,8 +62,8 @@
   [self.isActiveTokens addObject:token];
 
   if (wasInactive) {
-    if ([self.delegate respondsToSelector:@selector(runtimeActivityStateDidChange:)]) {
-      [self.delegate runtimeActivityStateDidChange:self];
+    if ([self.delegate respondsToSelector:@selector(motionRuntimeActivityStateDidChange:)]) {
+      [self.delegate motionRuntimeActivityStateDidChange:self];
     }
   }
 }
@@ -75,16 +75,16 @@
   [self.isActiveTokens removeObject:token];
 
   if (self.isActiveTokens.count == 0) {
-    if ([self.delegate respondsToSelector:@selector(runtimeActivityStateDidChange:)]) {
-      [self.delegate runtimeActivityStateDidChange:self];
+    if ([self.delegate respondsToSelector:@selector(motionRuntimeActivityStateDidChange:)]) {
+      [self.delegate motionRuntimeActivityStateDidChange:self];
     }
   }
 }
 
 #pragma mark - Public
 
-- (MDMRuntimeActivityState)activityState {
-  return (self.isActiveTokens.count > 0) ? MDMRuntimeActivityStateActive : MDMRuntimeActivityStateIdle;
+- (MDMMotionRuntimeActivityState)activityState {
+  return (self.isActiveTokens.count > 0) ? MDMMotionRuntimeActivityStateActive : MDMMotionRuntimeActivityStateIdle;
 }
 
 - (void)addPlan:(NSObject<MDMPlan> *)plan to:(id)target {

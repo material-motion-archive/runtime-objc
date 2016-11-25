@@ -88,7 +88,7 @@ enum RuntimeSpyEvent {
   case didCreatePerformer(performer: Performing, target: Any)
 }
 
-// Fuzzy comparator of Runtime Tracing events with their public equivalent.
+// Fuzzy comparator of MotionRuntime Tracing events with their public equivalent.
 func ==(lhs: RuntimeSpyEvent, rhs: RuntimeSpyTestEvent) -> Bool {
   switch (lhs, rhs) {
   case (.didAddPlan(let plan1, let target1),

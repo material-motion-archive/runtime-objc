@@ -15,7 +15,7 @@
  */
 
 #import "MDMIsActiveTokenGenerator.h"
-#import "MDMRuntime.h"
+#import "MDMMotionRuntime.h"
 
-@interface MDMRuntime () <MDMIsActiveTokenGeneratorDelegate>
+@interface MDMMotionRuntime () <MDMIsActiveTokenGeneratorDelegate>
 @end

@@ -17,14 +17,14 @@
 #import "MDMPerformerGroup.h"
 
 #import "MDMIsActiveTokenGenerator.h"
+#import "MDMMotionRuntime+Private.h"
 #import "MDMPerforming.h"
 #import "MDMPlan.h"
 #import "MDMPlanEmitter.h"
-#import "MDMRuntime+Private.h"
 #import "MDMTracing.h"
 
 @interface MDMPerformerGroup ()
-@property(nonatomic, weak) MDMRuntime *runtime;
+@property(nonatomic, weak) MDMMotionRuntime *runtime;
 @property(nonatomic, strong, readonly) NSMutableArray<id<MDMPerforming>> *performers;
 @property(nonatomic, strong, readonly) NSMutableDictionary *performerClassNameToPerformer;
 @property(nonatomic, strong, readonly) NSMutableDictionary *performerPlanNameToPerformer;
@@ -32,7 +32,7 @@
 
 @implementation MDMPerformerGroup
 
-- (instancetype)initWithTarget:(id)target runtime:(MDMRuntime *)runtime {
+- (instancetype)initWithTarget:(id)target runtime:(MDMMotionRuntime *)runtime {
   self = [super init];
   if (self) {
     _target = target;

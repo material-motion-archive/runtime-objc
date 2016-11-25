@@ -16,12 +16,12 @@
 
 #import "MDMPerforming.h"
 
-@class MDMRuntime;
+@class MDMMotionRuntime;
 
 @interface MDMPlanEmitter : NSObject <MDMPlanEmitting>
 
 /** Initialize a newly allocated emitter with the provided runtime and target. */
-- (nonnull instancetype)initWithRuntime:(nonnull MDMRuntime *)runtime target:(nonnull id)target;
+- (nonnull instancetype)initWithRuntime:(nonnull MDMMotionRuntime *)runtime target:(nonnull id)target;
 
 /** Use initWithRuntime:target: instead. */
 - (nonnull instancetype)init NS_UNAVAILABLE;

@@ -33,7 +33,7 @@ class NamedPlanTests: XCTestCase {
   }
 
   func testAddingNamedPlan() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
 
     runtime.addPlan(firstViewTargetAlteringPlan, named: "common_name", to: target)
 
@@ -41,7 +41,7 @@ class NamedPlanTests: XCTestCase {
   }
 
   func testAddAndRemoveTheSameNamedPlan() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
 
     runtime.addPlan(firstViewTargetAlteringPlan, named: "name_one", to: target)
     runtime.removePlan(named: "name_one", from: target)
@@ -50,7 +50,7 @@ class NamedPlanTests: XCTestCase {
   }
 
   func testRemoveNamedPlanThatIsntThere() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
 
     runtime.addPlan(firstViewTargetAlteringPlan, named: "common_name", to: target)
     runtime.removePlan(named: "was_never_added_plan", from: target)
@@ -59,7 +59,7 @@ class NamedPlanTests: XCTestCase {
   }
 
   func testNamedPlansOverwiteOneAnother() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     let planA = IncrementerTargetPlan()
     let planB = IncrementerTargetPlan()
     runtime.addPlan(planA, named: "common_name", to: incrementerTarget)
@@ -70,7 +70,7 @@ class NamedPlanTests: XCTestCase {
   }
 
   func testNamedPlansMakeAddAndRemoveCallbacks() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     let plan = ViewTargetAltering()
     runtime.addPlan(plan, named: "one_name", to: target)
     runtime.removePlan(named: "one_name", from: target)
@@ -80,7 +80,7 @@ class NamedPlanTests: XCTestCase {
   }
 
   func testAddingTheSameNamedPlanTwiceToTheSameTarget() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     let plan = IncrementerTargetPlan()
     runtime.addPlan(plan, named: "one", to: incrementerTarget)
     runtime.addPlan(plan, named: "one", to: incrementerTarget)
@@ -90,7 +90,7 @@ class NamedPlanTests: XCTestCase {
   }
 
   func testAddingTheSamePlanWithSimilarNamesToTheSameTarget() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     let firstPlan = IncrementerTargetPlan()
     runtime.addPlan(firstPlan, named: "one", to: incrementerTarget)
     runtime.addPlan(firstPlan, named: "One", to: incrementerTarget)
@@ -102,7 +102,7 @@ class NamedPlanTests: XCTestCase {
   }
 
   func testAddingTheSameNamedPlanToDifferentTargets() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     let firstPlan = IncrementerTargetPlan()
     let secondIncrementerTarget = IncrementerTarget()
     runtime.addPlan(firstPlan, named: "one", to: incrementerTarget)
@@ -115,7 +115,7 @@ class NamedPlanTests: XCTestCase {
   }
 
   func testNamedPlanOnlyInvokesNamedCallbacks() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     let plan = ViewTargetAltering()
     runtime.addPlan(plan, named: "one_name", to: target)
 
@@ -123,7 +123,7 @@ class NamedPlanTests: XCTestCase {
   }
 
   func testPlanOnlyInvokesPlanCallbacks() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     let plan = RegularPlanTargetAlteringPlan()
     runtime.addPlan(plan, to: target)
 
@@ -132,7 +132,7 @@ class NamedPlanTests: XCTestCase {
   }
 
   func testNamedPlansReusePerformers() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     let spy = RuntimeSpy()
     runtime.addTracer(spy)
 
@@ -143,7 +143,7 @@ class NamedPlanTests: XCTestCase {
   }
 
   func testNamedPlansAdditionsAreCommunicatedViaTracers() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     let spy = RuntimeSpy()
     runtime.addTracer(spy)
 
@@ -159,7 +159,7 @@ class NamedPlanTests: XCTestCase {
   func testNamedPlansRespectTracers() {
     let differentPlan = ChangeBooleanNamedPlan(desiredBoolean:true)
     let state = State()
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     let spy = RuntimeSpy()
     runtime.addTracer(spy)
 
@@ -180,7 +180,7 @@ class NamedPlanTests: XCTestCase {
   func testPerformerCallbacksAreInvokedBeforeTracers() {
     let trackingPlan = RegularPlanTargetAlteringPlan()
     let state = State()
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     let spy = RuntimeSpy()
     runtime.addTracer(spy)
 

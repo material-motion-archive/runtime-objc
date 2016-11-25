@@ -22,7 +22,7 @@ import MaterialMotionRuntime
 class ContinuousPerformingTests: XCTestCase {
 
   func testContinuousPerformerCausesActivityStateChange() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
 
     let delegate = TestRuntimeDelegate()
     runtime.delegate = delegate
@@ -34,7 +34,7 @@ class ContinuousPerformingTests: XCTestCase {
   }
 
   func testForeverActivePerformerCausesActivityStateChange() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
 
     let delegate = TestRuntimeDelegate()
     runtime.delegate = delegate

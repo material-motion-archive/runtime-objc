@@ -16,18 +16,18 @@
 
 #import "MDMPlanEmitter.h"
 
-#import "MDMRuntime.h"
+#import "MDMMotionRuntime.h"
 
 @interface MDMPlanEmitter ()
 
-@property(nonatomic, weak) MDMRuntime *runtime;
+@property(nonatomic, weak) MDMMotionRuntime *runtime;
 @property(nonatomic, weak) id target;
 
 @end
 
 @implementation MDMPlanEmitter
 
-- (nonnull instancetype)initWithRuntime:(nonnull MDMRuntime *)runtime target:(nonnull id)target {
+- (nonnull instancetype)initWithRuntime:(nonnull MDMMotionRuntime *)runtime target:(nonnull id)target {
   self = [super init];
   if (self) {
     self.runtime = runtime;

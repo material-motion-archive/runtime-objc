@@ -22,7 +22,7 @@ import MaterialMotionRuntime
 class CompositionTests: XCTestCase {
 
   func testComposedDelegationCausesActivityStateChange() {
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
 
     let delegate = TestRuntimeDelegate()
     runtime.delegate = delegate

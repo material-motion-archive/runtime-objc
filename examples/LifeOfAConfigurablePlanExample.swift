@@ -23,7 +23,7 @@ import MaterialMotionRuntime
 // associated with the view controller's root view, allowing us to drag the square by touching
 // anywhere in the view controller.
 class LifeOfAConfigurablePlanViewController: UIViewController {
-  let runtime = Runtime()
+  let runtime = MotionRuntime()
 
   func commonInit() {
     self.title = "Touch anywhere to drag the square"

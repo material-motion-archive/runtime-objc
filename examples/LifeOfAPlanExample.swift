@@ -97,10 +97,10 @@ class LifeOfAPlanViewController: UIViewController {
 
   // MARK: Configuring views and interactions
 
-  // We create a single Runtime for the lifetime of this view controller. How many runtimes you
+  // We create a single MotionRuntime for the lifetime of this view controller. How many runtimes you
   // decide to create is a matter of preference, but generally speaking it's fair to create one
   // runtime per self-contained interaction or transition.
-  let runtime = Runtime()
+  let runtime = MotionRuntime()
 
   override func viewDidLoad() {
     super.viewDidLoad()

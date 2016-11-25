@@ -22,7 +22,7 @@ import MaterialMotionRuntime
 // tossable. The user can drag anywhere on the screen to grab the square. The square can then be
 // tossed in any direction and it will spring back to the center of the screen.
 class LifeOfAComposablePlanExampleController: UIViewController {
-  let runtime = Runtime()
+  let runtime = MotionRuntime()
 
   func commonInit() {
     title = "Touch anywhere to toss the square"

@@ -32,7 +32,7 @@ class RuntimeTests: XCTestCase {
 
     let plan = ChangeBoolean(desiredBoolean: true)
 
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     let spy = RuntimeSpy()
     runtime.addTracer(spy)
 
@@ -48,7 +48,7 @@ class RuntimeTests: XCTestCase {
 
     let plan = ChangeBoolean(desiredBoolean: true)
 
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     runtime.addPlan(plan, to: state)
 
     XCTAssertEqual(state.boolean, plan.desiredBoolean)
@@ -87,7 +87,7 @@ class RuntimeTests: XCTestCase {
     let state = State()
     state.boolean = false
 
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     let spy = RuntimeSpy()
     runtime.addTracer(spy)
 
@@ -102,7 +102,7 @@ class RuntimeTests: XCTestCase {
     let state = State()
     state.boolean = false
 
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
     let spy = RuntimeSpy()
     runtime.addTracer(spy)
 
@@ -117,7 +117,7 @@ class RuntimeTests: XCTestCase {
     let state = State()
     state.boolean = false
 
-    let runtime = Runtime()
+    let runtime = MotionRuntime()
 
     runtime.addPlans([ChangeBoolean(desiredBoolean: true),
                       ChangeBoolean(desiredBoolean: false)], to: state)
@@ -133,7 +133,7 @@ class RuntimeTests: XCTestCase {
   // Verify that we're unable to request a delegated performance token after the runtime has been
   // released.
   func testPostDeallocTokenGenerationIsIgnored() {
-    var runtime: Runtime? = Runtime()
+    var runtime: MotionRuntime? = MotionRuntime()
 
     let plan = HijackedIsActiveTokenGenerator()
     runtime!.addPlan(plan, to: NSObject())

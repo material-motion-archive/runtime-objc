@@ -16,7 +16,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol MDMRuntimeDelegate;
+@protocol MDMMotionRuntimeDelegate;
 @protocol MDMPlan;
 @protocol MDMNamedPlan;
 @protocol MDMTracing;
@@ -27,17 +27,37 @@
  A runtime can be either idle or active. If any performer in the runtime is active, then the runtime
  is active.
  */
-typedef NS_ENUM(NSUInteger, MDMRuntimeActivityState) {
+typedef NS_ENUM(NSUInteger, MDMMotionRuntimeActivityState) {
   /** An idle runtime has no active performers. */
-  MDMRuntimeActivityStateIdle,
+  MDMMotionRuntimeActivityStateIdle,
 
   /** An active runtime has at least one active performer. */
-  MDMRuntimeActivityStateActive,
+  MDMMotionRuntimeActivityStateActive,
 };
 
-/** The RuntimeFeatures protocol defines the expected functionality for a runtime object. */
-NS_SWIFT_NAME(RuntimeFeatures)
-@protocol MDMRuntimeFeatures <NSObject>
+/**
+ An instance of MDMMotionRuntime acts as the mediating agent between plans and performers.
+
+ Plans are objects that conform to the MDMPlan protocol.
+ Performers are objects that conform to the MDMPerforming protocol.
+
+ ## Usage
+
+ Many runtime instances may be instantiated throughout the lifetime of an app. Generally-speaking,
+ one runtime is created per interaction. An interaction might be a transition, a one-off animation,
+ or a complex multi-state interaction.
+
+ Plans can be associated with targets by using addPlan:to:.
+
+ The runtime creates performer instances when plans are added. Performers are expected to fulfill
+ the provided plans.
+
+ ## Lifecycle
+
+ When an instance of a runtime is deallocated its performers will also be deallocated.
+ */
+NS_SWIFT_NAME(MotionRuntime)
+@interface MDMMotionRuntime : NSObject
 
 #pragma mark Adding plans
 
@@ -101,49 +121,23 @@ NS_SWIFT_NAME(RuntimeFeatures)
 
  An Performer conforming to MDMDelegatedPerforming is active if it has ongoing delegated performance.
  */
-@property(nonatomic, assign, readonly) MDMRuntimeActivityState activityState;
-
-@end
-
-/**
- An instance of MDMRuntime acts as the mediating agent between plans and performers.
-
- Plans are objects that conform to the MDMPlan protocol.
- Performers are objects that conform to the MDMPerforming protocol.
-
- ## Usage
-
- Many runtime instances may be instantiated throughout the lifetime of an app. Generally-speaking,
- one runtime is created per interaction. An interaction might be a transition, a one-off animation,
- or a complex multi-state interaction.
-
- Plans can be associated with targets by using addPlan:to:.
-
- The runtime creates performer instances when plans are added. Performers are expected to fulfill
- the provided plans.
-
- ## Lifecycle
-
- When an instance of a runtime is deallocated its performers will also be deallocated.
- */
-NS_SWIFT_NAME(Runtime)
-@interface MDMRuntime : NSObject <MDMRuntimeFeatures>
+@property(nonatomic, assign, readonly) MDMMotionRuntimeActivityState activityState;
 
 #pragma mark Delegated events
 
 /** A runtime delegate can listen to specific state change events. */
-@property(nonatomic, weak, nullable) id<MDMRuntimeDelegate> delegate;
+@property(nonatomic, weak, nullable) id<MDMMotionRuntimeDelegate> delegate;
 
 @end
 
 /**
- The MDMRuntimeDelegate protocol defines state change events that may be sent from an instance of
- MDMRuntime.
+ The MDMMotionRuntimeDelegate protocol defines state change events that may be sent from an instance of
+ MDMMotionRuntime.
  */
-NS_SWIFT_NAME(RuntimeDelegate)
-@protocol MDMRuntimeDelegate <NSObject>
+NS_SWIFT_NAME(MotionRuntimeDelegate)
+@protocol MDMMotionRuntimeDelegate <NSObject>
 
 /** Informs the receiver that the runtime's current activity state has changed. */
-- (void)runtimeActivityStateDidChange:(nonnull MDMRuntime *)runtime;
+- (void)motionRuntimeActivityStateDidChange:(nonnull MDMMotionRuntime *)runtime;
 
 @end

@@ -19,7 +19,7 @@
 #import "MDMTracing.h"
 
 /**
- An instance of a logging tracer added to a Runtime instance will output all Tracing
+ An instance of a logging tracer added to a MotionRuntime instance will output all Tracing
  invocation names and parameters to the console.
  */
 NS_SWIFT_NAME(ConsoleLoggingTracer)

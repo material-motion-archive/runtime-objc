@@ -17,6 +17,7 @@
 #import <Foundation/Foundation.h>
 
 @class MDMPerformerInfo;
+@class MDMPlanEmitter;
 @class MDMMotionRuntime;
 @protocol MDMIsActiveTokenable;
 @protocol MDMTargetScopeDelegate;
@@ -29,6 +30,7 @@
 
 - (nonnull instancetype)initWithTarget:(nonnull id)target
                                tracers:(nonnull NSMutableOrderedSet<id<MDMTracing>> *)tracers
+                           planEmitter:(nonnull MDMPlanEmitter *)planEmitter
                                runtime:(nonnull MDMMotionRuntime *)runtime NS_DESIGNATED_INITIALIZER;
 
 - (nonnull instancetype)init NS_UNAVAILABLE;

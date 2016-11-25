@@ -32,16 +32,19 @@
 @implementation MDMTargetScope {
   id _target;
   NSMutableOrderedSet<id<MDMTracing>> *_tracers;
+  MDMPlanEmitter *_planEmitter;
 }
 
 - (instancetype)initWithTarget:(id)target
                        tracers:(NSMutableOrderedSet<id<MDMTracing>> *)tracers
+                   planEmitter:(nonnull MDMPlanEmitter *)planEmitter
                        runtime:(MDMMotionRuntime *)runtime {
   self = [super init];
   if (self) {
     _target = target;
     _tracers = tracers;
     _runtime = runtime;
+    _planEmitter = planEmitter;
     _performerClassNameToPerformer = [NSMutableDictionary dictionary];
     _performerPlanNameToPerformer = [NSMutableDictionary dictionary];
   }
@@ -139,9 +142,7 @@
   // Composable performance
   if ([performer respondsToSelector:@selector(setPlanEmitter:)]) {
     id<MDMComposablePerforming> composablePerformer = (id<MDMComposablePerforming>)performer;
-
-    MDMPlanEmitter *emitter = [[MDMPlanEmitter alloc] initWithRuntime:self.runtime target:_target];
-    [composablePerformer setPlanEmitter:emitter];
+    [composablePerformer setPlanEmitter:_planEmitter];
   }
 
   // Continuous performance

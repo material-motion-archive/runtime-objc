@@ -19,6 +19,7 @@
 
 #import "MDMTracing.h"
 #import "private/MDMIsActiveTokenGenerator.h"
+#import "private/MDMPlanEmitter.h"
 #import "private/MDMTargetScope.h"
 
 @interface MDMMotionRuntime () <MDMIsActiveTokenGeneratorDelegate>
@@ -47,7 +48,11 @@
 - (MDMTargetScope *)scopeForTarget:(id)target {
   MDMTargetScope *scope = [_targetToScope objectForKey:target];
   if (!scope) {
-    scope = [[MDMTargetScope alloc] initWithTarget:target tracers:_tracers runtime:self];
+    MDMPlanEmitter *emitter = [[MDMPlanEmitter alloc] initWithRuntime:self target:target];
+    scope = [[MDMTargetScope alloc] initWithTarget:target
+                                           tracers:_tracers
+                                       planEmitter:emitter
+                                           runtime:self];
     [self.targetToScope setObject:scope forKey:target];
   }
 

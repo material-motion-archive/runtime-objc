@@ -30,7 +30,7 @@ class ContinuousPerformingTests: XCTestCase {
     runtime.addPlan(InstantlyInactive(), to: NSObject())
 
     XCTAssertTrue(delegate.activityStateDidChange)
-    XCTAssertTrue(runtime.activityState == .idle)
+    XCTAssertFalse(runtime.isActive)
   }
 
   func testForeverActivePerformerCausesActivityStateChange() {
@@ -42,6 +42,6 @@ class ContinuousPerformingTests: XCTestCase {
     runtime.addPlan(ForeverActive(), to: NSObject())
 
     XCTAssertTrue(delegate.activityStateDidChange)
-    XCTAssertTrue(runtime.activityState == .active)
+    XCTAssertTrue(runtime.isActive)
   }
 }

@@ -37,6 +37,6 @@ class CompositionTests: XCTestCase {
     //    and completing some delegated work.
 
     XCTAssertTrue(delegate.activityStateDidChange)
-    XCTAssertTrue(runtime.activityState == .idle)
+    XCTAssertFalse(runtime.isActive)
   }
 }

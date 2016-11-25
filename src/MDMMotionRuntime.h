@@ -22,20 +22,6 @@
 @protocol MDMTracing;
 
 /**
- The possible activity states a runtime can be in.
-
- A runtime can be either idle or active. If any performer in the runtime is active, then the runtime
- is active.
- */
-typedef NS_ENUM(NSUInteger, MDMMotionRuntimeActivityState) {
-  /** An idle runtime has no active performers. */
-  MDMMotionRuntimeActivityStateIdle,
-
-  /** An active runtime has at least one active performer. */
-  MDMMotionRuntimeActivityStateActive,
-};
-
-/**
  An instance of MDMMotionRuntime acts as the mediating agent between plans and performers.
 
  Plans are objects that conform to the MDMPlan protocol.
@@ -115,13 +101,11 @@ NS_SWIFT_NAME(MotionRuntime)
 #pragma mark State
 
 /**
- The current activity state of the runtime.
+ Whether or not this runtime is active.
 
- A runtime is Active if any Performer is active. Otherwise, the runtime is Idle.
-
- An Performer conforming to MDMDelegatedPerforming is active if it has ongoing delegated performance.
+ A runtime is active only if at least performer currently owns a non-terminated token.
  */
-@property(nonatomic, assign, readonly) MDMMotionRuntimeActivityState activityState;
+@property(nonatomic, assign, readonly, getter=isActive) BOOL active;
 
 #pragma mark Delegated events
 

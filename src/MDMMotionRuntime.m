@@ -83,8 +83,8 @@
 
 #pragma mark - Public
 
-- (MDMMotionRuntimeActivityState)activityState {
-  return (self.isActiveTokens.count > 0) ? MDMMotionRuntimeActivityStateActive : MDMMotionRuntimeActivityStateIdle;
+- (BOOL)isActive {
+  return self.isActiveTokens.count > 0;
 }
 
 - (void)addPlan:(NSObject<MDMPlan> *)plan to:(id)target {

@@ -19,11 +19,11 @@
 
 #import "MDMTracing.h"
 #import "private/MDMIsActiveTokenGenerator.h"
-#import "private/MDMPerformerGroup.h"
+#import "private/MDMTargetScope.h"
 
 @interface MDMMotionRuntime () <MDMIsActiveTokenGeneratorDelegate>
 
-@property(nonatomic, strong) NSMapTable *targetToPerformerGroup;
+@property(nonatomic, strong) NSMapTable *targetToScope;
 @property(nonatomic, strong, readonly) NSMutableSet<id<MDMIsActiveTokenable>> *isActiveTokens;
 
 @end
@@ -36,7 +36,7 @@
   self = [super init];
   if (self) {
     _tracers = [NSMutableOrderedSet orderedSet];
-    _targetToPerformerGroup = [NSMapTable weakToStrongObjectsMapTable];
+    _targetToScope = [NSMapTable weakToStrongObjectsMapTable];
     _isActiveTokens = [NSMutableSet set];
   }
   return self;
@@ -44,14 +44,14 @@
 
 #pragma mark - Private
 
-- (MDMPerformerGroup *)performerGroupForTarget:(id)target {
-  MDMPerformerGroup *performerGroup = [_targetToPerformerGroup objectForKey:target];
-  if (!performerGroup) {
-    performerGroup = [[MDMPerformerGroup alloc] initWithTarget:target runtime:self];
-    [self.targetToPerformerGroup setObject:performerGroup forKey:target];
+- (MDMTargetScope *)scopeForTarget:(id)target {
+  MDMTargetScope *scope = [_targetToScope objectForKey:target];
+  if (!scope) {
+    scope = [[MDMTargetScope alloc] initWithTarget:target runtime:self];
+    [self.targetToScope setObject:scope forKey:target];
   }
 
-  return performerGroup;
+  return scope;
 }
 
 #pragma mark - MDMIsActiveTokenGeneratorDelegate
@@ -89,7 +89,7 @@
 
 - (void)addPlan:(NSObject<MDMPlan> *)plan to:(id)target {
   id<MDMPlan> copiedPlan = [plan copy];
-  [[self performerGroupForTarget:target] addPlan:copiedPlan to:target];
+  [[self scopeForTarget:target] addPlan:copiedPlan to:target];
 }
 
 - (void)addPlans:(nonnull NSArray<NSObject<MDMPlan> *> *)plans to:(nonnull id)target {
@@ -101,12 +101,12 @@
 - (void)addPlan:(NSObject<MDMNamedPlan> *)plan named:(NSString *)name to:(id)target {
   NSParameterAssert(name.length > 0);
   id<MDMNamedPlan> copiedPlan = [plan copy];
-  [[self performerGroupForTarget:target] addPlan:copiedPlan named:name to:target];
+  [[self scopeForTarget:target] addPlan:copiedPlan named:name to:target];
 }
 
 - (void)removePlanNamed:(NSString *)name from:(id)target {
   NSParameterAssert(name.length > 0);
-  [[self performerGroupForTarget:target] removePlanNamed:name from:target];
+  [[self scopeForTarget:target] removePlanNamed:name from:target];
 }
 
 #pragma mark - Private

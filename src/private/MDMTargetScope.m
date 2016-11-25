@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-#import "MDMPerformerGroup.h"
+#import "MDMTargetScope.h"
 
 #import "MDMIsActiveTokenGenerator.h"
 #import "MDMMotionRuntime+Private.h"
@@ -23,13 +23,13 @@
 #import "MDMPlanEmitter.h"
 #import "MDMTracing.h"
 
-@interface MDMPerformerGroup ()
+@interface MDMTargetScope ()
 @property(nonatomic, weak) MDMMotionRuntime *runtime;
 @property(nonatomic, strong, readonly) NSMutableDictionary *performerClassNameToPerformer;
 @property(nonatomic, strong, readonly) NSMutableDictionary *performerPlanNameToPerformer;
 @end
 
-@implementation MDMPerformerGroup
+@implementation MDMTargetScope
 
 - (instancetype)initWithTarget:(id)target runtime:(MDMMotionRuntime *)runtime {
   self = [super init];

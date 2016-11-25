@@ -17,14 +17,13 @@
 #import "MDMPerforming.h"
 
 @class MDMPerformerInfo;
-@class MDMPerformerGroup;
+@class MDMTargetScope;
 
 @protocol MDMIsActiveTokenGeneratorDelegate;
 
 @interface MDMIsActiveTokenGenerator : NSObject <MDMIsActiveTokenGenerating>
 
-- (nonnull instancetype)initWithDelegate:(nonnull id<MDMIsActiveTokenGeneratorDelegate>)delegate
-    NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithDelegate:(nonnull id<MDMIsActiveTokenGeneratorDelegate>)delegate NS_DESIGNATED_INITIALIZER;
 
 + (nonnull instancetype) new NS_UNAVAILABLE;
 - (nonnull instancetype)init NS_UNAVAILABLE;

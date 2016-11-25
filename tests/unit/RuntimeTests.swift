@@ -130,6 +130,20 @@ class RuntimeTests: XCTestCase {
     XCTAssertEqual(state.boolean, true)
   }
 
+  func testRuntimeIsDeallocatedWhenNotReferenced() {
+    var runtime: MotionRuntime? = MotionRuntime()
+    weak var weakRuntime: MotionRuntime? = runtime
+
+    runtime!.addPlan(InstantlyInactive(), to: NSObject())
+
+    // Remove our only strong reference to the runtime.
+    runtime = nil
+
+    // If this fails it means there's a retain cycle within the runtime somewhere. Place a
+    // breakpoint here and use the Debug Memory Graph tool to debug.
+    XCTAssertNil(weakRuntime)
+  }
+
   // Verify that we're unable to request a delegated performance token after the runtime has been
   // released.
   func testPostDeallocTokenGenerationIsIgnored() {

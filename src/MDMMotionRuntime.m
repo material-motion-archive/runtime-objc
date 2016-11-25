@@ -29,7 +29,7 @@
 @end
 
 @implementation MDMMotionRuntime {
-  NSMutableOrderedSet *_tracers;
+  NSMutableOrderedSet<id<MDMTracing>> *_tracers;
 }
 
 - (instancetype)init {
@@ -47,7 +47,7 @@
 - (MDMTargetScope *)scopeForTarget:(id)target {
   MDMTargetScope *scope = [_targetToScope objectForKey:target];
   if (!scope) {
-    scope = [[MDMTargetScope alloc] initWithTarget:target runtime:self];
+    scope = [[MDMTargetScope alloc] initWithTarget:target tracers:_tracers runtime:self];
     [self.targetToScope setObject:scope forKey:target];
   }
 

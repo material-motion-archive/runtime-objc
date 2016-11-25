@@ -31,12 +31,16 @@
 
 @implementation MDMTargetScope {
   id _target;
+  NSMutableOrderedSet<id<MDMTracing>> *_tracers;
 }
 
-- (instancetype)initWithTarget:(id)target runtime:(MDMMotionRuntime *)runtime {
+- (instancetype)initWithTarget:(id)target
+                       tracers:(NSMutableOrderedSet<id<MDMTracing>> *)tracers
+                       runtime:(MDMMotionRuntime *)runtime {
   self = [super init];
   if (self) {
     _target = target;
+    _tracers = tracers;
     _runtime = runtime;
     _performerClassNameToPerformer = [NSMutableDictionary dictionary];
     _performerPlanNameToPerformer = [NSMutableDictionary dictionary];
@@ -54,7 +58,7 @@
 
   [performer addPlan:plan];
 
-  for (id<MDMTracing> tracer in self.runtime.tracers) {
+  for (id<MDMTracing> tracer in _tracers) {
     if ([tracer respondsToSelector:@selector(didAddPlan:to:)]) {
       [tracer didAddPlan:plan to:target];
     }
@@ -75,7 +79,7 @@
   if ([performer respondsToSelector:@selector(addPlan:named:)]) {
     [performer addPlan:plan named:name];
   }
-  for (id<MDMTracing> tracer in self.runtime.tracers) {
+  for (id<MDMTracing> tracer in _tracers) {
     if ([tracer respondsToSelector:@selector(didAddPlan:named:to:)]) {
       [tracer didAddPlan:plan named:name to:target];
     }
@@ -95,7 +99,7 @@
       [(id<MDMNamedPlanPerforming>)performer removePlanNamed:name];
     }
     [self.performerPlanNameToPerformer removeObjectForKey:name];
-    for (id<MDMTracing> tracer in self.runtime.tracers) {
+    for (id<MDMTracing> tracer in _tracers) {
       if ([tracer respondsToSelector:@selector(didRemovePlanNamed:from:)]) {
         [tracer didRemovePlanNamed:name from:target];
       }
@@ -150,7 +154,7 @@
 }
 
 - (void)notifyPerformerCreation:(id<MDMPerforming>)performer target:(id)target {
-  for (id<MDMTracing> tracer in self.runtime.tracers) {
+  for (id<MDMTracing> tracer in _tracers) {
     if ([tracer respondsToSelector:@selector(didCreatePerformer:for:)]) {
       [tracer didCreatePerformer:performer for:_target];
     }

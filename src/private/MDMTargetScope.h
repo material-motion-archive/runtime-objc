@@ -22,11 +22,14 @@
 @protocol MDMTargetScopeDelegate;
 @protocol MDMPlan;
 @protocol MDMNamedPlan;
+@protocol MDMTracing;
 
 /** An entity responsible for managing the performers associated with a given target. */
 @interface MDMTargetScope : NSObject
 
-- (nonnull instancetype)initWithTarget:(nonnull id)target runtime:(nonnull MDMMotionRuntime *)runtime NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithTarget:(nonnull id)target
+                               tracers:(nonnull NSMutableOrderedSet<id<MDMTracing>> *)tracers
+                               runtime:(nonnull MDMMotionRuntime *)runtime NS_DESIGNATED_INITIALIZER;
 
 - (nonnull instancetype)init NS_UNAVAILABLE;
 

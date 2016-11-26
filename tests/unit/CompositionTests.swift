@@ -24,7 +24,7 @@ class CompositionTests: XCTestCase {
   func testComposedDelegationCausesActivityStateChange() {
     let runtime = MotionRuntime()
 
-    let delegate = TestRuntimeDelegate()
+    let delegate = ExpectableRuntimeDelegate()
     runtime.delegate = delegate
 
     runtime.addPlan(Emit(plan: InstantlyInactive()), to: NSObject())

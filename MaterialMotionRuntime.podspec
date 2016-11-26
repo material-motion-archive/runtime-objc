@@ -25,5 +25,6 @@ Pod::Spec.new do |s|
   s.subspec "tests" do |ss|
     ss.source_files = "tests/src/*.{swift}", "tests/src/private/*.{swift}"
     ss.dependency "MaterialMotionRuntime/lib"
+    ss.framework = "XCTest"
   end
 end

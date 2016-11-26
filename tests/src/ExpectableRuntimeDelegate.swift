@@ -14,13 +14,19 @@
  limitations under the License.
  */
 
+import XCTest
 import Foundation
 import MaterialMotionRuntime
 
-public class TestRuntimeDelegate: NSObject, MotionRuntimeDelegate {
+public class ExpectableRuntimeDelegate: NSObject, MotionRuntimeDelegate {
   public var activityStateDidChange = false
+  public var didIdleExpectation: XCTestExpectation?
 
   public func motionRuntimeActivityStateDidChange(_ runtime: MotionRuntime) {
-    self.activityStateDidChange = true
+    activityStateDidChange = true
+
+    if runtime.activityState == .idle {
+      didIdleExpectation?.fulfill()
+    }
   }
 }

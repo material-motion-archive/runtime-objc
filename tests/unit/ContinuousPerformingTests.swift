@@ -24,7 +24,7 @@ class ContinuousPerformingTests: XCTestCase {
   func testContinuousPerformerCausesActivityStateChange() {
     let runtime = MotionRuntime()
 
-    let delegate = TestRuntimeDelegate()
+    let delegate = ExpectableRuntimeDelegate()
     runtime.delegate = delegate
 
     runtime.addPlan(InstantlyInactive(), to: NSObject())
@@ -36,7 +36,7 @@ class ContinuousPerformingTests: XCTestCase {
   func testForeverActivePerformerCausesActivityStateChange() {
     let runtime = MotionRuntime()
 
-    let delegate = TestRuntimeDelegate()
+    let delegate = ExpectableRuntimeDelegate()
     runtime.delegate = delegate
 
     runtime.addPlan(ForeverActive(), to: NSObject())

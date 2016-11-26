@@ -3,7 +3,7 @@ use_frameworks!
 
 target "Catalog" do
   pod 'CatalogByConvention'
-  pod 'MaterialMotionRuntime', :path => './'
+  pod 'MaterialMotionRuntime/examples', :path => './'
   project 'examples/apps/Catalog/Catalog.xcodeproj'
 end
 

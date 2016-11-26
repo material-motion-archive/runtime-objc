@@ -8,7 +8,7 @@ before_install:
   - git clone https://github.com/phacility/arcanist.git
   - git clone https://github.com/phacility/libphutil.git
   - git clone --recursive https://github.com/material-foundation/material-arc-tools.git
-  - pod install
+  - pod install --repo-update
 script:
   - set -o pipefail
   - arcanist/bin/arc unit --everything --trace

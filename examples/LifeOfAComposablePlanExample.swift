@@ -21,7 +21,7 @@ import MaterialMotionRuntime
 // many plans. Building off of our draggable examples, we'll be making the view in this example
 // tossable. The user can drag anywhere on the screen to grab the square. The square can then be
 // tossed in any direction and it will spring back to the center of the screen.
-class LifeOfAComposablePlanExampleController: UIViewController {
+public class LifeOfAComposablePlanExampleController: UIViewController {
   let runtime = MotionRuntime()
 
   func commonInit() {
@@ -30,7 +30,7 @@ class LifeOfAComposablePlanExampleController: UIViewController {
 
   // MARK: Configuring views and interactions
 
-  override func viewDidLoad() {
+  override public func viewDidLoad() {
     super.viewDidLoad()
 
     view.backgroundColor = .white
@@ -56,7 +56,7 @@ class LifeOfAComposablePlanExampleController: UIViewController {
     commonInit()
   }
 
-  required init?(coder aDecoder: NSCoder) {
+  required public init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
 
     commonInit()

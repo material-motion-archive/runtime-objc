@@ -22,7 +22,7 @@ import MaterialMotionRuntime
 // panGestureRecognizer property. We assign a pre-made pan gesture recognizer that's already
 // associated with the view controller's root view, allowing us to drag the square by touching
 // anywhere in the view controller.
-class LifeOfAConfigurablePlanViewController: UIViewController {
+public class LifeOfAConfigurablePlanViewController: UIViewController {
   let runtime = MotionRuntime()
 
   func commonInit() {
@@ -31,7 +31,7 @@ class LifeOfAConfigurablePlanViewController: UIViewController {
 
   // MARK: Configuring views and interactions
 
-  override func viewDidLoad() {
+  override public func viewDidLoad() {
     super.viewDidLoad()
 
     view.backgroundColor = .white
@@ -56,7 +56,7 @@ class LifeOfAConfigurablePlanViewController: UIViewController {
     self.commonInit()
   }
 
-  required init?(coder aDecoder: NSCoder) {
+  required public init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
 
     self.commonInit()

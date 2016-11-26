@@ -19,7 +19,7 @@ import MaterialMotionRuntime
 
 // This example demonstrates the development a new plan/performer pair and the committment of the
 // plan to a runtime. We create a "Draggable" plan that enables its associated view to be dragged.
-class LifeOfAPlanViewController: UIViewController {
+public class LifeOfAPlanViewController: UIViewController {
 
   func commonInit() {
     self.title = "Touch the square to drag it"
@@ -102,7 +102,7 @@ class LifeOfAPlanViewController: UIViewController {
   // runtime per self-contained interaction or transition.
   let runtime = MotionRuntime()
 
-  override func viewDidLoad() {
+  override public func viewDidLoad() {
     super.viewDidLoad()
 
     view.backgroundColor = .white
@@ -123,7 +123,7 @@ class LifeOfAPlanViewController: UIViewController {
     self.commonInit()
   }
 
-  required init?(coder aDecoder: NSCoder) {
+  required public init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
 
     self.commonInit()

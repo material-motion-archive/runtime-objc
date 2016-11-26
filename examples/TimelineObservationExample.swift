@@ -20,7 +20,7 @@ import MaterialMotionRuntime
 // This example demonstrates how to create a Timeline and observe changes to its state by
 // implementing the TimelineObserving protocol. We create a rudimentary API to mimic the ability to
 // attach/detach a scrubber and to be able to change its timeOffset.
-class TimelineObservationExampleViewController: UIViewController, TimelineObserving {
+public class TimelineObservationExampleViewController: UIViewController, TimelineObserving {
 
   let timeline = Timeline()
   let maximumTimeOffset: Float = 10
@@ -35,7 +35,7 @@ class TimelineObservationExampleViewController: UIViewController, TimelineObserv
 
   var slider: UISlider!
 
-  override func viewDidLoad() {
+  override public func viewDidLoad() {
     super.viewDidLoad()
 
     view.backgroundColor = .white
@@ -75,16 +75,16 @@ class TimelineObservationExampleViewController: UIViewController, TimelineObserv
 
   // MARK: TimelineObserving
 
-  func timeline(_ timeline: Timeline, scrubberDidScrub timeOffset: TimeInterval) {
+  public func timeline(_ timeline: Timeline, scrubberDidScrub timeOffset: TimeInterval) {
     print("Scrubber did scrub: \(timeOffset)")
   }
 
-  func timeline(_ timeline: Timeline, didAttach scrubber: TimelineScrubber) {
+  public func timeline(_ timeline: Timeline, didAttach scrubber: TimelineScrubber) {
     print("Did attach scrubber")
     dump(scrubber)
   }
 
-  func timeline(_ timeline: Timeline, didDetach scrubber: TimelineScrubber) {
+  public func timeline(_ timeline: Timeline, didDetach scrubber: TimelineScrubber) {
     print("Did detach scrubber")
     dump(scrubber)
   }
@@ -97,7 +97,7 @@ class TimelineObservationExampleViewController: UIViewController, TimelineObserv
     self.commonInit()
   }
 
-  required init?(coder aDecoder: NSCoder) {
+  required public init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
 
     self.commonInit()

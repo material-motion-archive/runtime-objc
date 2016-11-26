@@ -16,6 +16,8 @@
 
 // MARK: Catalog by convention
 
+import MaterialMotionRuntime
+
 extension LifeOfAPlanViewController {
   class func catalogBreadcrumbs() -> [String] {
     return ["1. Life of a plan"]

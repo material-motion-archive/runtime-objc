@@ -57,6 +57,7 @@ public class TimelineObservationExampleViewController: UIViewController, Timelin
                           height: sliderSize.height)
     slider.addTarget(self, action: #selector(sliderDidChange(_:)), for: .valueChanged)
     slider.maximumValue = maximumTimeOffset
+    slider.isEnabled = false
     view.addSubview(slider)
   }
 

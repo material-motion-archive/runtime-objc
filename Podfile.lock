@@ -17,7 +17,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   CatalogByConvention: be55c2263132e4f9f59299ac8a528ee8715b3275
-  MaterialMotionRuntime: d3021113b28d332efd0621f66c9e152b3b11e4ff
+  MaterialMotionRuntime: 428cc4ff81bc4190101bfb1dd34d9e13e26eeb36
 
 PODFILE CHECKSUM: 7a96b6cc54ccc4da1e8e955c12f0b1688026e0e3
 

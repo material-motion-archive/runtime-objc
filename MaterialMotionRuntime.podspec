@@ -22,6 +22,12 @@ Pod::Spec.new do |s|
     ss.dependency "MaterialMotionRuntime/lib"
   end
 
+  s.subspec "examples" do |ss|
+    ss.source_files = "examples/*.{swift}", "examples/supplementary/*.{swift}"
+    ss.exclude_files = "examples/TableOfContents.swift"
+    ss.dependency "MaterialMotionRuntime/lib"
+  end
+
   s.subspec "tests" do |ss|
     ss.source_files = "tests/src/*.{swift}", "tests/src/private/*.{swift}"
     ss.dependency "MaterialMotionRuntime/lib"

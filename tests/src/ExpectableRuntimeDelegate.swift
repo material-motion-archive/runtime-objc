@@ -25,7 +25,7 @@ public class ExpectableRuntimeDelegate: NSObject, MotionRuntimeDelegate {
   public func motionRuntimeActivityStateDidChange(_ runtime: MotionRuntime) {
     activityStateDidChange = true
 
-    if runtime.activityState == .idle {
+    if runtime.isActive {
       didIdleExpectation?.fulfill()
     }
   }

@@ -20,16 +20,17 @@
 #import "MDMTracing.h"
 #import "private/MDMIsActiveTokenGenerator.h"
 #import "private/MDMPlanEmitter.h"
+#import "private/MDMTargetRegistry.h"
 #import "private/MDMTargetScope.h"
 
 @interface MDMMotionRuntime () <MDMIsActiveTokenGeneratorDelegate>
 
-@property(nonatomic, strong) NSMapTable *targetToScope;
 @property(nonatomic, strong, readonly) NSMutableSet<id<MDMIsActiveTokenable>> *isActiveTokens;
 
 @end
 
 @implementation MDMMotionRuntime {
+  MDMTargetRegistry *_targetRegistry;
   NSMutableOrderedSet<id<MDMTracing>> *_tracers;
 }
 
@@ -37,26 +38,10 @@
   self = [super init];
   if (self) {
     _tracers = [NSMutableOrderedSet orderedSet];
-    _targetToScope = [NSMapTable weakToStrongObjectsMapTable];
+    _targetRegistry = [[MDMTargetRegistry alloc] initWithRuntime:self tracers:_tracers];
     _isActiveTokens = [NSMutableSet set];
   }
   return self;
-}
-
-#pragma mark - Private
-
-- (MDMTargetScope *)scopeForTarget:(id)target {
-  MDMTargetScope *scope = [_targetToScope objectForKey:target];
-  if (!scope) {
-    MDMPlanEmitter *emitter = [[MDMPlanEmitter alloc] initWithRuntime:self target:target];
-    scope = [[MDMTargetScope alloc] initWithTarget:target
-                                           tracers:_tracers
-                                       planEmitter:emitter
-                                           runtime:self];
-    [self.targetToScope setObject:scope forKey:target];
-  }
-
-  return scope;
 }
 
 #pragma mark - MDMIsActiveTokenGeneratorDelegate
@@ -93,8 +78,8 @@
 }
 
 - (void)addPlan:(NSObject<MDMPlan> *)plan to:(id)target {
-  id<MDMPlan> copiedPlan = [plan copy];
-  [[self scopeForTarget:target] addPlan:copiedPlan to:target];
+  NSObject<MDMPlan> *copiedPlan = [plan copy];
+  [_targetRegistry addPlan:copiedPlan to:target];
 }
 
 - (void)addPlans:(nonnull NSArray<NSObject<MDMPlan> *> *)plans to:(nonnull id)target {
@@ -105,16 +90,14 @@
 
 - (void)addPlan:(NSObject<MDMNamedPlan> *)plan named:(NSString *)name to:(id)target {
   NSParameterAssert(name.length > 0);
-  id<MDMNamedPlan> copiedPlan = [plan copy];
-  [[self scopeForTarget:target] addPlan:copiedPlan named:name to:target];
+  NSObject<MDMNamedPlan> *copiedPlan = [plan copy];
+  [_targetRegistry addPlan:copiedPlan named:name to:target];
 }
 
 - (void)removePlanNamed:(NSString *)name from:(id)target {
   NSParameterAssert(name.length > 0);
-  [[self scopeForTarget:target] removePlanNamed:name from:target];
+  [_targetRegistry removePlanNamed:name from:target];
 }
-
-#pragma mark - Private
 
 - (void)addTracer:(nonnull id<MDMTracing>)tracer {
   [_tracers addObject:tracer];
@@ -127,5 +110,4 @@
 - (nonnull NSArray<id<MDMTracing>> *)tracers {
   return _tracers.array;
 }
-
 @end

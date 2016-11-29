@@ -27,12 +27,12 @@
   __weak MDMMotionRuntime *_runtime;
   NSMutableDictionary<NSString *, id<MDMPerforming>> *_performerClassNameToPerformer;
   NSMutableDictionary<NSString *, id<MDMPerforming>> *_performerPlanNameToPerformer;
-  NSMutableOrderedSet<id<MDMTracing>> *_tracers;
+  NSOrderedSet<id<MDMTracing>> *_tracers;
   MDMPlanEmitter *_planEmitter;
 }
 
 - (instancetype)initWithTarget:(id)target
-                       tracers:(NSMutableOrderedSet<id<MDMTracing>> *)tracers
+                       tracers:(NSOrderedSet<id<MDMTracing>> *)tracers
                    planEmitter:(MDMPlanEmitter *)planEmitter
                        runtime:(MDMMotionRuntime *)runtime {
   self = [super init];

@@ -16,27 +16,26 @@
 
 #import <Foundation/Foundation.h>
 
-@class MDMPlanEmitter;
 @class MDMMotionRuntime;
 @protocol MDMPlan;
 @protocol MDMNamedPlan;
 @protocol MDMTracing;
 
-/** An entity responsible for managing the performers associated with a given target. */
-@interface MDMTargetScope : NSObject
+@interface MDMTargetRegistry : NSObject
 
-- (nonnull instancetype)initWithTarget:(nonnull id)target
-                               tracers:(nonnull NSOrderedSet<id<MDMTracing>> *)tracers
-                           planEmitter:(nonnull MDMPlanEmitter *)planEmitter
-                               runtime:(nonnull MDMMotionRuntime *)runtime
+- (nonnull instancetype)initWithRuntime:(nonnull MDMMotionRuntime *)runtime
+                                tracers:(nonnull NSOrderedSet<id<MDMTracing>> *)tracers
     NS_DESIGNATED_INITIALIZER;
 
 - (nonnull instancetype)init NS_UNAVAILABLE;
 + (nonnull instancetype) new NS_UNAVAILABLE;
 
-- (void)addPlan:(nonnull id<MDMPlan>)plan to:(nonnull id)target;
+- (void)addPlan:(nonnull NSObject<MDMPlan> *)plan to:(nonnull id)target;
 
-- (void)addPlan:(nonnull id<MDMNamedPlan>)plan named:(nonnull NSString *)name to:(nonnull id)target;
-- (void)removePlanNamed:(nonnull NSString *)name from:(nonnull id)target;
+- (void)addPlan:(nonnull id<MDMNamedPlan>)plan
+          named:(nonnull NSString *)name
+             to:(nonnull id)target;
+- (void)removePlanNamed:(nonnull NSString *)name
+                   from:(nonnull id)target;
 
 @end

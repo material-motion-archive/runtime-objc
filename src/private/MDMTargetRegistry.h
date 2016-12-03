@@ -16,6 +16,7 @@
 
 #import <Foundation/Foundation.h>
 
+@class MDMTokenPool;
 @class MDMMotionRuntime;
 @protocol MDMPlan;
 @protocol MDMNamedPlan;
@@ -29,6 +30,10 @@
 
 - (nonnull instancetype)init NS_UNAVAILABLE;
 + (nonnull instancetype) new NS_UNAVAILABLE;
+
+@property(nonatomic, weak, nullable, readonly) MDMMotionRuntime *runtime;
+
+@property(nonatomic, strong, nonnull, readonly) MDMTokenPool *tokenPool;
 
 - (void)addPlan:(nonnull NSObject<MDMPlan> *)plan to:(nonnull id)target;
 

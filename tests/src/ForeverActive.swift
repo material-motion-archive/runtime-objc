@@ -33,12 +33,13 @@ public class ForeverActive: NSObject, Plan {
       self.target = target
     }
 
-    public func addPlan(_ plan: Plan) {
-      // No-op
+    func addPlan(_ plan: Plan) {
+      tokenizer.token(for: plan)?.isActive = true
     }
 
-    func set(isActiveTokenGenerator: IsActiveTokenGenerating) {
-      isActiveTokenGenerator.generate()
+    var tokenizer: PlanTokenizing!
+    func givePlanTokenizer(_ tokenizer: PlanTokenizing) {
+      self.tokenizer = tokenizer
     }
   }
 }

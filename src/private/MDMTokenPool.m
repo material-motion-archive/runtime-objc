@@ -14,38 +14,34 @@
  limitations under the License.
  */
 
-#import "MDMPlanEmitter.h"
+#import "MDMTokenPool.h"
 
-#import "MDMMotionRuntime.h"
-#import "MDMTargetRegistry.h"
+#import "MDMPlan.h"
+#import "MDMToken+Private.h"
 
-@interface MDMPlanEmitter ()
+@implementation MDMTokenPool {
+  NSMapTable<id<MDMPlan>, id<MDMTokened>> *_planToToken;
+}
 
-@property(nonatomic, weak) MDMTargetRegistry *targetRegistry;
-@property(nonatomic, weak) id target;
-
-@end
-
-@implementation MDMPlanEmitter
-
-- (instancetype)initWithTargetRegistry:(MDMTargetRegistry *)targetRegistry target:(id)target {
+- (instancetype)init {
   self = [super init];
   if (self) {
-    self.targetRegistry = targetRegistry;
-    self.target = target;
+    _planToToken = [NSMapTable weakToStrongObjectsMapTable];
   }
   return self;
 }
 
-#pragma mark - MDMPlanEmitting
-
-- (void)emitPlan:(NSObject<MDMPlan> *)plan {
-  MDMTargetRegistry *registry = self.targetRegistry;
-  id target = self.target;
-  if (!registry || !target) {
-    return;
+- (id<MDMTokened>)tokenForPlan:(id<MDMPlan>)plan {
+  // Performers that can't be continuous can never generate tokens.
+  if (![[plan performerClass] instancesRespondToSelector:@selector(givePlanTokenizer:)]) {
+    return nil;
   }
-  [registry.runtime addPlan:plan to:target];
+  id<MDMTokened> token = [_planToToken objectForKey:plan];
+  if (!token) {
+    token = [[MDMToken alloc] initInternal];
+    [_planToToken setObject:token forKey:plan];
+  }
+  return token;
 }
 
 @end

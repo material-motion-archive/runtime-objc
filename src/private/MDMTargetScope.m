@@ -16,17 +16,16 @@
 
 #import "MDMTargetScope.h"
 
-#import "MDMIsActiveTokenGenerator.h"
-#import "MDMMotionRuntime+Private.h"
 #import "MDMPlan.h"
 #import "MDMPlanEmitter.h"
+#import "MDMTokenPool.h"
 #import "MDMTracing.h"
 
 @implementation MDMTargetScope {
   id _target;
-  __weak MDMMotionRuntime *_runtime;
   NSMutableDictionary<NSString *, id<MDMPerforming>> *_performerClassNameToPerformer;
   NSMutableDictionary<NSString *, id<MDMPerforming>> *_performerPlanNameToPerformer;
+  MDMTokenPool *_tokenPool;
   NSOrderedSet<id<MDMTracing>> *_tracers;
   MDMPlanEmitter *_planEmitter;
 }
@@ -34,13 +33,13 @@
 - (instancetype)initWithTarget:(id)target
                        tracers:(NSOrderedSet<id<MDMTracing>> *)tracers
                    planEmitter:(MDMPlanEmitter *)planEmitter
-                       runtime:(MDMMotionRuntime *)runtime {
+                     tokenPool:(MDMTokenPool *)tokenPool {
   self = [super init];
   if (self) {
     _target = target;
     _tracers = tracers;
-    _runtime = runtime;
     _planEmitter = planEmitter;
+    _tokenPool = tokenPool;
     _performerClassNameToPerformer = [NSMutableDictionary dictionary];
     _performerPlanNameToPerformer = [NSMutableDictionary dictionary];
   }
@@ -142,11 +141,9 @@
   }
 
   // Continuous performance
-  if ([performer respondsToSelector:@selector(setIsActiveTokenGenerator:)]) {
+  if ([performer respondsToSelector:@selector(givePlanTokenizer:)]) {
     id<MDMContinuousPerforming> continuousPerformer = (id<MDMContinuousPerforming>)performer;
-
-    MDMIsActiveTokenGenerator *generator = [[MDMIsActiveTokenGenerator alloc] initWithDelegate:_runtime];
-    [continuousPerformer setIsActiveTokenGenerator:generator];
+    [continuousPerformer givePlanTokenizer:_tokenPool];
   }
 }
 

@@ -18,9 +18,9 @@
 
 #import "MDMPlanEmitter.h"
 #import "MDMTargetScope.h"
+#import "MDMTokenPool.h"
 
 @implementation MDMTargetRegistry {
-  __weak MDMMotionRuntime *_runtime;
   NSMapTable<id, MDMTargetScope *> *_targetToScope;
   NSOrderedSet<id<MDMTracing>> *_tracers;
 }
@@ -33,6 +33,7 @@
     _tracers = tracers;
 
     _targetToScope = [NSMapTable weakToStrongObjectsMapTable];
+    _tokenPool = [MDMTokenPool new];
   }
   return self;
 }
@@ -42,11 +43,11 @@
 - (MDMTargetScope *)scopeForTarget:(id)target {
   MDMTargetScope *scope = [_targetToScope objectForKey:target];
   if (!scope) {
-    MDMPlanEmitter *emitter = [[MDMPlanEmitter alloc] initWithRuntime:_runtime target:target];
+    MDMPlanEmitter *emitter = [[MDMPlanEmitter alloc] initWithTargetRegistry:self target:target];
     scope = [[MDMTargetScope alloc] initWithTarget:target
                                            tracers:_tracers
                                        planEmitter:emitter
-                                           runtime:_runtime];
+                                         tokenPool:_tokenPool];
     [_targetToScope setObject:scope forKey:target];
   }
 

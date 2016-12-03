@@ -72,19 +72,18 @@ NS_SWIFT_NAME(NamedPlanPerforming)
 
 #pragma mark - Continuous performing
 
-@protocol MDMIsActiveTokenGenerating;
+@protocol MDMPlanTokenizing;
 
 /**
- A performer that conforms to MDMContinuousPerforming is able to request and release is-active
- tokens.
+ A performer that conforms to MDMContinuousPerforming is able to fetch tokens for plans.
 
- The runtime uses these tokens to inform its active state. If any performer owns an is-active
- token then the runtime is active. Otherwise, the runtime is idle.
+ The runtime uses these tokens to inform its active state. If any token is active then the runtime
+ is active. Otherwise, the runtime is idle.
 
- The performer should store a strong reference to the token generator. Request a token just before
- some continuous work is about to begin, such as adding an animation or starting a gesture
- recognizer. Release the token when the continuous work completes, such as when an animation
- reaches its resting state or when a gesture recognizer is ended or canceled.
+ The performer should store a strong reference to the token generator. Fetch a token when a plan is
+ added. When some continuous work is about to begin, such as adding an animation or starting a
+ gesture recognizer, active the token. Deactivate the token when the continuous work completes, such
+ as when an animation reaches its resting state or when a gesture recognizer is ended or canceled.
  */
 NS_SWIFT_NAME(ContinuousPerforming)
 @protocol MDMContinuousPerforming <MDMPerforming>
@@ -92,49 +91,48 @@ NS_SWIFT_NAME(ContinuousPerforming)
 #pragma mark Continuous performing
 
 /**
- Invoked on the performer immediately after initialization.
+ Provides the performer with a plan tokenizer instance.
 
- The token generator will be set before any add(plan:) invocations occur.
+ Invoked before any add(plan:) invocations occur.
  */
-- (void)setIsActiveTokenGenerator:(nonnull id<MDMIsActiveTokenGenerating>)isActiveTokenGenerator
-    NS_SWIFT_NAME(set(isActiveTokenGenerator:));
+- (void)givePlanTokenizer:(nonnull id<MDMPlanTokenizing>)planTokenizer
+    NS_SWIFT_NAME(givePlanTokenizer(_:));
 
 @end
 
 /**
- A non-terminated is-active token is an indication that some continuous work is active.
+ A token is a representation of potential activity for a specific plan.
 
- When the continuous work comes to an end, the token should be terminated by invoking terminate. The
- token must then be released. Any further attempts to invoke terminate will result in assertions.
+ When activity for a plan begins, the token should be activated. When the activity ends, the token
+ should be deactivated. Tokens can be reactivated.
 
- Tokens will terminate themselves on dealloc if they were not already terminated.
+ Tokens will deactivate themselves on dealloc.
  */
-NS_SWIFT_NAME(IsActiveTokenable)
-@protocol MDMIsActiveTokenable <NSObject>
+NS_SWIFT_NAME(Tokened)
+@protocol MDMTokened <NSObject>
 
-#pragma mark Terminating an is-active token
+#pragma mark Modifying token active state
 
-/**
- Remove the token from the pool of active tokens in the runtime.
-
- Subsequent invocations of this method will result in an assertion.
- */
-- (void)terminate;
+/** An active token will be added to the runtime's pool of active tokens. */
+@property(nonatomic, assign, getter=isActive) BOOL active;
 
 @end
 
-/** An is-active token generator is able to generate any number of MDMIsActiveToken instances. */
-NS_SWIFT_NAME(IsActiveTokenGenerating)
-@protocol MDMIsActiveTokenGenerating <NSObject>
+/** A tokenizer turns plans into motion tokens. */
+NS_SWIFT_NAME(PlanTokenizing)
+@protocol MDMPlanTokenizing <NSObject>
 
 /**
- Generate and return a new is-active token.
+ Returns a token for a given plan.
 
- The receiver of this token is expected to eventually invoke terminate on the token.
+ The receiver of this token is expected to activate the token when work associated with the plan
+ has started. Similarly, the token should be deactivated when the work completes.
 
  May fail to generate a token if the performer's runtime has been deallocated.
+
+ Will always return the same token instance for a given plan instance.
  */
-- (nullable id<MDMIsActiveTokenable>)generate;
+- (nullable id<MDMTokened>)tokenForPlan:(nonnull id<MDMPlan>)plan;
 
 @end
 

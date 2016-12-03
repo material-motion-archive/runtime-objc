@@ -16,8 +16,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class MDMTokenPool;
 @class MDMPlanEmitter;
-@class MDMMotionRuntime;
 @protocol MDMPlan;
 @protocol MDMNamedPlan;
 @protocol MDMTracing;
@@ -28,7 +28,7 @@
 - (nonnull instancetype)initWithTarget:(nonnull id)target
                                tracers:(nonnull NSOrderedSet<id<MDMTracing>> *)tracers
                            planEmitter:(nonnull MDMPlanEmitter *)planEmitter
-                               runtime:(nonnull MDMMotionRuntime *)runtime
+                             tokenPool:(nonnull MDMTokenPool *)tokenPool
     NS_DESIGNATED_INITIALIZER;
 
 - (nonnull instancetype)init NS_UNAVAILABLE;

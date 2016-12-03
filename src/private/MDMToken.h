@@ -16,23 +16,20 @@
 
 #import "MDMPerforming.h"
 
-@class MDMPerformerInfo;
-@class MDMTargetScope;
+@protocol MDMTokenActivityObserving;
 
-@protocol MDMIsActiveTokenGeneratorDelegate;
-
-@interface MDMIsActiveTokenGenerator : NSObject <MDMIsActiveTokenGenerating>
-
-- (nonnull instancetype)initWithDelegate:(nonnull id<MDMIsActiveTokenGeneratorDelegate>)delegate NS_DESIGNATED_INITIALIZER;
+@interface MDMToken : NSObject <MDMTokened>
 
 - (nonnull instancetype)init NS_UNAVAILABLE;
 + (nonnull instancetype) new NS_UNAVAILABLE;
 
+- (void)addActivityObserver:(nonnull id<MDMTokenActivityObserving>)observer;
+
 @end
 
-@protocol MDMIsActiveTokenGeneratorDelegate <NSObject>
+@protocol MDMTokenActivityObserving <NSObject>
 
-- (void)registerIsActiveToken:(nonnull id<MDMIsActiveTokenable>)token;
-- (void)terminateIsActiveToken:(nonnull id<MDMIsActiveTokenable>)token;
+- (void)tokenDidActivate:(nonnull MDMToken *)token;
+- (void)tokenDidDeactivate:(nonnull MDMToken *)token;
 
 @end

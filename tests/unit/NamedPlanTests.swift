@@ -24,6 +24,12 @@ class NamedPlanTests: XCTestCase {
   private var incrementerTarget:IncrementerTarget!
   var firstViewTargetAlteringPlan:NamedPlan!
 
+  override func tearDown() {
+    target = nil
+    incrementerTarget = nil
+    firstViewTargetAlteringPlan = nil
+  }
+
   override func setUp() {
     super.setUp()
     target = UITextView()

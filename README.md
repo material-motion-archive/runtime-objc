@@ -453,13 +453,13 @@ emitter.emitPlan<#T##Plan#>)
 Performers will often perform their actions over a period of time or while an interaction is
 active. These types of performers are called continuous performers.
 
-A continuous performer is able to affect the active state of the runtime by generating is-active
-tokens. The runtime is considered active so long as an is-active token exists and has not been
-terminated. Continuous performers are expected to terminate a token when its corresponding work has
-completed.
+A continuous performer is able to affect the active state of the runtime by generating activity
+tokens. The runtime is considered active so long as an activity token is active. Continuous
+performers are expected to activate and deactivate tokens when ongoing work starts and finishes,
+respectively.
 
-For example, a performer that registers a platform animation might generate a token when the
-animation starts. When the animation completes the token would be terminated.
+For example, a performer that registers a platform animation might activate a token when the
+animation starts. When the animation completes the token would be deactivated.
 
 ### Step 1: Conform to ContinuousPerforming and store the token generator
 
@@ -469,7 +469,7 @@ Code snippets:
 
 ```objc
 @interface <#Performer#> ()
-@property(nonatomic, strong) id<MDMIsActiveTokenGenerating> tokenGenerator;
+@property(nonatomic, strong) id<MDMPlanTokenizing> tokenizer;
 @end
 
 @interface <#Performer#> (Composition) <MDMComposablePerforming>
@@ -477,8 +477,8 @@ Code snippets:
 
 @implementation <#Performer#> (Composition)
 
-- (void)setIsActiveTokenGenerator:(id<MDMIsActiveTokenGenerating>)isActiveTokenGenerator {
-  self.tokenGenerator = isActiveTokenGenerator;
+- (void)givePlanTokenizer:(id<MDMPlanTokenizing>)tokenizer {
+  self.tokenizer = tokenizer;
 }
 
 @end
@@ -490,51 +490,70 @@ Code snippets:
 // Store the emitter in your class' definition.
 class <#Performer#>: ... {
   ...
-  var tokenGenerator: IsActiveTokenGenerating!
+  var tokenizer: PlanTokenizing!
   ...
 }
 
 extension <#Performer#>: ContinuousPerforming {
-  func set(isActiveTokenGenerator: IsActiveTokenGenerating) {
-    tokenGenerator = isActiveTokenGenerator
+  func givePlanTokenizer(_ tokenizer: PlanTokenizing) {
+    self.tokenizer = tokenizer
   }
 }
 ```
 
-### Step 2: Generate a token when some continuous work has started
+### Step 2: Generate a token
 
-You will likely need to store the token in order to be able to reference it at a later point.
+If your work completes in a callback then you will likely need to store the token in order to be
+able to reference it at a later point.
 
 Code snippets:
 
 ***In Objective-C:***
 
 ```objc
-id<MDMIsActiveTokenable> token = [self.tokenGenerator generate];
+id<MDMTokenized> token = [self.tokenizer tokenForPlan:<#plan#>];
 tokenMap[animation] = token;
 ```
 
 ***In Swift:***
 
 ```swift
-let token = tokenGenerator.generate()!
+let token = tokenizer.generate(for: <#plan#>)!
 tokenMap[animation] = token
 ```
 
-### Step 3: Terminate the token when work has completed
+### Step 3: Activate the token when work begins
 
 Code snippets:
 
 ***In Objective-C:***
 
 ```objc
-[token terminate];
+id<MDMIsActiveTokenable> token = tokenMap[animation];
+token.active = true;
 ```
 
 ***In Swift:***
 
 ```swift
-token.terminate()
+tokenMap[animation].isActive = true
+```
+
+### Step 4: Deactivate the token when work has completed
+
+Code snippets:
+
+***In Objective-C:***
+
+```objc
+id<MDMTokenized> token = tokenMap[animation];
+token.active = false;
+```
+
+***In Swift:***
+
+```swift
+tokenMap[animation].isActive = false
 ```
 
 ## How to trace internal runtime events

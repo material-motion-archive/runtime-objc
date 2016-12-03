@@ -14,8 +14,7 @@
  limitations under the License.
  */
 
-#import "MDMIsActiveTokenGenerator.h"
-#import "MDMMotionRuntime.h"
+#import "MDMPerforming.h"
 
-@interface MDMMotionRuntime () <MDMIsActiveTokenGeneratorDelegate>
+@interface MDMTokenPool : NSObject <MDMPlanTokenizing>
 @end

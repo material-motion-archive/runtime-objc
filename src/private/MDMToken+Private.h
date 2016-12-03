@@ -14,17 +14,10 @@
  limitations under the License.
  */
 
-#import "MDMPerforming.h"
+#import "MDMToken.h"
 
-@class MDMTargetRegistry;
+@interface MDMToken ()
 
-@interface MDMPlanEmitter : NSObject <MDMPlanEmitting>
-
-/** Initialize a newly allocated emitter with the provided runtime and target. */
-- (nonnull instancetype)initWithTargetRegistry:(nonnull MDMTargetRegistry *)targetRegistry
-                                        target:(nonnull id)target;
-
-- (nonnull instancetype)init NS_UNAVAILABLE;
-+ (nonnull instancetype) new NS_UNAVAILABLE;
+- (instancetype)initInternal;
 
 @end

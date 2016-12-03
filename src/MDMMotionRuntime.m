@@ -15,17 +15,16 @@
  */
 
 #import "MDMMotionRuntime.h"
-#import "MDMMotionRuntime+Private.h"
 
 #import "MDMTracing.h"
-#import "private/MDMIsActiveTokenGenerator.h"
-#import "private/MDMPlanEmitter.h"
 #import "private/MDMTargetRegistry.h"
 #import "private/MDMTargetScope.h"
+#import "private/MDMToken.h"
+#import "private/MDMTokenPool.h"
 
-@interface MDMMotionRuntime () <MDMIsActiveTokenGeneratorDelegate>
+@interface MDMMotionRuntime () <MDMTokenActivityObserving>
 
-@property(nonatomic, strong, readonly) NSMutableSet<id<MDMIsActiveTokenable>> *isActiveTokens;
+@property(nonatomic, strong, readonly) NSMutableSet<id<MDMTokened>> *activeTokens;
 
 @end
 
@@ -39,46 +38,56 @@
   if (self) {
     _tracers = [NSMutableOrderedSet orderedSet];
     _targetRegistry = [[MDMTargetRegistry alloc] initWithRuntime:self tracers:_tracers];
-    _isActiveTokens = [NSMutableSet set];
+    _activeTokens = [NSMutableSet set];
   }
   return self;
 }
 
-#pragma mark - MDMIsActiveTokenGeneratorDelegate
+#pragma mark - Private
 
-- (void)registerIsActiveToken:(nonnull id<MDMIsActiveTokenable>)token {
-  BOOL wasInactive = self.isActiveTokens.count == 0;
+- (void)willAddPlan:(NSObject<MDMPlan> *)plan {
+  MDMToken *token = (MDMToken *)[_targetRegistry.tokenPool tokenForPlan:plan];
+  [token addActivityObserver:self];
+}
 
-  [self.isActiveTokens addObject:token];
-
-  if (wasInactive) {
-    if ([self.delegate respondsToSelector:@selector(motionRuntimeActivityStateDidChange:)]) {
-      [self.delegate motionRuntimeActivityStateDidChange:self];
-    }
+- (void)stateDidChange {
+  if ([self.delegate respondsToSelector:@selector(motionRuntimeActivityStateDidChange:)]) {
+    [self.delegate motionRuntimeActivityStateDidChange:self];
   }
 }
 
-- (void)terminateIsActiveToken:(nonnull id<MDMIsActiveTokenable>)token {
-  NSAssert([self.isActiveTokens containsObject:token],
+#pragma mark - MDMTokenActivityObserving
+
+- (void)tokenDidActivate:(MDMToken *)token {
+  BOOL wasInactive = _activeTokens.count == 0;
+
+  [_activeTokens addObject:token];
+
+  if (wasInactive) {
+    [self stateDidChange];
+  }
+}
+
+- (void)tokenDidDeactivate:(MDMToken *)token {
+  NSAssert([_activeTokens containsObject:token],
            @"Token is not active. May have already been terminated by a previous invocation.");
 
-  [self.isActiveTokens removeObject:token];
+  [_activeTokens removeObject:token];
 
-  if (self.isActiveTokens.count == 0) {
-    if ([self.delegate respondsToSelector:@selector(motionRuntimeActivityStateDidChange:)]) {
-      [self.delegate motionRuntimeActivityStateDidChange:self];
-    }
+  if (_activeTokens.count == 0) {
+    [self stateDidChange];
   }
 }
 
 #pragma mark - Public
 
 - (BOOL)isActive {
-  return self.isActiveTokens.count > 0;
+  return self.activeTokens.count > 0;
 }
 
 - (void)addPlan:(NSObject<MDMPlan> *)plan to:(id)target {
   NSObject<MDMPlan> *copiedPlan = [plan copy];
+  [self willAddPlan:copiedPlan];
   [_targetRegistry addPlan:copiedPlan to:target];
 }
 
@@ -91,6 +100,7 @@
 - (void)addPlan:(NSObject<MDMNamedPlan> *)plan named:(NSString *)name to:(id)target {
   NSParameterAssert(name.length > 0);
   NSObject<MDMNamedPlan> *copiedPlan = [plan copy];
+  [self willAddPlan:(NSObject<MDMPlan> *)copiedPlan];
   [_targetRegistry addPlan:copiedPlan named:name to:target];
 }
 

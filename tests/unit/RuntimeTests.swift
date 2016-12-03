@@ -134,65 +134,15 @@ class RuntimeTests: XCTestCase {
     var runtime: MotionRuntime? = MotionRuntime()
     weak var weakRuntime: MotionRuntime? = runtime
 
-    runtime!.addPlan(InstantlyInactive(), to: NSObject())
+    autoreleasepool {
+      runtime!.addPlan(InstantlyInactive(), to: NSObject())
 
-    // Remove our only strong reference to the runtime.
-    runtime = nil
+      // Remove our only strong reference to the runtime.
+      runtime = nil
+    }
 
     // If this fails it means there's a retain cycle within the runtime somewhere. Place a
     // breakpoint here and use the Debug Memory Graph tool to debug.
     XCTAssertNil(weakRuntime)
-  }
-
-  // Verify that we're unable to request a delegated performance token after the runtime has been
-  // released.
-  func testPostDeallocTokenGenerationIsIgnored() {
-    var runtime: MotionRuntime? = MotionRuntime()
-
-    let plan = HijackedIsActiveTokenGenerator()
-    runtime!.addPlan(plan, to: NSObject())
-
-    // Force the runtime to be deallocated.
-    runtime = nil
-
-    XCTAssertNil(plan.state.tokenGenerator!.generate())
-  }
-
-  // A plan that enables hijacking of the delegated performance token blocks.
-  private class HijackedIsActiveTokenGenerator: NSObject, Plan {
-    // We must store the generator in an intermediary "state" object that we can share across plan
-    // copies. This breaks the separation of concerns between plans and performers and should not
-    // be used in a production setting.
-    class State {
-      var tokenGenerator: IsActiveTokenGenerating?
-    }
-    var state = State()
-
-    func performerClass() -> AnyClass {
-      return Performer.self
-    }
-
-    public func copy(with zone: NSZone? = nil) -> Any {
-      let copy = HijackedIsActiveTokenGenerator()
-      copy.state = state
-      return copy
-    }
-
-    private class Performer: NSObject, ContinuousPerforming {
-      let target: Any
-      required init(target: Any) {
-        self.target = target
-      }
-
-      func addPlan(_ plan: Plan) {
-        let delayedDelegation = plan as! HijackedIsActiveTokenGenerator
-        delayedDelegation.state.tokenGenerator = tokenGenerator
-      }
-
-      var tokenGenerator: IsActiveTokenGenerating!
-      func set(isActiveTokenGenerator: IsActiveTokenGenerating) {
-        tokenGenerator = isActiveTokenGenerator
-      }
-    }
   }
 }

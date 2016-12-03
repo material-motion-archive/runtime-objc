@@ -34,11 +34,14 @@ public class InstantlyInactive: NSObject, Plan {
     }
 
     public func addPlan(_ plan: Plan) {
-      // No-op
+      let token = tokenizer.token(for: plan)!
+      token.isActive = true
+      token.isActive = false
     }
 
-    func set(isActiveTokenGenerator: IsActiveTokenGenerating) {
-      isActiveTokenGenerator.generate()?.terminate()
+    var tokenizer: PlanTokenizing!
+    func givePlanTokenizer(_ tokenizer: PlanTokenizing) {
+      self.tokenizer = tokenizer
     }
   }
 }

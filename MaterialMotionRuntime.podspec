@@ -8,6 +8,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/material-motion/runtime-objc.git", :tag => "v" + s.version.to_s }
   s.platform     = :ios, "8.0"
   s.requires_arc = true
+  s.deprecated   = true
   s.default_subspec = "lib"
 
   s.subspec "lib" do |ss|
